@@ -23,6 +23,7 @@ CORS_ALLOW_HEADERS = [
 INSTALLED_APPS += [
 	'corsheaders',
     'rest_framework',
+    'byo_network_hub',
 ]
 
 MIDDLEWARE += [
