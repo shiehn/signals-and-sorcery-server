@@ -1,0 +1,60 @@
+version: '3.5'
+services:
+    cms:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile.cms
+        external_links:
+            - postgres
+        environment:
+            - POSTGRESQL_ADDON_HOST=postgres
+            - POSTGRESQL_ADDON_DB=${POSTGRESQL_ADDON_DB:-django_seed}
+            - POSTGRESQL_ADDON_PASSWORD=${POSTGRESQL_ADDON_PASSWORD:-toto42}
+            - POSTGRESQL_ADDON_USER=${POSTGRESQL_ADDON_USER:-postgres}
+            - POSTGRESQL_ADDON_PORT=5432
+            - DJANGO_SETTINGS_MODULE=app.settings.web
+            - SENTRY_DSN=${SENTRY_URL}
+            - DEBUG=${DEBUG:-true}
+        ports:
+            - 8082:8082
+        networks:
+            - django-seed-network
+        depends_on:
+            - postgres
+    api:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile.api
+        external_links:
+            - postgres
+        environment:
+            - POSTGRESQL_ADDON_HOST=postgres
+            - POSTGRESQL_ADDON_DB=${POSTGRESQL_ADDON_DB:-django_seed}
+            - POSTGRESQL_ADDON_PASSWORD=${POSTGRESQL_ADDON_PASSWORD:-toto42}
+            - POSTGRESQL_ADDON_USER=${POSTGRESQL_ADDON_USER:-postgres}
+            - POSTGRESQL_ADDON_PORT=5432
+            - DJANGO_SETTINGS_MODULE=app.settings.api
+            - SENTRY_DSN=${SENTRY_URL}
+            - DEBUG=${DEBUG:-true}
+        ports:
+            - 8081:8081
+        networks:
+            - django-seed-network
+        depends_on:
+            - postgres
+    postgres:
+        image: postgres:14
+        restart: always
+        ports:
+            - 5438:5432
+        environment:
+            - POSTGRES_PASSWORD=toto42
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=${POSTGRESQL_ADDON_DB:-django_seed}
+        networks:
+            - django-seed-network
+networks:
+  django-seed-network:
+    name: django-seed-local

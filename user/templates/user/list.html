@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load common i18n %}
+
+{% block title %}{% trans 'Users' %}{% endblock %}
+
+{% block subheader %}
+<div class="row">
+    <div class="block-title">
+        <h3 class="title">{% trans 'Users' %}</h3>
+        <span class="separator"></span>
+        <div class="info">
+            <span class="desc">{{ page_obj.paginator.count }} {% trans 'total' %}</span>
+            <a href="{% url 'user:user-create' %}" class="btn btn-outline-primary btn-sm ml-3">
+                <i class="bi bi-plus-lg"></i>
+                {% trans 'NewUser' %}
+            </a>
+        </div>
+    </div>
+    <div class="block-toolbar">
+    	<button class="btn btn-outline-warning btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offFilter" aria-controls="offFilter"><i class="bi bi-funnel-fill"></i>{% trans 'Filters' %}</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block container %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>{% head_cell_with_ordering field='email' title=_('Email') %}</th>
+                <th>{% head_cell_with_ordering field='username' title=_('Username') %}</th>
+                <th class="text-center">{% head_cell_with_ordering field='role' title=_('Role') %}</th>
+                <th class="text-center">{% head_cell_with_ordering field='is_active' title=_('IsActive?') %}</th>
+                <th class="text-center">{% trans 'Actions' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in object_list %}
+            <tr>
+                <td>{{ item.email }}</td>
+                <td>{{ item.username|default_if_none:'' }}</td>
+                <td class="text-center">{{ item.get_role_display }}</td>
+                <td class="text-center">{% boolean_icon item.is_active %}</td>
+                <td class="text-center">
+                    <a href="{% url 'user:user-update' item.pk %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-fill"></i>
+                        {% trans 'Edit' %}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% pagination page_obj=page_obj %}
+</div>
+{% endblock %}
+
+{% block sticky_toolbar %}
+<div id="offFilter" class="filter-panel offcanvas offcanvas-end" tabindex="-1" aria-labelledby="offFilterLabel">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="offcanvasNavbarLabel">{% trans 'Filters' %}</h5>
+		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body">
+		{% filter_form_block filterset.form %}
+	</div>
+</div>
+{% endblock %}

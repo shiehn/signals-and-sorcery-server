@@ -1,0 +1,348 @@
+html, body {
+	background-color: #f9f9fc;
+	height: 100%;
+	font-size: 13px;
+	font-family: Poppins, Helvetica, sans-serif;
+}
+a {
+	color: #5867dd;
+	text-decoration: none;
+	background-color: transparent;
+}
+a:hover {color: #2739c1;}
+
+label {
+	font-weight: 400;
+	color: #646c9a;
+	display: inline-block;
+	margin-bottom: 0.5rem;
+}
+
+/***** Main Structure ******/
+div.main-content {
+	height: calc(100% - 55px);
+	position: absolute;
+	top: 55px;
+	margin-top: 2rem;
+	padding-left: 30px;
+	width: 100%;
+}
+
+div#sidebar {
+	position: fixed;
+	height: calc(100vh - (10% + 55px));
+	width: 255px;
+}
+div#content {
+	position: absolute;
+	left: 285px;
+	width: calc(100% - 285px);
+	height: 50%;
+	padding: 0 30px;
+	min-height: calc(100vh - (10% + 55px));
+}
+div#content div.sub-content {
+	min-height: calc(100vh - 50%);
+	background-color: #fff;
+	box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.08);
+}
+div#content div.sub-header .row,
+div#content div.sub-content {
+	padding: 20px 25px;
+}
+div#content div.sub-header > .row,
+div#content div.sub-content > .row {
+	--bs-gutter-x: 0;
+	--bs-gutter-y: 0;
+}
+
+div#footer {margin-top: 1rem; text-align: right;}
+
+/**** Off Canvas ****/
+div.offcanvas {z-index: 100000;}
+div.offcanvas-header {
+	padding-left: 44px;
+	padding-top: 2rem;
+	margin-bottom: 10px;
+}
+div.offcanvas-header button.btn-close {
+	padding-right: 2rem;
+}
+div.offcanvas-header .offcanvas-title {
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: #48465b;
+	margin: 0;
+	padding: 0;
+}
+
+/***** Sidebar ******/
+div.sidebar ul {
+	height:  100%;
+	padding: 24px 30px;
+	background-color: #fff;
+	justify-content: flex-start !important;
+	box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.08);
+	overflow: auto;
+}
+div.sidebar.offcanvas-body ul {box-shadow: none;}
+div.sidebar ul li {
+	height: 40px;
+}
+div.sidebar ul li:hover a i,
+div.sidebar ul li:hover a span,
+div.sidebar ul li.selected a i,
+div.sidebar ul li.selected a span {
+	color: #5867dd !important;
+}
+div.sidebar ul li.nav-section {
+	display: flex;
+	align-items: center;
+	margin-top: 20px;
+}
+div.sidebar ul li h4 {
+	color: #9e95c3;
+	font-size: 1rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.3px;
+	margin: 0;
+}
+div.sidebar ul li a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+}
+div.sidebar ul li a i {font-size: 1.3rem; color: #cacad2;}
+div.sidebar ul li a span {
+	padding-left: 10px;
+	font-size: 1rem;
+	color: #5d5b6f;
+	font-weight: 500;
+}
+
+div.offcanvas-body.sidebar ul {padding-top: 0px;}
+div.offcanvas-body.sidebar ul li.nav-section {margin: 0px;}
+
+/***** Navbar ******/
+nav.navbar {
+	background-color: #1e1e2d;
+	height: 55px;
+	z-index: 100000;
+	width:  100%;
+}
+nav.navbar a.logo {color:  #fff; text-decoration: none;}
+nav.navbar a.logo img {idth: 36px; height: 36px;}
+nav.navbar a.logo span {padding-left: 4px;}
+nav.navbar button.navbar-toggler {color:  #fff; border: 1px solid #fff;}
+nav.navbar div.user .hi {
+	color: #636177;
+	align-self: center;
+	padding-right: 4px;
+	font-size:  0.9rem;
+}
+nav.navbar div.user .username {
+	color: #fff;
+	align-self: center;
+	padding-right: 4px;
+	font-size:  0.9rem;
+}
+nav.navbar div.user .fake-avatar {
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	background-color: #5d78ff !important;
+	align-self: center;
+}
+
+#toggleUserMenu {
+	position: absolute;
+	right: 0;
+	top: 55px;
+	width: 380px;
+	box-shadow: 0px 0px 50px 0px rgba(82, 63, 105, 0.15);
+	border-radius: 4px;
+	background-color: #fff;
+	color: #595d6e;
+	z-index: 1;
+}
+#toggleUserMenu div.d-flex.flex-column > div {padding: 1rem 2rem;}
+#toggleUserMenu div.dropdown.languages ul {min-width: 50px;}
+#toggleUserMenu div.dropdown.languages img {width: 20px;}
+#toggleUserMenu div.logout a {text-decoration: none; color: #595d6e;}
+
+/**** SubHeader And Form Header ****/
+div.form-header {
+	min-height: 80px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #ebedf2;
+}
+div.sub-header > .row,
+div.form-header {
+	flex-direction: row;
+	justify-content: space-between;
+	width: auto;
+	align-items: center;
+}
+div.sub-header > .row * {width: auto;}
+div.sub-header .block-title,
+div.sub-header .block-title .info,
+div.form-header,
+div.form-header .info {
+	display: flex;
+	align-items: center;
+}
+div.sub-header .block-title .title,
+div.form-header .block-title .title {
+	margin: 0;
+	padding-right: 1rem;
+	font-size: 1.2rem;
+	font-weight: 500;
+	color: #434349;
+}
+div.sub-header .block-title .separator,
+div.form-header .block-title .separator {
+	background-color: #dbdce7;
+	width: 1px;
+	height: 22px;
+	border-radius: 2px;
+	margin-right: 1rem;
+	display: block;
+}
+div.sub-header .block-title .info .desc,
+div.form-header .block-title .info .desc {
+	padding-right: 0.5rem;
+	font-size: 1rem;
+	font-weight: 500;
+	color: #959cb6;
+}
+div.sub-header .block-title .info a,
+div.form-header .block-title .info a {margin-left: 1rem;}
+
+div.sub-header .block-toolbar button i,
+div.form-header .block-toolbar button i {padding-right: 4px;}
+
+/**** Form Body ****/
+div.form-body {
+	padding-top: 20px;
+}
+.form-group {
+	margin-bottom: 2rem;
+}
+div.form-body .form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 1.3rem + 2px);
+    padding: 0.65rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #e2e5ec;
+    border-radius: 4px;
+    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+select.form-control {
+	appearance: auto;
+}
+div.form-body div.form-group .checkbox {
+	height: calc(1.5em + 1.3rem + 2px);
+	vertical-align: middle;
+	line-height: calc(1.5em + 1.3rem + 2px);
+}
+div.form-body div.form-group .checkbox input {
+	position: relative;
+	top: 9px;
+}
+
+/**** Table ****/
+table.table {
+	color: #212529;
+}
+table.table thead {
+	color: #595d6e;
+	background-color: #ebedf2;
+}
+table.table thead th,
+table.table thead td {
+	padding: 1rem 0.75rem;
+	border-bottom-width: 1px;
+	border-color: #ebedf2 !important;
+	font-weight: 500;
+}
+.table th, .table td, table th, table td {
+	padding: 0.75em;
+	border-top: 1px solid #ebedf2;
+}
+
+/**** Filter ****/
+div.filter-panel .offcanvas-body {padding: 1rem 44px;}
+
+/**** Pagination ****/
+div.card-body div.pagination {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin: 0;
+	padding: 0;
+	color: #646c9a;
+}
+div.card-body div.pagination ul {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+div.card-body div.pagination ul li {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 0.5rem;
+	border-radius: 4px;
+	background-color: rgba(93, 120, 255, 0.1);
+}
+div.card-body div.pagination ul li.pagination-active {
+	background-color: #5d78ff;
+}
+div.card-body div.pagination ul li.pagination-active a {color: #ffffff;}
+div.card-body div.pagination ul li a {
+	font-weight: 500;
+	color: #74788d;
+	font-size: 1rem;
+	padding: 0 0.2rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	min-width: 30px;
+	min-height: 30px;
+	margin: 0;
+}
+
+/**** Specific media rule not possible with bootstrap *****/
+@media (max-width: 991px) {
+	div#sidebar {display: none;}
+	div.main-content {padding: 0px; margin-top: 0.7rem;}
+	#toggleUserMenu {width: 100%;}
+	div#content {
+		width: 100%;
+		padding: 0 15px;
+		left: 0px;
+	}
+	div#content div.sub-header,
+	div#content div.sub-content {
+		padding: 10px 15px;
+	}
+	div.form-header {
+		min-height: 60px;
+		padding-bottom: 10px;
+	}
+}

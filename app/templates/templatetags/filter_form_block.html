@@ -1,0 +1,36 @@
+{% load widget_tweaks %}
+
+{% if form %}
+<form action="" method="GET" id="filterForm">
+	{% for field in form %}
+	<div class="form-group{% if field.name == 'id' %} d-none{% endif %}">
+		<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+		{% if field.name == 'id' %}
+		<input type="hidden" name="{{ field.name }}">
+		{% else %}
+		{% if field.field.widget.input_type == 'select' %}
+		{% render_field field class+="form-control select2" %}
+		{% elif 'created_at' in field.name or 'date' in  field.name %}
+		{% render_field field class+="form-control dateinput" %}
+		{% else %}
+		{% render_field field class+="form-control" %}
+		{% endif %}
+		{% endif %}
+	</div>
+	{% endfor %}
+    <div class="d-flex d-flex-row justify-content-between align-items-center">
+        <div>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-lg"></i>
+				<span class="kt-hidden-mobile">Save</span>
+            </button>
+		</div>
+        <div>
+            <a id="resetFilter" class="btn btn-outline-danger">
+                <i class="bi bi-close"></i>
+				<span class="kt-hidden-mobile">Reset</span>
+            </a>
+        </div>
+    </div>
+</form>
+{% endif %}

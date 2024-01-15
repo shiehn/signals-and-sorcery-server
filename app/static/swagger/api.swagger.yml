@@ -1,0 +1,151 @@
+openapi: 3.0.0
+
+info:
+  title: Django Seed API
+  description: Django Rest Framework API for Django Seed Project
+  version: 1.0.0
+
+servers:
+  - url: https://django-seed.com/api/
+    description: Main production server
+  - url: https://django-seed.staging.com/api/
+    description: Internal staging server
+
+paths:
+  # SAMPLE
+  /sample:
+    parameters:
+      - $ref: '#/components/parameters/DefaultLangHeader'
+    get:
+      tags:
+        - Sample
+      summary: GET Sample
+      description: Get Sample API
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+    post:
+      tags:
+        - Sample
+      summary: POST Sample
+      description: Post Sample API
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+  /sample/{id}:
+    parameters:
+      - $ref: '#/components/parameters/DefaultIDPath'
+      - $ref: '#/components/parameters/DefaultLangHeader'
+    get:
+      tags:
+        - Sample
+      summary: GET Sample By ID
+      description: Get Sample By ID API
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+    put:
+      tags:
+        - Sample
+      summary: PUT Sample By ID
+      description: Put Sample API
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+    delete:
+      tags:
+        - Sample
+      summary: PUT Sample By ID
+      description: Put Sample API
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+  /sample/non-generic:
+    parameters:
+      - $ref: '#/components/parameters/DefaultLangHeader'
+    post:
+      tags:
+        - Sample
+      summary: POST Sample Non Generic API
+      description: Post Sample Non Generic API
+      requestBody:
+        $ref: 'components/sample.yml#/components/requestBodies/PostSampleNonGenericBody'
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        400:
+          $ref: '#/components/responses/BadRequest'
+
+tags:
+  - name: Sample
+
+components:
+  responses:
+    Success:
+      description: A message saying everything went well
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BodyGeneral'
+    BadRequest:
+      description: A message with the details of the bad parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BodyGeneral'
+    Unauthorized:
+      description: A message requesting an authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BodyGeneral'
+    NotFound:
+      description: A message with the details of the item(s) not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BodyGeneral'
+    Duplicated:
+      description: A message describing the duplicated item in DB
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BodyGeneral'
+    InternalError:
+      description: A message with a generic message
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BodyGeneral'
+  parameters:
+    DefaultIDPath:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      description: ID of a resource
+    DefaultLangHeader:
+      in: header
+      name: HTTP_ACCEPT_LANGUAGE
+      required: true
+      schema:
+        type: string
+        enum:
+          - fr
+          - en
+      description: Language to use during the treatment of the request
+  schemas:
+    BodyGeneral:
+      type: object
+      properties:
+        message:
+          type: string

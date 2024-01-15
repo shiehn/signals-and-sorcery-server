@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% with request.get_full_path as url_path %}
+<ul class="navbar-nav justify-content-end flex-grow-1">
+	<li class="nav-item {% if url_path == '/' %}selected{% endif %}">
+		<a class="nav-link" href="/"><i class="bi bi-house-door-fill"></i><span>{% trans 'Dashboard' %}</span></a>
+	</li>
+
+	<li class="nav-section">
+		<h4 class="nav-link">{% trans 'Modules' %}</h4>
+	</li>
+	<li class="nav-item {% if '/users/' in url_path %}selected{% endif %}">
+		<a class="nav-link" href="{% url 'user:user-list'%}"><i class="bi bi-people-fill"></i><span>{% trans 'user' %}</span></a>
+	</li>
+</ul>
+{% endwith %}

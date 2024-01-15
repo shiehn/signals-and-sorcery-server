@@ -1,0 +1,80 @@
+{% load static widget_tweaks i18n %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<base href="">
+		<meta charset="utf-8" />
+		<title>{% trans 'Login' %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!--begin::Fonts -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Asap+Condensed:500">
+		<!--end::Fonts -->
+
+		<!--begin::Styles -->
+		<link href="{% static 'assets/plugins/bootstrap/bootstrap-5-1-1.min.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'assets/css/login.css' %}" rel="stylesheet" type="text/css" />
+		<!--end::Styles -->
+
+		<!--end::Layout Skins -->
+		<link rel="shortcut icon" href="{% static 'assets/media/logos/logo-small.png' %}" />
+	</head>
+
+	<body>
+
+		<div class="container-fluid">
+
+			{% get_available_languages as languages %}
+			{% get_current_language as LANGUAGE_CODE %}
+			<div class="dropdown languages dropstart">
+				<button class="btn btn-secondary dropdown-toggle" type="button" id="languages_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+					<img src="{% static 'assets/media/flags/'|add:LANGUAGE_CODE|add:'.png' %}" title="{{ LANGUAGE_CODE|language_name_local }}" alt="{{ LANGUAGE_CODE|language_name_local }}" /></a>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="languages_dropdown">
+					{% for lang_code, lang_name in languages %}
+					    {% language lang_code %}
+					    <li><a href="{% url 'login' %}" class="dropdown-item {% if lang_code == LANGUAGE_CODE %}active{% endif%}"><img src="{% static 'assets/media/flags/'|add:lang_code|add:'.png' %}" title="{{lang_name}}" alt="{{lang_name}}" /></a></li>
+					    {% endlanguage %}
+					{% endfor %}
+				</ul>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-4 col-md-6 col-sm12">
+					<div class="logo">
+						<a href="javascript:void(0)">
+							<img src="{% static 'assets/media/logos/logo-login.png' %}" title="{% trans 'LoginLogo' %}" alt="{% trans 'LoginLogo' %}" />
+						</a>
+					</div>
+
+					<div class="form-content">
+						<div class="head">
+							<h3 class="title">{% trans 'SignIn' %}</h3>
+						</div>
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                        {% endif %}
+
+                        {% if form.username.errors %}
+                        <div class="alert alert-danger">{{ form.username.errors }}</div>
+                        {% endif %}
+
+                        <form action="" method="POST">{% csrf_token %}
+                            {% for field in form %}
+                            <div class="form-group">
+                                {% render_field field class+="form-control form-control-lg" placeholder=field.label autocomplete="off" %}
+                            </div>
+                            {% endfor %}
+                            <div class="action">
+                                <button type="submit" class="btn btn-primary btn-lg signin">{% trans 'SignIn' %}</button>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--begin::Page Scripts -->
+		<script src="{% static 'assets/plugins/bootstrap/bootstrap-5-1-1.min.js' %}" type="text/javascript"></script>
+		<!--end::Page Scripts -->
+	</body>
+</html>

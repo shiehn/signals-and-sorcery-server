@@ -1,0 +1,28 @@
+{% load common %}
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="card-body">
+	<div class="pagination">
+		<ul>
+			{% if page_obj.has_previous %}
+			<li>
+				<a href="{% change_url page=page_obj.previous_page_number %}"><i class="bi bi-chevron-left"></i></a>
+			</li>
+			{% endif %}
+			{% for i in page_obj.paginator.page_range %}
+			{% if page_obj.number|add:"-5" < i and i < page_obj.number|add:"5" %}
+			<li class="{% if page_obj.number == i %} pagination-active{% endif %}{% if page_obj.number|add:"2" < i or page_obj.number|add:"-2" > i %} d-none d-sm-block{% endif %}">
+				<a href="{% change_url page=i %}">{{ i }}</a>
+			</li>
+			{% endif %}
+			{% endfor %}
+			{% if page_obj.has_next %}
+			<li>
+				<a href="{% change_url page=page_obj.next_page_number %}"><i class="bi bi-chevron-right"></i></a>
+			</li>
+			{% endif %}
+		</ul>
+	</div>
+</div>
+{% endif %}
+

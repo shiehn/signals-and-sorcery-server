@@ -1,0 +1,62 @@
+html, body {
+	background-image: url('../media/bg/bg-login.jpg');
+	background-repeat: no-repeat;
+	background-color: #f9f9fc;
+	background-position: center;
+	background-size: cover;
+	height: 100%;
+	font-size: 13px;
+	font-family: Poppins, Helvetica, sans-serif;
+}
+
+div.container-fluid .row {justify-content: center;}
+div.container-fluid .row > div {padding-top: 6%; text-align: center;}
+
+/**** Languages ****/
+div.dropdown.languages {top: 10px; text-align: right;}
+div.dropdown.languages ul {min-width: 50px;}
+div.dropdown.languages button img,
+div.dropdown.languages ul li img {width: 24px;}
+
+/**** Logo ****/
+div.logo img {max-width: 100%;}
+
+/**** Form ****/
+div.form-content div.head {
+	font-size: 1.5rem;
+	font-weight: 500;
+	color: #595d6e;
+	padding: 2rem 0;
+}
+
+div.form-content .form-group {
+	margin-bottom: 2rem;
+}
+div.form-content .form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 1.3rem + 2px);
+    padding: 0.65rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #e2e5ec;
+    border-radius: 4px;
+    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+
+div.form-content div.action,
+div.form-content div.action button {width: 100%;}
+
+div.form-content div.alert {margin-bottom: 25px;}
+div.form-content div.alert ul {
+	padding-left: 0;
+	margin-bottom: 0;
+	list-style: none;
+}

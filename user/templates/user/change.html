@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load widget_tweaks i18n %}
+
+{% block title %}{% if object %}{% trans 'Change' %}: {{ object.email }}{% else %}{% trans 'NewUser' %}{% endif %}{% endblock %}
+
+{% block subheader %}
+{% endblock %}
+
+{% block container %}
+<form action="" method="POST">{% csrf_token %}
+	<div class="full-form">
+		<div class="form-header">
+			<div class="block-title">
+				<h3 class="title">{% if object %}{% trans 'Change' %}: {{ object.email }}{% else %}{% trans 'NewUser' %}{% endif %}</h3>
+			 </div>
+			 {% with request.get_full_path as url_path %}
+			 <div class="block-toolbar">
+				{% if url_path != '/users/profile/' %}
+				<a href="{% url 'user:user-list' %}" class="btn btn-outline-primary">
+					<i class="bi bi-arrow-left"></i>
+					<span class="">{% trans 'Back' %}</span>
+				</a>
+				 {% endif %}
+				<div class="btn-group">
+					<button type="submit" class="btn btn-primary">
+						<i class="bi bi-check-lg"></i>
+						<span class="">{% trans 'Save' %}</span>
+					</button>
+				</div>
+			 </div>
+			 {% endwith %}
+		  </div>
+		  <div class="form-body">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="{{ form.email.id_for_label }}">{% trans form.email.label %} {% if form.fields.email.required %}<span class="text-warning">*</span>{% endif %}</label>
+						{% render_field form.email class+="form-control" %}
+						{% if form.email.errors %}<label class="field-error">{{ form.email.errors }}</label>{% endif %}
+					</div>
+				 </div>
+				 <div class="col-sm-4">
+					<div class="form-group">
+						<label for="{{ form.password.id_for_label }}">{% trans form.password.label %} {% if form.fields.password.required %}<span class="text-warning">*</span>{% endif %}</label>
+						{% render_field form.password class+="form-control" %}
+						{% if form.password.errors %}<label class="field-error">{{ form.password.errors }}</label>{% endif %}
+					</div>
+				 </div>
+				 <div class="col-sm-4">
+					<div class="form-group">
+						<label for="{{ form.username.id_for_label }}">{% trans form.username.label %} {% if form.fields.username.required %}<span class="text-warning">*</span>{% endif %}</label>
+						{% render_field form.username class+="form-control" %}
+						{% if form.username.errors %}<label class="field-error">{{ form.username.errors }}</label>{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="{{ form.role.id_for_label }}">{% trans form.role.label %} {% if form.fields.role.required %}<span class="text-warning">*</span>{% endif %}</label>
+						{% render_field form.role class+="form-control" %}
+						{% if form.role.errors %}<label class="field-error">{{ form.role.errors }}</label>{% endif %}
+					</div>
+				</div>
+				<div class="col-sm-4">
+				 	<div class="form-group">
+						<label>&nbsp;</label><br>
+						<label class="checkbox form-check form-switch">
+							{% render_field form.is_active class+="form-check-input" %} {% trans 'IsActive' %}
+							<span></span>
+						</label>
+					 </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+{% endblock %}

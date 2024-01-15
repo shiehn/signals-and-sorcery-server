@@ -1,0 +1,116 @@
+{% load static i18n common %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<base href="">
+		<meta charset="utf-8" />
+		<title>{% block title %}{% endblock %} - {% trans 'Admin' %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!--begin::Fonts -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Asap+Condensed:500">
+
+		<!--end::Fonts -->
+
+		<!--begin::Styles -->
+		<link href="{% static 'assets/plugins/fullcalendar/fullcalendar.bundle.min.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'assets/plugins/bootstrap/bootstrap-5-1-1.min.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'assets/plugins/bootstrap/bootstrap-icon1-5.min.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'assets/css/custom.css' %}" rel="stylesheet" type="text/css" />
+		<!--end::Styles -->
+
+		{% block extra_css %}{% endblock %}
+
+		<!--end::Layout Skins -->
+		<link rel="shortcut icon" href="{% static 'assets/media/logos/logo-small.png' %}" />
+	</head>
+
+	<body>
+		<nav class="navbar position-fixed">
+			<div class="container-fluid">
+				<a class="logo" href="{% url 'dashboard' %}">
+					<img alt="Logo" src="{% static 'assets/media/logos/logo-small.png' %}" />
+					<span>Django Seed</span>
+				</a>
+				<div class="user d-none d-lg-flex d-xl-flex d-xxl-flex" type="button" data-bs-toggle="collapse" data-bs-target="#toggleUserMenu" aria-controls="toggleUserMenu" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="hi">{% trans 'Hi' %}, </span>
+					<span class="username">{{ request.user }}</span>
+					<span class="fake-avatar">
+				</div>
+				<div class="d-lg-none">
+					<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offSidebarMenu" aria-controls="offSidebarMenu"><i class="bi bi-list"></i></button>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggleUserMenu" aria-controls="toggleUserMenu" aria-expanded="false" aria-label="Toggle navigation"><i class="bi bi-three-dots"></i></button>
+				</div>
+				<div class="offcanvas offcanvas-start" tabindex="-1" id="offSidebarMenu" aria-labelledby="offSidebarMenuLabel">
+					<div class="offcanvas-header">
+						<h5 class="offcanvas-title" id="offcanvasNavbarLabel">Django Seed</h5>
+						<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body sidebar">
+						{% include "sidebar.html" %}
+					</div>
+				</div>
+			</div>
+		</nav>
+		<div class="collapse" id="toggleUserMenu">
+			<div class="d-flex flex-column">
+				<div class="d-flex justify-content-between align-items-center">
+					<small>{{ request.user.full_name }}</small>
+					{% get_available_languages as languages %}
+					{% get_current_language as LANGUAGE_CODE %}
+					<div class="dropdown languages dropstart">
+						<button class="btn dropdown-toggle" type="button" id="languages_dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="{% static 'assets/media/flags/'|add:LANGUAGE_CODE|add:'.png' %}" title="{{ LANGUAGE_CODE|language_name_local }}" alt="{{ LANGUAGE_CODE|language_name_local }}" /></a>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="languages_dropdown">
+							{% for lang_code, lang_name in languages %}
+							    <li><a href="{% change_lang lang_code %}" class="dropdown-item {% if lang_code == LANGUAGE_CODE %}active{% endif%}"><img src="{% static 'assets/media/flags/'|add:lang_code|add:'.png' %}" title="{{lang_name}}" alt="{{lang_name}}" /></a></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+				<div class="d-flex justify-content-between">
+	                <small>{{ request.user.email }}</small>
+					{% if request.user.is_superuser %}
+					<span class="badge bg-info text-dark">{% trans 'ADMIN' %}</span>
+					{% endif %}
+				</div>
+				<div class="logout"><a href="{% url 'logout' %}"><i class="bi bi-box-arrow-up-right"></i> {% trans 'Logout' %}</a></div>
+			</div>
+		</div>
+
+		<div class="main-content container-fluid">
+			<div class="sidebar" id="sidebar">
+				{% include "sidebar.html" %}
+			</div>
+			<div id="content">
+				<div class="sub-header">
+					{% block subheader %}{% endblock %}
+				</div>
+
+				<div class="sub-content">
+                    {% block container %}{% endblock %}
+				</div>
+
+				<div id="footer">
+					<div class="copyright">
+						{% now 'Y' %}&nbsp;&copy;&nbsp;<a href="/" class="">Django Seed</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{% block sticky_toolbar %}{% endblock %}
+
+		<!--begin::Page Scripts -->
+		<script>
+			window.csrfToken = '{{ csrf_token }}';
+		</script>
+		<script src="{% static 'assets/plugins/fullcalendar/fullcalendar.bundle.min.js' %}" type="text/javascript"></script>
+		<script src="{% static 'assets/plugins/bootstrap/bootstrap-5-1-1.min.js' %}" type="text/javascript"></script>
+
+		{% block extra_js %}{% endblock %}
+		<!--end::Page Scripts -->
+	</body>
+</html>

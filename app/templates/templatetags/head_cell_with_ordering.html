@@ -1,0 +1,9 @@
+{% load common %}
+
+{% if field in ordering_fields %}
+<a href="{% change_url ordering=order_by page=1 %}">
+	{{ title }}{% if arrow_class %}<i class="bi bi-arrow-{{ arrow_class }}"></i>{% endif %}
+</a>
+{% else %}
+{{ title }}
+{% endif %}

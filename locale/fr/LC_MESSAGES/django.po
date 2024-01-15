@@ -1,0 +1,170 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-08 11:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: api/sample/views.py:28 api/sample/views.py:41 api/sample/views.py:54
+#: api/sample/views.py:67 api/sample/views.py:80 api/sample/views.py:101
+msgid "Success"
+msgstr "Succès"
+
+#: api/sample/views.py:97
+msgid "Error"
+msgstr "Erreur"
+
+#: app/templates/base.html:8
+msgid "Admin"
+msgstr "Admin"
+
+#: app/templates/base.html:37
+msgid "Hi"
+msgstr "Bonjour"
+
+#: app/templates/base.html:76
+msgid "ADMIN"
+msgstr "ADMIN"
+
+#: app/templates/base.html:79
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: app/templates/dashboard.html:4 app/templates/dashboard.html:8
+#: app/templates/sidebar.html:6
+msgid "Dashboard"
+msgstr "Tableau de Bord"
+
+#: app/templates/dashboard.html:13
+msgid "DashboardContent"
+msgstr "Contenu du Tableau de Bord"
+
+#: app/templates/login.html:7
+msgid "Login"
+msgstr "Connexion"
+
+#: app/templates/login.html:46
+msgid "LoginLogo"
+msgstr "Logo de Connexion"
+
+#: app/templates/login.html:52 app/templates/login.html:69
+msgid "SignIn"
+msgstr "Connexion"
+
+#: app/templates/sidebar.html:10
+msgid "Modules"
+msgstr "Modules"
+
+#: app/templates/sidebar.html:13 user/managers.py:15
+msgid "user"
+msgstr "Utilisateur"
+
+#: app/views.py:48
+msgid "Unauthorized"
+msgstr "Vous ne possédez pas les droits pour faire cette action"
+
+#: common/helper.py:10
+msgid "Yes"
+msgstr "Oui"
+
+#: common/helper.py:10
+msgid "No"
+msgstr "Non"
+
+#: common/helper.py:70
+msgid "en"
+msgstr "Anglais"
+
+#: common/helper.py:71
+msgid "fr"
+msgstr "Français"
+
+#: user/filters.py:17 user/templates/user/list.html:30
+msgid "Email"
+msgstr "Email"
+
+#: user/filters.py:19 user/templates/user/list.html:32
+msgid "Role"
+msgstr "Rôle"
+
+#: user/filters.py:21
+msgid "Active"
+msgstr "Actif"
+
+#: user/managers.py:16
+msgid "superuser"
+msgstr "Super Utilisateur"
+
+#: user/managers.py:28
+msgid "EmailMandatory"
+msgstr "Le champ mail est obligatoire"
+
+#: user/managers.py:52
+msgid "StaffMuBeSet"
+msgstr "Le champ is_staff doit être à 'true'"
+
+#: user/managers.py:54
+msgid "SuperUserMustBeSet"
+msgstr "Le champ is_superuser doit être à 'true'"
+
+#: user/templates/user/change.html:4 user/templates/user/change.html:14
+msgid "Change"
+msgstr "Changer"
+
+#: user/templates/user/change.html:4 user/templates/user/change.html:14
+#: user/templates/user/list.html:15
+msgid "NewUser"
+msgstr "Ajouter un utilisateur"
+
+#: user/templates/user/change.html:21
+msgid "Back"
+msgstr "Retour"
+
+#: user/templates/user/change.html:27
+msgid "Save"
+msgstr "Sauvegarder"
+
+#: user/templates/user/change.html:69
+msgid "IsActive"
+msgstr "Actif"
+
+#: user/templates/user/list.html:4 user/templates/user/list.html:9
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: user/templates/user/list.html:12
+msgid "total"
+msgstr "total"
+
+#: user/templates/user/list.html:20 user/templates/user/list.html:61
+msgid "Filters"
+msgstr "Filtres"
+
+#: user/templates/user/list.html:31
+msgid "Username"
+msgstr "Pseudo"
+
+#: user/templates/user/list.html:33
+msgid "IsActive?"
+msgstr "Actif ?"
+
+#: user/templates/user/list.html:34
+msgid "Actions"
+msgstr "Actions"
+
+#: user/templates/user/list.html:47
+msgid "Edit"
+msgstr "Éditer"
