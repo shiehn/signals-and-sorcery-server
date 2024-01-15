@@ -22,6 +22,18 @@ services:
             - django-seed-network
         depends_on:
             - postgres
+    websocket:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile.websocket
+        environment:
+            - SENTRY_DSN=${SENTRY_URL}
+            - DEBUG=${DEBUG:-true}
+        ports:
+            - 8765:8765
+        networks:
+            - django-seed-network
     api:
         restart: always
         build:

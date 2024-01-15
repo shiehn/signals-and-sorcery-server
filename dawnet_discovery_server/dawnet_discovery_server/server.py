@@ -29,7 +29,7 @@ async def fetch_pending_requests():
                     # Try parsing the response to JSON
                     data = await response.json()
 
-                    print('LATEST_PENDING_MESSAGES: ', str(data))
+                    #print('LATEST_PENDING_MESSAGES: ', str(data))
 
                     # Loop through the connections and send the message to each one
                     for record in data:

@@ -1,0 +1,21 @@
+FROM python:3.10-slim
+
+LABEL maintainer=stevehiehn@gmail.com
+
+RUN apt-get update && apt-get upgrade -y
+
+WORKDIR /usr/src/app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libsndfile1 \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY dawnet_discovery_server /usr/src/app/
+
+RUN pip install .
+
+EXPOSE 8765
+
+CMD ["python", "./start_server.py"]
