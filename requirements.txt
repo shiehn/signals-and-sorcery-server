@@ -23,3 +23,5 @@ wheel==0.42.0
 #DAWNET
 
 websockets==12.0
+dawnet_client
+aiohttp

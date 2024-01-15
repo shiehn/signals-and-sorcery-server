@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 LABEL maintainer=stevehiehn@gmail.com
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y gcc git curl postgresql postgresql-client libpq-dev && apt-get clean -y
+RUN apt-get update && apt-get upgrade -y && apt-get install -y gcc git curl postgresql postgresql-client libpq-dev libsndfile1 && apt-get clean -y
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
