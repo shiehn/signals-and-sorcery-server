@@ -43,12 +43,12 @@ urlpatterns = [
     path('hub/get_latest_pending_messages/', GetLatestPendingMessagesView.as_view(),
          name='get-latest-pending-messages'),
     path(
-        'api/hub/update_message_status/<str:token>/<uuid:message_id>/',
+        'hub/update_message_status/<str:token>/<uuid:message_id>/',
         UpdateMessageStatusView.as_view(),
         name='update-message-status'
     ),
 
-    path('api/hub/get_signed_url/', SignedURLAPIView.as_view(), name='get-signed-url'),
+    path('hub/get_signed_url/', SignedURLAPIView.as_view(), name='get-signed-url'),
 
     path('', include(router.urls)),
 ]
