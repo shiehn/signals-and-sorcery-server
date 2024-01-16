@@ -1,208 +1,41 @@
-# Django Seed
+# DAWNet infrastructure (DockerCompose)
 
-The purpose of this repository is just to share a homemade seed to create an API and CMS in Python 3, Django and Django Rest Framework.
+This is a monorepo containing all the services needed to support the DAWNet plugin and client.  The repo contains the following services:
 
-You can setup this project with a Docker and manually.
+* **DAWNET API SERVER:** The Django server (DRF) which serves the API and handles uploads/downloads to cloud storage.
+* **DAWNET WEBSOCKET SERVER:** A Python websockets server which handles the realtime communication between the dawnet remote Google Colabs (or scripts)
+* **POSTGRES DATABASE:** The database which stores all the data for the DAWNet infrastructure
 
-## Manual Installation
+NOTE: there are a few other services which are currently just placeholders to support potential functionality such as a web frontend for user auth, etc.
 
-Requires [Python 3.9](https://www.python.org/downloads/) and [Postgresql 13+](https://www.postgresql.org/download/)
+## Dependencies:
 
-To install all dependencies:
-```bash
-make install
-```
+* **SERVER:** You will a server expose to the public internet.  I recommend a multi-core Ubuntu VM on AWS or GCP.
+* **DOCKER-COMPOSE:** you will need docker and docker-compose installed on you server.  I recommend querying CHAT-GPT for instructions on how to install docker-compose on your server.
+* **GCP CLOUD STORAGE:** As currently implemented the system expects to use GCP cloud storage for the storage of audio files.  You will need to create a GCP project and get a service key which is added as an environment variable to the docker-compose file.  See `example.env` for the required format of the service key.
 
-To delete all dependencies:
-```bash
-make clean
-```
 
-All the command from the Makefile would require to have your environment setup with the variables listed at the end of this file.
-You may used `example.env` as a sample.
+## Running The Services
 
-### Run
-
-This django app has been setup for multi-settings mode (app/settings), two settings have been created:
-
- * api
- * web
-
-There are inheriting everything from app/settings/base.py.
-
-Here is an example of commands you can run for the `api` settings:
+Set up your environment variables by copying `example.env` to `.env` and filling in the required values.
 
 ```bash
-make setting=api migrations
-make setting=api migrate
-make setting=api port=8080 server
-```
+source ./your-env-file.env
+````
 
-The server will be ready on http://localhost:8080.
-
-## Automatic Installation
-
-Requires [Docker 20+](https://docs.docker.com/get-docker/) and [Docker Compose 1+](https://docs.docker.com/compose/install/)
+Start the services using docker-compose:
 
 ```bash
 docker-compose up --build
 ````
+After running this command, (BY DEFAULT) you should have the following services exposed on the following ports:
 
-### Run
+* **DAWNET API SERVER:** `http://[YOUR-IP-AT-PORT]:8081`
+* **DAWNET WEB SOCKET:** `http://[YOUR-IP-AT-PORT]:8765`
 
-As explained above, you have two different settings you can launch, with docker both of them will be ready on:
+### NOTE:
 
- * api: `http://localhost:8081`
- * cms: `http://localhost:8082`
+Remember you'll need to expose your ports to the public internet on your VM.  (Query Chat-GPT for instructions on how to do this.)
 
-## CMS
 
-To be able to access the CMS, you'll have to create a super user beforehand with the command:
 
-```bash
-make setting=web superuser
-````
-
-## API
-
-### Swagger
-
-To see the API swagger, you must launch the server.
-
-```bash
-make install
-make setting=api server
-```
-
-Then goes on this URL `http://127.0.0.1:8080/api/swagger`.
-
-You can check the validity of the swagger by installing `swagger-cli` through the command:
-```bash
-npm install -g swagger-cli
-```
-Then you can launch the command:
-```bash
-make setting=api swagger-check
-```
-
-### Test
-
-You can test the API by launching this command:
-```bash
-make setting=api app=api test_app
-```
-
-## Code linting
-```bash
-make lint
-```
-
-In order to enforce a certain code quality, the option `--fail-under` is used, and is configured to fail if the score is below 9.0 (see Makefile).
-
-Before each Pull Request, we expect developers to run this command and fix most of errors or warnings displayed.
-
-After creating a new module, it has to be added into the Makefile command.
-
-As part of the linting, be aware you have to use [typings](https://docs.python.org/3/library/typing.html) in all the code you're creating.
-
-## Other commands
-
-### Super User creation
-
-```bash
-make settings=xxx superuser
-```
-
-### Greenkeeping
-
-```bash
-make greenkeeping
-```
-
-Then run the tests, as explained above, to verify nothing has been broken.
-
-## i18N
-
-The translation files (po) are in locale/<lang>/LC_MESSAGES/django.po.
-
-### To generate them:
-
-```bash
-make setting=web makemessages
-```
-
-The setup is at the bottom of the app/settings.py.
-
-The way to use it is:
-
-In python code:
-
-```python
-from django.utils.translation import gettext_lazy as _
-
-return JsonResponse({'message': _('NoFortune')}, status=404)
-```
-
-In template:
-
-```html
-{% load i18n %}
-<p>{% trans 'YourFortune' %}</p>
-```
-
-### To compile the messages (so that Django can use them) run:
-
-```bash
-make setting=web compilemessages
-```
-
-Note for the ops: the compiled files won't be kept in git, so they have to be re-generated at every deployment.
-
-### API Example:
-
-```bash
-➜  django-seed git:(master) ✗ curl http://localhost:8080/sample/
-{"message": "Success"}
-
-➜  django-seed git:(master) ✗ curl http://localhost:8080/sample/ -H 'Accept-Language: fr'
-{"message": "Succès"}
-```
-
-## OPS
-
-## Celery
-
-There is a Celery project embedded in this django project and it can be found in the following files:
-
- * app/__init__.py (imports the Celery config file)
- * app/main_celery.py (Celery config)
- * tasks/tasks.py (list of tasks)
-
-### Run the server
-
-```bash
-make setting=api celery
-```
-
-### Tasks
-
-In order to use your task (decorated with `@shared_task`), launch the celery server and in another console you can do the following:
-```bash
-make setting=api shell
-from tasks.tasks import test
-test.delay({'test': 'abc', 'true': 'yes'})
-```
-
-## Environment variables
-
-| Name                          | Type    | Default                                      | Description                                                                                      |
-| ----------------------------- | ------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| DEBUG                         | Boolean | True                                         | Should be False in production                                                                    |
-| POSTGRESQL_ADDON_DB           | String  | base                                         | Name of the psql database                                                                        |
-| POSTGRESQL_ADDON_USER         | String  | base                                         | Name of the psql user                                                                            |
-| POSTGRESQL_ADDON_PASSWORD     | String  | base                                         | Password of the psql user                                                                        |
-| POSTGRESQL_ADDON_HOST         | String  | localhost                                    | Domain/Ip of the psql database                                                                   |
-| POSTGRESQL_ADDON_PORT         | Integer | 5432                                         | Port of the psql database                                                                        |
-| SENTRY_DSN                    | String  | X                                            | Sentry's DSN (will only be enabled if the DEBUG flag is FALSE)                                   |
-| CELERY_QUEUE                  | String  | celery                                       | Name of the default celery queue                                                                 |
-| REDIS_URL                     | String  | redis://localhost:6379/0                     | Redis URL used by Celery                                                                         |
