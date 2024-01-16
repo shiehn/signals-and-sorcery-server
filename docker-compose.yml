@@ -34,6 +34,9 @@ services:
             - 8765:8765
         networks:
             - django-seed-network
+        depends_on:
+            - postgres
+            - api
     api:
         restart: always
         build:
@@ -54,8 +57,6 @@ services:
             - GCP_ASSET_BUCKET=${GCP_ASSET_BUCKET:-empty}
             - SENTRY_DSN=${SENTRY_URL}
             - DEBUG=${DEBUG:-true}
-
-
         ports:
             - 8081:8081
         networks:
