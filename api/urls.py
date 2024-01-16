@@ -13,7 +13,7 @@ class OptionalSlashRouter(SimpleRouter):
         self.trailing_slash = '/?'
 
 urlpatterns = [
-    path('', include('api.sample.urls')),
+    path('', include('api.dawnet.urls')),
     # Swagger
     path('swagger/', TemplateView.as_view(
         template_name='swagger/api.swagger.html',

@@ -48,8 +48,14 @@ services:
             - POSTGRESQL_ADDON_USER=${POSTGRESQL_ADDON_USER:-postgres}
             - POSTGRESQL_ADDON_PORT=5432
             - DJANGO_SETTINGS_MODULE=app.settings.api
+            - WEB_SOCKET_SERVER_IP=websocket
+            - WEB_SOCKET_PORT=${WEB_SOCKET_PORT:-8765}
+            - GCP_SERVICE_ACCOUNT_FILE=${GCP_SERVICE_ACCOUNT_FILE:-empty}
+            - GCP_ASSET_BUCKET=${GCP_ASSET_BUCKET:-empty}
             - SENTRY_DSN=${SENTRY_URL}
             - DEBUG=${DEBUG:-true}
+
+
         ports:
             - 8081:8081
         networks:

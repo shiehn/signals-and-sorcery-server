@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from dawnet_client import SentryEventLogger, DNSystemType, DNTag, DNMsgStage
-from mysite import settings
+#from mysite import settings
 
 dn_tracer = SentryEventLogger(service_name=DNSystemType.DN_API_SERVER.value)
 
@@ -21,7 +21,7 @@ class SignedURLAPIView(APIView):
         token = request.query_params.get('token')
 
         # Ensure the service account file exists
-        service_account_file = settings.GCP_SERVICE_ACCOUNT_FILE
+        service_account_file = os.environ.get('GCP_SERVICE_ACCOUNT_FILE')
         if not os.path.exists(service_account_file):
             dn_tracer.log_error(str(token), {
                 DNTag.DNMsgStage.value: DNMsgStage.UPLOAD_ASSET.value,
@@ -43,7 +43,7 @@ class SignedURLAPIView(APIView):
         # Initialize the GCP Storage client
         try:
             storage_client = storage.Client.from_service_account_json(service_account_file)
-            bucket = storage_client.get_bucket(settings.GCP_ASSET_BUCKET)
+            bucket = os.environ.get('GCP_ASSET_BUCKET')
         except Exception as e:
             dn_tracer.log_error(str(token), {
                 DNTag.DNMsgStage.value: DNMsgStage.UPLOAD_ASSET.value,

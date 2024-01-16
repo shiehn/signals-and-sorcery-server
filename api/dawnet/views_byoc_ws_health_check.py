@@ -1,4 +1,5 @@
 import json
+import os
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,16 +7,19 @@ from rest_framework import status
 import asyncio
 import websockets
 
-#WEB_SOCKET_SERVER_IP = "0.0.0.0"
-WEB_SOCKET_SERVER_IP = "35.223.141.253"
-WEB_SOCKET_PORT = "8765"
-
 class HealthCheckView(APIView):
     authentication_classes = []  # disables authentication
     permission_classes = []  # disables permission
 
     async def check_websocket_connection(self):
-        uri = f"ws://{WEB_SOCKET_SERVER_IP}:{WEB_SOCKET_PORT}"
+
+        print( "______:SENTRY_DSN=" + os.environ.get('SENTRY_DSN'))
+        print( "______:WEB_SOCKET_SERVER_IP=" + os.environ.get('WEB_SOCKET_SERVER_IP'))
+        print( "______:WEB_SOCKET_PORT=" + os.environ.get('WEB_SOCKET_PORT'))
+
+
+
+        uri = f"ws://{os.environ.get('WEB_SOCKET_SERVER_IP')}:{os.environ.get('WEB_SOCKET_PORT')}"
         try:
             async with websockets.connect(uri, close_timeout=5) as ws:
                 await ws.send(json.dumps({"type": "healthcheck"}))
