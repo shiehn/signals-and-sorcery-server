@@ -17,7 +17,7 @@ NOTE: there are a few other services which are currently just placeholders to su
 
 ## Running The Services
 
-Set up your environment variables by copying `example.env` to `.env` and filling in the required values.
+Set up your environment variables by copying the `example.env` and filling in the required values. Then source the file:
 
 ```bash
 source ./your-env-file.env

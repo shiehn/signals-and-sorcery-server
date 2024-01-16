@@ -32,10 +32,9 @@ if not DEBUG:
     from sentry_sdk.integrations.django import DjangoIntegration
     sentry_sdk.init(os.environ.get('SENTRY_DSN'), integrations=[DjangoIntegration()])
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost'
-]
+ALLOWED_HOSTS = ['*']
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 INSTALLED_APPS = [
