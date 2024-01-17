@@ -29,7 +29,7 @@ async def fetch_pending_requests():
                     # Try parsing the response to JSON
                     data = await response.json()
 
-                    #print('LATEST_PENDING_MESSAGES: ', str(data))
+                    # print('LATEST_PENDING_MESSAGES: ', str(data))
 
                     # Loop through the connections and send the message to each one
                     for record in data:
@@ -137,37 +137,27 @@ async def server_handler(websocket, path):
                         DNTag.DNMsg.value: str(e),
                     })
 
-
-
     except websockets.exceptions.ConnectionClosedOK:
         # Remove the connection when the client disconnects
-        if msg is not None and msg.token is not None:
-            print(f"ERROR: WebSocket connection closed for token {msg.token}")
-            try:
-                await connection_manager.remove_connection(msg.token)
-                dn_tracer.log_event(str(msg.token), {
-                    DNTag.DNMsgStage.value: DNMsgStage.WS_UN_REG_TOKEN.value,
-                    DNTag.DNMsg.value: "success",
-                })
-            except Exception as e:
-                dn_tracer.log_error(str(msg.token), {
-                    DNTag.DNMsgStage.value: DNMsgStage.WS_UN_REG_TOKEN.value,
-                    DNTag.DNMsg.value: str(e),
-                })
+        if msg is not None and 'token' in msg:
+            token = msg['token']
+            if token is not None:
+                print(f"ERROR: WebSocket connection closed for token {token}")
+                try:
+                    await connection_manager.remove_connection(token)
+                    dn_tracer.log_event(str(msg.token), {
+                        DNTag.DNMsgStage.value: DNMsgStage.WS_UN_REG_TOKEN.value,
+                        DNTag.DNMsg.value: "success",
+                    })
+                except Exception as e:
+                    dn_tracer.log_error(str(msg.token), {
+                        DNTag.DNMsgStage.value: DNMsgStage.WS_UN_REG_TOKEN.value,
+                        DNTag.DNMsg.value: str(e),
+                    })
+            else:
+                print("ERROR: WebSocket connection closed")
         else:
-            print(f"ERROR: WebSocket connection closed")
-    except Exception as e:
-        # Remove the connection when the client disconnects
-        if msg is not None and msg.token is not None:
-            try:
-                await connection_manager.remove_connection(msg.token)
-            except Exception as e:
-                dn_tracer.log_error(str(msg.token), {
-                    DNTag.DNMsgStage.value: DNMsgStage.WS_UN_REG_TOKEN.value,
-                    DNTag.DNMsg.value: str(e),
-                })
-        else:
-            print(f"ERROR: WebSocket connection closed: {e}")
+            print("ERROR: WebSocket connection closed")
 
 
 async def check_all_clients_health():
