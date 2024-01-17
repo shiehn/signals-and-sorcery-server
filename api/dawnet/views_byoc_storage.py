@@ -43,7 +43,9 @@ class SignedURLAPIView(APIView):
         # Initialize the GCP Storage client
         try:
             storage_client = storage.Client.from_service_account_json(service_account_file)
-            bucket = os.environ.get('GCP_ASSET_BUCKET')
+            bucket_name = os.environ.get('GCP_ASSET_BUCKET')
+            bucket = storage_client.bucket(bucket_name)
+            blob = Blob(original_filename, bucket)
         except Exception as e:
             dn_tracer.log_error(str(token), {
                 DNTag.DNMsgStage.value: DNMsgStage.UPLOAD_ASSET.value,
@@ -51,9 +53,6 @@ class SignedURLAPIView(APIView):
             })
 
             return JsonResponse({'error': str(e)}, status=500)
-
-        # Create a blob with the original filename
-        blob = Blob(original_filename, bucket)
 
         # Generate a signed URL for the upload
         try:
