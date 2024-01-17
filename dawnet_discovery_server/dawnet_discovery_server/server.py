@@ -160,27 +160,10 @@ async def server_handler(websocket, path):
                 print("WebSocket connection closed")
         else:
             print("WebSocket connection closed")
-    except websockets.exceptions.ConnectionClosedError:
+    except websockets.exceptions.ConnectionClosedError as e:
         # Remove the connection when the client disconnects
-        if msg is not None and 'token' in msg:
-            token = msg['token']
-            if token is not None:
-                print(f"ERROR: WebSocket connection closed for token {token}")
-                try:
-                    await connection_manager.remove_connection(token)
-                    dn_tracer.log_event(str(msg.token), {
-                        DNTag.DNMsgStage.value: DNMsgStage.WS_UN_REG_TOKEN.value,
-                        DNTag.DNMsg.value: "success",
-                    })
-                except Exception as e:
-                    dn_tracer.log_error(str(msg.token), {
-                        DNTag.DNMsgStage.value: DNMsgStage.WS_UN_REG_TOKEN.value,
-                        DNTag.DNMsg.value: str(e),
-                    })
-            else:
-                print("ERROR: WebSocket connection closed")
-        else:
-            print("ERROR: WebSocket connection closed")
+        print(f"ERROR: WebSocket connection closed with error: {e}")
+        
     except Exception as e:
         # Remove the connection when the client disconnects
         if msg is not None and 'token' in msg:
@@ -236,7 +219,7 @@ async def run_forever():
             print(f"WebSocket server crashed with error: {e}. Restarting server...")
 
             # Optional: wait a short time before restarting
-            await asyncio.sleep(5)
+            #await asyncio.sleep(5)
 
 # This function remains the same
 def setup_tasks():
