@@ -70,10 +70,8 @@ async def server_handler(websocket, path):
     msg = None
     try:
         while True:
-            raw_msg = await websocket.recv()
-
-            # HANDLE HEALTH CHECKS - END
             try:
+                raw_msg = await websocket.recv()
                 msg = json.loads(raw_msg)
                 if msg.get('type') == 'healthcheck':
                     await websocket.send(json.dumps({"status": "success"}))
@@ -111,6 +109,7 @@ async def server_handler(websocket, path):
                         DNTag.DNMsgStage.value: DNMsgStage.WS_REG_TOKEN.value,
                         DNTag.DNMsg.value: str(e),
                     })
+                    continue
             elif str(msg.type) == 'contract':
                 try:
                     await create_compute_contract(msg.token, msg.data)
@@ -123,6 +122,7 @@ async def server_handler(websocket, path):
                         DNTag.DNMsgStage.value: DNMsgStage.WS_REG_CONTRACT.value,
                         DNTag.DNMsg.value: str(e),
                     })
+                    continue
             elif str(msg.type) == 'results':
                 dict_data = msg.data.to_dict()
                 try:
@@ -136,6 +136,7 @@ async def server_handler(websocket, path):
                         DNTag.DNMsgStage.value: DNMsgStage.WS_SEND_RESULTS.value,
                         DNTag.DNMsg.value: str(e),
                     })
+                    continue
 
     except websockets.exceptions.ConnectionClosedOK:
         # Remove the connection when the client disconnects
