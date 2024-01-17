@@ -70,8 +70,9 @@ async def server_handler(websocket, path):
     msg = None
     try:
         while True:
+            raw_msg = await websocket.recv()
+
             try:
-                raw_msg = await websocket.recv()
                 msg = json.loads(raw_msg)
                 if msg.get('type') == 'healthcheck':
                     await websocket.send(json.dumps({"status": "success"}))
@@ -212,28 +213,43 @@ async def check_all_clients_health():
         await connection_manager.check_client_health()
 
 
+async def run_forever():
+    while True:
+        try:
+            # Starting the server
+            start_server = websockets.serve(
+                server_handler,
+                '0.0.0.0',
+                8765,
+                ping_interval=90,
+                ping_timeout=90,
+                close_timeout=10
+            )
+
+            server = await start_server
+
+            # Running the server
+            print("WebSocket server started.")
+            await server.wait_closed()
+
+        except Exception as e:
+            print(f"WebSocket server crashed with error: {e}. Restarting server...")
+
+            # Optional: wait a short time before restarting
+            await asyncio.sleep(5)
+
+# This function remains the same
 def setup_tasks():
     asyncio.create_task(fetch_pending_requests())
     asyncio.create_task(check_all_clients_health())
-
 
 def run():
     try:
         loop = asyncio.get_event_loop()
 
-        # Schedule the setup of tasks once the loop starts running
+        # Schedule the setup of tasks and the server
         loop.call_soon(setup_tasks)
-
-        start_server = websockets.serve(
-            server_handler,
-            '0.0.0.0',
-            8765,
-            ping_interval=90,  # Send a ping to the client every 30 seconds
-            ping_timeout=90,  # Timeout if no response to ping after 10 seconds
-            close_timeout=10  # max wait for the closing handshake to complete
-        )
-        loop.run_until_complete(start_server)
-        loop.run_forever()
+        loop.run_until_complete(run_forever())
 
     except Exception as e:
         print(f"Event loop crashed with error: {e}")
