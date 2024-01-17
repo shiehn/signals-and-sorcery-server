@@ -1,5 +1,7 @@
 import asyncio
 import json
+import logging
+
 import websockets
 
 from dawnet_discovery_server.byoc_api import update_connection_status
@@ -11,9 +13,9 @@ class ConnectionManager:
         self.connections_lock = asyncio.Lock()  # Lock to protect the connections dictionary
 
     async def add_connection(self, token, websocket):
-        print("ATTEMPTING TO REGISTER TOKEN:WEBSOCKET = " + str(token) + " : " + str(websocket))
+        logging.info("ATTEMPTING TO REGISTER TOKEN:WEBSOCKET = " + str(token) + " : " + str(websocket))
         async with self.connections_lock:
-            print("REGISTERED TOKEN:WEBSOCKET = " + str(token) + " : " + str(websocket))
+            logging.info("REGISTERED TOKEN:WEBSOCKET = " + str(token) + " : " + str(websocket))
             self.connections[token] = websocket
             await update_connection_status(token, 1)
 

@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 
 import websockets
 import aiohttp
@@ -88,7 +89,7 @@ async def server_handler(websocket, path):
             # HANDLE HEALTH CHECKS - START
 
             try:
-                print("raw_msg: " + str(raw_msg))
+                logging.info("raw_msg: " + str(raw_msg))
                 msg = create_message_from_json(raw_msg)
             except Exception as e:
                 dn_tracer.log_error(str(msg.token), {
@@ -99,7 +100,7 @@ async def server_handler(websocket, path):
 
             if str(msg.type) == 'register':
                 # Add the connection to the ConnectionManager when a client connects
-                print("MESSAGE: " + str(msg))
+                logging.info("MESSAGE: " + str(msg))
                 try:
                     await connection_manager.add_connection(msg.token, websocket)
                     dn_tracer.log_event(str(msg.token), {
