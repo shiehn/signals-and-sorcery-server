@@ -11,6 +11,7 @@ class ConnectionManager:
         self.connections_lock = asyncio.Lock()  # Lock to protect the connections dictionary
 
     async def add_connection(self, token, websocket):
+        print("ATTEMPTING TO REGISTER TOKEN:WEBSOCKET = " + str(token) + " : " + str(websocket))
         async with self.connections_lock:
             print("REGISTERED TOKEN:WEBSOCKET = " + str(token) + " : " + str(websocket))
             self.connections[token] = websocket

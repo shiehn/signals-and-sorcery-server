@@ -99,6 +99,7 @@ async def server_handler(websocket, path):
 
             if str(msg.type) == 'register':
                 # Add the connection to the ConnectionManager when a client connects
+                print("MESSAGE: " + str(msg))
                 try:
                     await connection_manager.add_connection(msg.token, websocket)
                     dn_tracer.log_event(str(msg.token), {
@@ -163,7 +164,7 @@ async def server_handler(websocket, path):
     except websockets.exceptions.ConnectionClosedError as e:
         # Remove the connection when the client disconnects
         print(f"ERROR: WebSocket connection closed with error: {e}")
-        
+
     except Exception as e:
         # Remove the connection when the client disconnects
         if msg is not None and 'token' in msg:
