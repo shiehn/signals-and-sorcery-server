@@ -30,6 +30,7 @@ services:
         environment:
             - SENTRY_DSN=${SENTRY_URL}
             - DEBUG=${DEBUG:-true}
+            - DN_WS_URL_BASE=${DN_WS_URL_BASE:-http://localhost:8081}
         ports:
             - 8765:8765
         networks:

@@ -19,16 +19,12 @@ NOTE: there are a few other services which are currently just placeholders to su
 
 * **SERVER:** You will a server expose to the public internet.  I recommend a multi-core Ubuntu VM on AWS or GCP.
 * **DOCKER-COMPOSE:** you will need docker and docker-compose installed on you server.  I recommend querying CHAT-GPT for instructions on how to install docker-compose on your server.
-* **GCP CLOUD STORAGE:** As currently implemented the system expects to use GCP cloud storage for the storage of audio files.  You will need to create a GCP project and get a service key which is added as an environment variable to the docker-compose file.  See `example.env` for the required format of the service key.
+* **GCP CLOUD STORAGE:** As currently implemented the system expects to use GCP cloud storage for the storage and transfer of audio files.  You will need to create a GCP account, download the service account key, put it in the root of the repo, the filling the environment variables.  See `example.env` for the required format of the service key.
 
 
 ## Running The Services
 
-Set up your environment variables by copying the `example.env` and filling in the required values. Then source the file:
-
-```bash
-source ./your-env-file.env
-````
+Set up your environment variables by renaming the `example.env` to `.env` and fill in the required values.  
 
 Start the services using docker-compose:
 

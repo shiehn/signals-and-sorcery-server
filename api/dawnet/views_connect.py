@@ -1,3 +1,5 @@
+import logging
+
 from django.urls import resolve
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
@@ -32,16 +34,18 @@ class Connect(APIView):
     def put(self, request, token, connection_status: int):
         # Determine the type based on the URL name
         url_name = resolve(request.path_info).url_name
-        if url_name == 'connection/compute':
-            connection_type = 'compute'
+        if url_name == "connection/compute":
+            connection_type = "compute"
         else:
-            connection_type = 'plugin'
+            connection_type = "plugin"
+
+        logging.info(f"PUT_URL: {request.path_info}")
 
         # Check if a record with the provided token exists
         record, created = ConnectionStatus.objects.get_or_create(id=token)
 
         # Update the respective column
-        if connection_type == 'compute':
+        if connection_type == "compute":
             record.compute = bool(connection_status)
         else:
             record.plugin = bool(connection_status)
@@ -49,9 +53,11 @@ class Connect(APIView):
         # Save the updated/created record
         record.save()
 
-        return Response({
-            'type': connection_type,
-            'token': token,
-            'status': connection_status,
-            'record_created': created  # returns True if a new record was created
-        })
+        return Response(
+            {
+                "type": connection_type,
+                "token": token,
+                "status": connection_status,
+                "record_created": created,  # returns True if a new record was created
+            }
+        )

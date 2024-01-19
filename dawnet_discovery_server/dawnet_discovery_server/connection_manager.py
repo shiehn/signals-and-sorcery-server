@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 import websockets
 
@@ -12,16 +13,7 @@ class ConnectionManager:
         # self.connections_lock = asyncio.Lock()  # Lock to protect the connections dictionary
 
     async def add_connection(self, token, websocket):
-        logging.info(
-            "ATTEMPTING TO REGISTER TOKEN:WEBSOCKET = "
-            + str(token)
-            + " : "
-            + str(websocket)
-        )
         # async with self.connections_lock:
-        logging.info(
-            "REGISTERED TOKEN:WEBSOCKET = " + str(token) + " : " + str(websocket)
-        )
         self.connections[token] = websocket
         await update_connection_status(token, 1)
 
@@ -41,7 +33,6 @@ class ConnectionManager:
                 disconnected_tokens.append(token)
 
         for token in disconnected_tokens:
-            print("REMOVING DEAD CONNECTION: " + str(token))
             await self.remove_connection(token)
 
     async def get_websocket(self, token):
@@ -59,15 +50,9 @@ class ConnectionManager:
 
             json_message = json.dumps(message)
 
-            print("--------------------------------------------------")
-            print("TOO: " + str(token))
-            print("SEND: " + str(json_message))
-            print("--------------------------------------------------")
-
             await websocket.send(json_message)
 
             return True
         except websockets.exceptions.ConnectionClosed:
-            print(f"Connection for token {token} closed before message could be sent.")
             await self.remove_connection(token)
             return False
