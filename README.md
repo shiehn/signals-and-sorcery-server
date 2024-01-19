@@ -1,3 +1,10 @@
+# DAWNet
+
+`DAWNet` is a DAW (digit audio workstation) plugin that connects to a remote Google Colab or Script.  A user can send audio files from the plugin for remote processing. Hence, perform computationally expensive tasks such as text-2-audio or stem separation without leaving the DAW.
+
+For more information visit: [https://dawnet.tools/](https://dawnet.tools/)
+
+
 # DAWNet infrastructure (DockerCompose)
 
 This is a monorepo containing all the services needed to support the DAWNet plugin and client.  The repo contains the following services:
