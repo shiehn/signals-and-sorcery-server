@@ -15,6 +15,41 @@ This is a monorepo containing all the services needed to support the DAWNet plug
 
 NOTE: there are a few other services which are currently just placeholders to support potential functionality such as a web frontend for user auth, etc.
 
+## MAKE COMMANDS
+
+To install all dependencies:
+```bash
+make install
+```
+
+To delete all dependencies:
+```bash
+make clean
+```
+
+All the command from the Makefile would require to have your environment setup with the variables listed at the end of this file.
+You may used `example.env` as a sample.
+
+### DB MIGRATIONS
+
+This django app has been setup for multi-settings mode (app/settings), two settings have been created:
+
+* api
+* web
+
+There are inheriting everything from app/settings/base.py.
+
+Here is an example of commands you can run for the `api` settings:
+
+```bash
+make setting=api migrations
+make setting=api migrate
+make setting=api port=8080 server
+```
+
+The server will be ready on http://localhost:8080.
+
+
 ## Dependencies:
 
 * **SERVER:** You will a server expose to the public internet.  I recommend a multi-core Ubuntu VM on AWS or GCP.
