@@ -17,6 +17,10 @@ CONFIG = {
     "URL_GET_CONNECTIONS": os.getenv(
         "DN_WS_URL_GET_CONNECTIONS", parser.get("DEFAULT", "URL_GET_CONNECTIONS")
     ),
+    "URL_ADD_CONNECTION_MAPPING": os.getenv(
+        "DN_WS_ADD_CONNECTION_MAPPING",
+        parser.get("DEFAULT", "URL_ADD_CONNECTION_MAPPING"),
+    ),
     "URL_CREATE_COMPUTE_CONTRACT": os.getenv(
         "DN_WS_URL_CREATE_COMPUTE_CONTRACT",
         parser.get("DEFAULT", "URL_CREATE_COMPUTE_CONTRACT"),

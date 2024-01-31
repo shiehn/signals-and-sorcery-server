@@ -73,6 +73,42 @@ async def update_connection_status(token: str, status: int):
                 raise  # Re-raise the last exception if all retries fail
 
 
+async def add_connection_mapping(
+    master_token: str, connection_token: str, name: str, description: str
+):
+    add_mapping_url = CONFIG["URL_BASE"] + CONFIG["URL_ADD_CONNECTION_MAPPING"]
+
+    payload = {
+        "master_token": master_token,
+        "connection_token": connection_token,
+        "connection_name": name,
+        "description": description,
+    }
+
+    max_retries = 3  # Define the maximum number of retries
+    for attempt in range(max_retries):
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(add_mapping_url, json=payload) as response:
+                    response_data = await response.text()
+                    print("ADD_MAPPING_RES: " + str(response_data))
+                    if response.status != 200:
+                        print(
+                            f"Error adding connection mapping. Status code: {response.status}, Response: {response_data}"
+                        )
+                    else:
+                        print(
+                            f"Successfully added connection mapping. Response: {response_data}"
+                        )
+                        return response_data  # Break out of the loop on success
+        except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+            logging.error(f"Add Connection Mapping Attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:  # Check if we've reached the max retries
+                await asyncio.sleep(2**attempt)  # Exponential backoff
+            else:
+                raise  # Re-raise the last exception if all retries fail
+
+
 # TODO: MOVE THIS TO BYOC_API.PY
 async def update_message_status(token: str, message_id: str, new_status: str):
     update_url = CONFIG["URL_BASE"] + CONFIG["URL_UPDATE_MESSAGE_STATUS"].format(

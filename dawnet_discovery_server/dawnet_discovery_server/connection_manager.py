@@ -4,7 +4,10 @@ import os
 
 import websockets
 
-from dawnet_discovery_server.byoc_api import update_connection_status
+from dawnet_discovery_server.byoc_api import (
+    update_connection_status,
+    add_connection_mapping,
+)
 
 
 class ConnectionManager:
@@ -16,6 +19,12 @@ class ConnectionManager:
         # async with self.connections_lock:
         self.connections[token] = websocket
         await update_connection_status(token, 1)
+
+    async def add_connection_mapping(
+        self, master_token, connection_token, name, description
+    ):
+        # async with self.connections_lock:
+        await add_connection_mapping(master_token, connection_token, name, description)
 
     async def remove_connection(self, token):
         # async with self.connections_lock:

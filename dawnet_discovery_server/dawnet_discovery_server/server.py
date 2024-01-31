@@ -136,6 +136,14 @@ async def server_handler(websocket, path):
                             DNTag.DNMsg.value: "success",
                         },
                     )
+
+                    await connection_manager.add_connection_mapping(
+                        msg.data.master_token,
+                        msg.token,
+                        msg.data.name,
+                        msg.data.description,
+                    )
+                    # TODO: add connection mapping TRACING
                 except Exception as e:
                     dn_tracer.log_error(
                         str(msg.token),
