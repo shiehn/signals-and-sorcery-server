@@ -37,8 +37,22 @@ class ConnectionManager:
 
         # Now, outside the loop, remove the collected websockets from self.all_connections
         for websocket in websockets_to_close:
-            self.all_connections.discard(websocket)  # This is safe as it's not within the iteration loop
+            try:
+                # Prepare the close message as a JSON string
+                close_message = json.dumps({"type": "close_connection", "message": "Connection closed by server"})
+                # Send the close message to the client
+                await websocket.send(close_message)  # Make sure to await the send operation
+                # Optionally, wait for a response or a specific condition before closing, if needed
 
+                # Close the websocket connection
+                await websocket.close()
+
+                logging.info(f"Sent close_connection message and closed websocket: {websocket}")
+            except Exception as e:
+                logging.error(f"Error attempting `safe` websocket close: {e}")
+
+            # Remove the websocket from the tracking set
+            self.all_connections.discard(websocket)
 
     async def add_registered_connection(self, token, websocket):
         # async with self.connections_lock:
