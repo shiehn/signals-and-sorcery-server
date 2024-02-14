@@ -23,7 +23,7 @@ dn_tracer = SentryEventLogger(service_name=DNSystemType.DN_DISCOVERY_SERVER.valu
 
 async def fetch_pending_requests():
     while True:
-        await asyncio.sleep(CONFIG["FETCH_PENDING_REQUESTS_INTERVAL"])
+        await asyncio.sleep(float(CONFIG["FETCH_PENDING_REQUESTS_INTERVAL"]))
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get(
@@ -83,11 +83,16 @@ async def fetch_pending_requests():
 
 async def send_trigger_periodically(websocket, client_id):
     while True:
-        await asyncio.sleep(CONFIG["SLEEP_TIME"])
+        await asyncio.sleep(float(CONFIG["SLEEP_TIME"]))
         await websocket.send("start_plugin")
 
 
 async def server_handler(websocket, path):
+    try:
+        await connection_manager.add_unregistered_connection(websocket)
+    except Exception as e:
+        logging.error(f"Error adding unregistered websocket: {e}")
+
     msg = None
     try:
         while True:
@@ -128,7 +133,7 @@ async def server_handler(websocket, path):
                 # Add the connection to the ConnectionManager when a client connects
                 logging.info("MESSAGE: " + str(msg))
                 try:
-                    await connection_manager.add_connection(msg.token, websocket)
+                    await connection_manager.add_registered_connection(msg.token, websocket)
                     dn_tracer.log_event(
                         str(msg.token),
                         {
@@ -258,10 +263,13 @@ async def server_handler(websocket, path):
 async def check_all_clients_health():
     while True:
         # Wait for a configured time interval between health checks
-        await asyncio.sleep(CONFIG["CLIENT_SOCKET_HEALTH_CHECK_INTERVAL"])
+        await asyncio.sleep(float(CONFIG["CLIENT_SOCKET_HEALTH_CHECK_INTERVAL"]))
 
         # Check the health of all clients
         await connection_manager.check_client_health()
+
+        # Close any unregistered connections
+        await connection_manager.close_unregistered_connections()
 
 
 async def run_forever():
