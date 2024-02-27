@@ -5,7 +5,7 @@ import subprocess
 import time
 import requests
 
-from dawnet_api import register_the_plugin_token
+from dawnet_api import register_the_plugin_token, get_connection_mappings
 
 
 def start_service():
@@ -33,21 +33,34 @@ def health_check(url):
 
 
 def main():
-    service_url = 'http://localhost:8000'  # Assuming your service runs on this URL
     register_the_plugin_token(token)
 
-    
     service_process = start_service()
 
 
+    connection_mappings = []
+    print("Waiting for connected remotes")
+    while not get_connection_mappings(token):
+        time.sleep(1)  # Wait a bit before trying again
 
-    # Wait for the service to be up
-    # print("Waiting for the service to be up...")
-    # while not health_check(service_url):
-    #     time.sleep(1)  # Wait a bit before trying again
-    # print("Service is up!")
+    # [{'id': '9c81ed92-c08c-4d05-9293-f357d51721e4',
+    #   'master_token': '4ad34c17-7c88-407f-8021-984054aa32dd',
+    #   'connection_token': 'a84f8256-791e-5b6e-84ab-921637113a16',
+    #   'connection_name': 'DAWNet Template',
+    #   'description': 'This is a template intended as a starting place to create custom DAWNet functions.',
+    #   'created_at': '2024-02-27T19:44:10',
+    #   'updated_at': '2024-02-27T19:44:10'}]
 
-    time.sleep(10)
+    print("Service is up!")
+    connection_mapping = get_connection_mappings(token)[0]
+    # print("MAPPINGS: " + str(connection_mapping))
+    print("MASTER_TOKEN: " + connection_mapping['master_token'])
+    print("CONNECTION_TOKEN: " + connection_mapping['connection_token'])
+    print("CONNECTION_NAME: " + connection_mapping['connection_name'])
+
+
+
+    #time.sleep(10)
 
 
     # Perform your tests here (example HTTP request)

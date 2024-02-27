@@ -26,9 +26,15 @@ import requests
 
 BASE_URL = 'http://34.135.228.111:8081'
 
+
 def API_URLS_PLUGIN_CONNECTION(token: str):
     status = 1
     return f"http://{BASE_URL}/api/plugin_connection?token={token}&status={status}"
+
+
+# Example implementation of API_URLS_GET_CONNECTION_MAPPINGS, replace with your actual function
+def API_URLS_GET_CONNECTION_MAPPINGS(token: str):
+    return f"{BASE_URL}/api/hub/connection_mappings/{token}/"
 
 
 def register_the_plugin_token(token):
@@ -49,3 +55,24 @@ def register_the_plugin_token(token):
             pass
     except Exception as error:
         print(f"Error updating plugin connection status: {error}")
+
+
+import requests
+
+
+def get_connection_mappings(token: str):
+    url = API_URLS_GET_CONNECTION_MAPPINGS(token)
+
+    try:
+        response = requests.get(url, allow_redirects=True)  # 'allow_redirects=True' is default and follows redirects
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            # Handle the error case, perhaps log it or use a Python equivalent of your toast error notification
+            print('Error fetching connection mappings')
+            return []
+    except Exception as error:
+        # Handle exceptions and log or notify as appropriate
+        print(f'Error fetching connection mappings: {error}')
+        return []
