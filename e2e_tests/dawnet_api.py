@@ -29,12 +29,20 @@ BASE_URL = 'http://34.135.228.111:8081'
 
 def API_URLS_PLUGIN_CONNECTION(token: str):
     status = 1
-    return f"http://{BASE_URL}/api/plugin_connection?token={token}&status={status}"
+    return f"{BASE_URL}/api/plugin_connection?token={token}&status={status}"
 
 
-# Example implementation of API_URLS_GET_CONNECTION_MAPPINGS, replace with your actual function
 def API_URLS_GET_CONNECTION_MAPPINGS(token: str):
     return f"{BASE_URL}/api/hub/connection_mappings/{token}/"
+
+
+def API_URLS_COMPUTE_CONTRACT(connection_token: str):
+    #COMPUTE_CONTRACT: (apiBaseUrl, uuid) => `${formatBaseUrl(apiBaseUrl)}/api/hub/compute/contract/${uuid}/`,
+    return f"{BASE_URL}/api/hub/compute/contract/{connection_token}/"
+
+def API_URLS_SUBMIT_REQUEST():
+    url = f"{BASE_URL}/api/hub/reply_to_message/"
+    return url
 
 
 def register_the_plugin_token(token):
@@ -76,3 +84,98 @@ def get_connection_mappings(token: str):
         # Handle exceptions and log or notify as appropriate
         print(f'Error fetching connection mappings: {error}')
         return []
+
+
+def fetch_contract(connection_token: str):
+    url = API_URLS_COMPUTE_CONTRACT(connection_token)
+
+    try:
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print("Failed to fetch contract data")
+    except Exception as error:
+        print(f"Error fetching contract: {error}")
+
+
+
+
+def send_request(formatted_request_body):
+    url = API_URLS_SUBMIT_REQUEST()
+
+    try:
+        response = requests.post(url, json=formatted_request_body, headers={'Content-Type': 'application/json'})
+
+        if response.status_code != 200:
+            # Implement Python equivalent of toast.error or handle the error as needed
+            print("MESSAGE already processing!")
+            return
+
+        response_data = response.json()
+        # Assuming store.setState is similar to saving or processing the response data in your application
+        # Replace the following with your actual data handling logic
+        message_id = response_data.get('id')
+        print(f"Message ID: {message_id}")
+    except Exception as error:
+        print(f"Error in network request: {error}")
+
+
+# CONTRACT:
+#
+# {
+#     "id": "3bac1fe8-f365-5e94-8096-de559931ffb1",
+#     "data": {
+#         "name": "DAWNet Template",
+#         "author": "Default Author",
+#         "params": [
+#             {
+#                 "max": 0,
+#                 "min": 0,
+#                 "name": "input_file",
+#                 "step": 0,
+#                 "type": "DAWNetFilePath",
+#                 "options": [],
+#                 "ui_component": null,
+#                 "default_value": null
+#             }
+#         ],
+#         "version": "0.0.0",
+#         "description": "This is a template for creating a DAWNet Remote",
+#         "method_name": "dawnet_func"
+#     },
+#     "created_at": "2024-02-27T21:20:22",
+#     "updated_at": "2024-02-27T21:20:22"
+# }
+#
+#
+# FORM_DATA:
+#
+# {
+#     "input_file": {
+#         "type": "str",
+#         "value": "https://storage.googleapis.com/byoc-file-transfer/test_16_44100_stereo.aif"
+#     }
+# }
+#
+# FORMATTED_REQUEST:
+#
+# {
+#     "token": "3bac1fe8-f365-5e94-8096-de559931ffb1",
+#     "request": {
+#         "token": "3bac1fe8-f365-5e94-8096-de559931ffb1",
+#         "type": "run_method",
+#         "bpm": 0,
+#         "sample_rate": 0,
+#         "data": {
+#             "method_name": "dawnet_func",
+#             "params": {
+#                 "input_file": {
+#                     "value": "https://storage.googleapis.com/byoc-file-transfer/test_16_44100_stereo.aif",
+#                     "type": "DAWNetFilePath"
+#                 }
+#             }
+#         }
+#     }
+# }

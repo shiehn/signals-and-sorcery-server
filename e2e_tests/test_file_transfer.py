@@ -5,7 +5,7 @@ import subprocess
 import time
 import requests
 
-from dawnet_api import register_the_plugin_token, get_connection_mappings
+from dawnet_api import register_the_plugin_token, get_connection_mappings, fetch_contract, send_request
 
 
 def start_service():
@@ -43,7 +43,7 @@ def main():
     while not get_connection_mappings(token):
         time.sleep(1)  # Wait a bit before trying again
 
-    # [{'id': '9c81ed92-c08c-4d05-9293-f357d51721e4',
+    # [{'id': '9connection_mappingsc81ed92-c08c-4d05-9293-f357d51721e4',
     #   'master_token': '4ad34c17-7c88-407f-8021-984054aa32dd',
     #   'connection_token': 'a84f8256-791e-5b6e-84ab-921637113a16',
     #   'connection_name': 'DAWNet Template',
@@ -58,9 +58,78 @@ def main():
     print("CONNECTION_TOKEN: " + connection_mapping['connection_token'])
     print("CONNECTION_NAME: " + connection_mapping['connection_name'])
 
+    connection_token = connection_mapping['connection_token']
+
+
+    contract = fetch_contract(connection_token)
+
+    print("CONTRACT: " + str(contract))
+
+    # CONTRACT: {'id': '243348dc-6c7d-53ca-a766-8c5033c53ff6',
+    # 'data': {'name': 'DAWNet Template', 'author': 'Default Author',
+    # 'params': [
+    # {'max': 10, 'min': 0, 'name': 'a', 'step': 1, 'type': 'int', 'options': [], 'ui_component': 'DAWNetNumberSlider', 'default_value': 5},
+    # {'max': 0, 'min': 0, 'name': 'b', 'step': 0, 'type': 'DAWNetFilePath', 'options': [], 'ui_component': None, 'default_value': None},
+    # {'max': 0, 'min': 0, 'name': 'c', 'step': 0, 'type': 'bool', 'options': [], 'ui_component': None, 'default_value': False}],
+    # 'version': '0.0.0',
+    # 'description': 'This is a template intended as a starting place to create custom DAWNet functions.',
+    # 'method_name': 'arbitrary_method'},
+    # 'created_at': '2024-02-27T20:35:55',
+    # 'updated_at': '2024-02-27T20:35:55'}
 
 
     #time.sleep(10)
+
+    #*************** SEND REQUEST ******************
+
+    import json
+
+    # Example usage
+    token_value = connection_token
+    input_file_url = "https://storage.googleapis.com/byoc-file-transfer/test_16_44100_stereo.aif"
+
+    data_dict = {
+        "token": token_value,
+        "request": {
+            "token": token_value,
+            "type": "run_method",
+            "bpm": 0,
+            "sample_rate": 0,
+            "data": {
+                "method_name": "arbitrary_method",
+                "params": {
+                    "input_file": {
+                        "value": input_file_url,
+                        "type": "DAWNetFilePath"
+                    }
+                }
+            }
+        }
+    }
+
+    request_id = send_request(data_dict)
+
+    print("REQUEST_ID: " + str(request_id))
+
+
+    # {
+    #     "token": "3bac1fe8-f365-5e94-8096-de559931ffb1",
+    #     "request": {
+    #         "token": "3bac1fe8-f365-5e94-8096-de559931ffb1",
+    #         "type": "run_method",
+    #         "bpm": 0,
+    #         "sample_rate": 0,
+    #         "data": {
+    #             "method_name": "dawnet_func",
+    #             "params": {
+    #                 "input_file": {
+    #                     "value": "https://storage.googleapis.com/byoc-file-transfer/test_16_44100_stereo.aif",
+    #                     "type": "DAWNetFilePath"
+    #                 }
+    #             }
+    #         }
+    #     }
+    # }
 
 
     # Perform your tests here (example HTTP request)
