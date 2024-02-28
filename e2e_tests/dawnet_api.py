@@ -37,12 +37,17 @@ def API_URLS_GET_CONNECTION_MAPPINGS(token: str):
 
 
 def API_URLS_COMPUTE_CONTRACT(connection_token: str):
-    #COMPUTE_CONTRACT: (apiBaseUrl, uuid) => `${formatBaseUrl(apiBaseUrl)}/api/hub/compute/contract/${uuid}/`,
+    # COMPUTE_CONTRACT: (apiBaseUrl, uuid) => `${formatBaseUrl(apiBaseUrl)}/api/hub/compute/contract/${uuid}/`,
     return f"{BASE_URL}/api/hub/compute/contract/{connection_token}/"
 
-def API_URLS_SUBMIT_REQUEST():
-    url = f"{BASE_URL}/api/hub/reply_to_message/"
+
+def API_URLS_SEND_MESSAGE():
+    url = f"{BASE_URL}/api/hub/send_message/"
     return url
+
+
+def API_MESSAGE_RESPONSES(message_id: str, token: str):
+    return f"{BASE_URL}/api/hub/get_response/{message_id}/{token}/"
 
 
 def register_the_plugin_token(token):
@@ -100,27 +105,39 @@ def fetch_contract(connection_token: str):
         print(f"Error fetching contract: {error}")
 
 
-
-
 def send_request(formatted_request_body):
-    url = API_URLS_SUBMIT_REQUEST()
+    url = API_URLS_SEND_MESSAGE()
 
     try:
         response = requests.post(url, json=formatted_request_body, headers={'Content-Type': 'application/json'})
 
-        if response.status_code != 200:
-            # Implement Python equivalent of toast.error or handle the error as needed
-            print("MESSAGE already processing!")
+        if response.status_code != 201:
+            print("RESPONSE ERROR: " + str(response))
             return
 
         response_data = response.json()
-        # Assuming store.setState is similar to saving or processing the response data in your application
-        # Replace the following with your actual data handling logic
         message_id = response_data.get('id')
-        print(f"Message ID: {message_id}")
+        return message_id
     except Exception as error:
         print(f"Error in network request: {error}")
 
+
+def get_message_responses(message_id: str, token: str):
+    url = API_MESSAGE_RESPONSES(message_id, token)
+
+    try:
+        response = requests.get(url, allow_redirects=True)  # 'allow_redirects=True' is default and follows redirects
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            # Handle the error case, perhaps log it or use a Python equivalent of your toast error notification
+            print('Error fetching message responses')
+            return []
+    except Exception as error:
+        # Handle exceptions and log or notify as appropriate
+        print(f'Error fetching message responses: {error}')
+        return []
 
 # CONTRACT:
 #
@@ -142,14 +159,7 @@ def send_request(formatted_request_body):
 #             }
 #         ],
 #         "version": "0.0.0",
-#         "description": "This is a template for creating a DAWNet Remote",
-#         "method_name": "dawnet_func"
-#     },
-#     "created_at": "2024-02-27T21:20:22",
-#     "updated_at": "2024-02-27T21:20:22"
-# }
-#
-#
+#         "description": "This is a template for creati
 # FORM_DATA:
 #
 # {
@@ -168,8 +178,10 @@ def send_request(formatted_request_body):
 #         "type": "run_method",
 #         "bpm": 0,
 #         "sample_rate": 0,
+
 #         "data": {
-#             "method_name": "dawnet_func",
+
+
 #             "params": {
 #                 "input_file": {
 #                     "value": "https://storage.googleapis.com/byoc-file-transfer/test_16_44100_stereo.aif",
