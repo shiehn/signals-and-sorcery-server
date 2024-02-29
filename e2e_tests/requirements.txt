@@ -1,0 +1,4 @@
+dawnet-client
+requests>=2.27.0
+ffmpeg>=1.4
+aiohttp
