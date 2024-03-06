@@ -1,6 +1,6 @@
 """DAWNet data validators"""
 from rest_framework import serializers
-from byo_network_hub.models import Connection, RemoteImage
+from byo_network_hub.models import Connection, RemoteImage, RemoteSource
 
 
 # pylint: disable=abstract-method
@@ -19,4 +19,10 @@ class ConnectionSerializer(serializers.ModelSerializer):
 class RemoteImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = RemoteImage
+        fields = '__all__'
+
+
+class RemoteSourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemoteSource
         fields = '__all__'

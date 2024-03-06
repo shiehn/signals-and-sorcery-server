@@ -21,6 +21,7 @@ from .views_byoc_messages import (
 )
 from .views_byoc_storage import SignedURLAPIView
 from .views_remote_images import RemoteImageListView
+from .views_remote_sources import RemoteSourceListView
 from . import views_connections
 
 router = OptionalSlashRouter()
@@ -99,5 +100,6 @@ urlpatterns = [
         name="connection-detail",
     ),
     path('hub/remote-images/', RemoteImageListView.as_view(), name='remote-image-list'),
+    path('hub/remote-sources/', RemoteSourceListView.as_view(), name='remote-source-list'),
     path("", include(router.urls)),
 ]
