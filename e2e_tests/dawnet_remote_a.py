@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
+import time
+import random
 
 from dawnet_client import ui_param
 
@@ -16,12 +18,13 @@ from dawnet_client.core import DAWNetFilePath
 # @ui_param('c', 'DAWNetMultiChoice', options=['cherries', 'oranges', 'grapes'], default='grapes')
 async def arbitrary_method(input_file: DAWNetFilePath):
     try:
-        # print(f"Input A: {a}")
-        # print(f"Input B: {b}")
-
         print(f"Input File: {input_file}")
 
-        # DO INFERENCE SHIT HERE
+        # Pause execution for a random number of seconds between 1 and 30
+        sleep_time = random.randint(1, 30)
+        print(f"Pausing for {sleep_time} seconds")
+        time.sleep(sleep_time)
+
 
         await dawnet.output().add_file(input_file)
         await dawnet.output().add_message("This is a message send to the plugin")

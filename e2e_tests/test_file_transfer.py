@@ -4,7 +4,7 @@ import uuid
 import subprocess
 import time
 from pathlib import Path
-
+import sys
 import requests
 import json
 
@@ -34,6 +34,13 @@ def health_check(url):
 
 
 def main():
+    if len(sys.argv) < 2:
+        print("Usage: script_name.py <upload_file_path>")
+        sys.exit(1)
+
+    global upload_filepath
+    upload_filepath = Path(sys.argv[1])  # Set upload_filepath based on command line argument
+
     service_process = 0
     try:
         register_the_plugin_token(token)
@@ -124,7 +131,6 @@ def main():
 
 
 token = str(uuid.uuid4())
-upload_filepath = Path("/home/stevehiehn/dawnet/dawnet-server/e2e_tests/assets/old_mcdonald.wav")
 
 if __name__ == '__main__':
     main()
