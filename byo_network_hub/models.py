@@ -58,3 +58,18 @@ class BYOCMessageState(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class RemoteImage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    remote_name = models.CharField(max_length=100, null=False)
+    remote_description = models.CharField(max_length=250, null=False)
+    remote_category = models.CharField(max_length=100, null=False)
+    remote_author = models.CharField(max_length=100, null=False)
+    image_name = models.CharField(max_length=250, null=False)
+    remote_version = models.CharField(max_length=25, null=False, default="v0")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)

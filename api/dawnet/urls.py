@@ -20,6 +20,7 @@ from .views_byoc_messages import (
     UpdateMessageStatusView,
 )
 from .views_byoc_storage import SignedURLAPIView
+from .views_remote_images import RemoteImageListView
 from . import views_connections
 
 router = OptionalSlashRouter()
@@ -97,5 +98,6 @@ urlpatterns = [
         views_connections.ConnectionDetailView.as_view(),
         name="connection-detail",
     ),
+    path('hub/remote-images/', RemoteImageListView.as_view(), name='remote-image-list'),
     path("", include(router.urls)),
 ]
