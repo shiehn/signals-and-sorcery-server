@@ -75,6 +75,23 @@ services:
             - POSTGRES_DB=${POSTGRESQL_ADDON_DB:-django_seed}
         networks:
             - django-seed-network
+
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - ./nginx/conf:/etc/nginx/conf.d:ro
+            - ./nginx/ssl:/etc/nginx/ssl:ro
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+            - cms
+            - websocket
+            - api
+        networks:
+            - django-seed-network
+
+
 networks:
   django-seed-network:
     name: django-seed-local

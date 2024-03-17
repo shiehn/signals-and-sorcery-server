@@ -129,3 +129,10 @@ farmbox/static/
 .tool-versions
 
 .DS_STORE
+
+
+# Exclude everything in the ssl directory
+/nginx/ssl/*
+
+# Include the ssl directory itself by adding a .gitkeep file
+!/nginx/ssl/.gitkeep
