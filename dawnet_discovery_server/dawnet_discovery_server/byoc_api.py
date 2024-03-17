@@ -1,6 +1,7 @@
 import json
 import logging
 from uuid import uuid4
+from urllib.parse import urljoin
 
 import aiohttp
 import asyncio
@@ -21,7 +22,7 @@ async def create_compute_contract(token: str, data):
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
-                    CONFIG["URL_BASE"] + CONFIG["URL_CREATE_COMPUTE_CONTRACT"],
+                    urljoin(CONFIG["URL_BASE"], CONFIG["URL_CREATE_COMPUTE_CONTRACT"]),
                     json=json_data,
                 ) as response:
                     response_data = await response.text()
@@ -45,8 +46,11 @@ async def create_compute_contract(token: str, data):
 
 
 async def update_connection_status(token: str, status: int):
-    update_url = CONFIG["URL_BASE"] + CONFIG["URL_UPDATE_CONNECTION_STATUS"].format(
-        token=token, connection_status=status
+    update_url = urljoin(
+        CONFIG["URL_BASE"],
+        CONFIG["URL_UPDATE_CONNECTION_STATUS"].format(
+            token=token, connection_status=status
+        ),
     )
 
     logging.info(f"update_connection_status: {update_url}")
@@ -76,7 +80,7 @@ async def update_connection_status(token: str, status: int):
 async def add_connection_mapping(
     master_token: str, connection_token: str, name: str, description: str
 ):
-    add_mapping_url = CONFIG["URL_BASE"] + CONFIG["URL_ADD_CONNECTION_MAPPING"]
+    add_mapping_url = urljoin(CONFIG["URL_BASE"], CONFIG["URL_ADD_CONNECTION_MAPPING"])
 
     payload = {
         "master_token": master_token,
@@ -111,8 +115,9 @@ async def add_connection_mapping(
 
 # TODO: MOVE THIS TO BYOC_API.PY
 async def update_message_status(token: str, message_id: str, new_status: str):
-    update_url = CONFIG["URL_BASE"] + CONFIG["URL_UPDATE_MESSAGE_STATUS"].format(
-        token=token, message_id=message_id
+    update_url = urljoin(
+        CONFIG["URL_BASE"],
+        CONFIG["URL_UPDATE_MESSAGE_STATUS"].format(token=token, message_id=message_id),
     )
     payload = {"status": new_status}
 
@@ -141,7 +146,7 @@ async def update_message_status(token: str, message_id: str, new_status: str):
 
 
 async def send_message_response(token: str, message_id: str, response: str):
-    send_response_url = CONFIG["URL_BASE"] + CONFIG["URL_SEND_MESSAGE_RESPONSE"]
+    send_response_url = urljoin(CONFIG["URL_BASE"], CONFIG["URL_SEND_MESSAGE_RESPONSE"])
 
     payload = {
         "id": message_id,

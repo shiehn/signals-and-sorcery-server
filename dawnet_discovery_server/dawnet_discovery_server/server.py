@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+from urllib.parse import urljoin
 
 import websockets
 import aiohttp
@@ -27,7 +28,7 @@ async def fetch_pending_requests():
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get(
-                    CONFIG["URL_BASE"] + CONFIG["URL_GET_PENDING_MESSAGES"]
+                    urljoin(CONFIG["URL_BASE"], CONFIG["URL_GET_PENDING_MESSAGES"])
                 ) as response:
                     # Check response status. If not 200 OK, print error and continue.
                     if response.status != 200:
@@ -133,7 +134,9 @@ async def server_handler(websocket, path):
                 # Add the connection to the ConnectionManager when a client connects
                 logging.info("MESSAGE: " + str(msg))
                 try:
-                    await connection_manager.add_registered_connection(msg.token, websocket)
+                    await connection_manager.add_registered_connection(
+                        msg.token, websocket
+                    )
                     dn_tracer.log_event(
                         str(msg.token),
                         {

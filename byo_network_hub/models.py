@@ -82,6 +82,7 @@ class RemoteSource(models.Model):
     remote_category = models.CharField(max_length=100, null=False)
     remote_author = models.CharField(max_length=100, null=False)
     source_url = models.CharField(max_length=1500, null=False)
+    colab_url = models.CharField(max_length=1500, null=True)
     remote_version = models.CharField(max_length=25, null=False, default="v0")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

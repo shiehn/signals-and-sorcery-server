@@ -45,10 +45,19 @@ There are inheriting everything from app/settings/base.py.
 
 Here is an example of commands you can run for the `api` settings:
 
+
 ```bash
 make setting=api migrations
 make setting=api migrate
 make setting=api port=8080 server
+```
+
+*note: migrations require you to have a virtual environment setup i.e:*
+```bash
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+make setting=api migrations
 ```
 
 The server will be ready on http://localhost:8080.
