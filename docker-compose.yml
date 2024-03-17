@@ -75,7 +75,8 @@ services:
             - POSTGRES_DB=${POSTGRESQL_ADDON_DB:-django_seed}
         networks:
             - django-seed-network
-
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
     nginx:
         image: nginx:alpine
         volumes:
@@ -91,6 +92,8 @@ services:
         networks:
             - django-seed-network
 
+volumes:
+    postgres-data:
 
 networks:
   django-seed-network:
