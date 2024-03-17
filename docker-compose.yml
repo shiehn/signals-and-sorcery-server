@@ -81,7 +81,7 @@ services:
         image: nginx:alpine
         volumes:
             - ./nginx/conf:/etc/nginx/conf.d:ro
-            - ./nginx/ssl:/etc/nginx/ssl:ro
+            - /etc/letsencrypt:/etc/letsencrypt:ro
         ports:
             - "80:80"
             - "443:443"
