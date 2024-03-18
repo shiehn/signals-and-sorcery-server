@@ -25,7 +25,7 @@ from urllib.parse import quote
 
 import requests
 
-BASE_URL = 'http://34.135.228.111:8081'
+BASE_URL = "https://signalsandsorceryapi.com"
 
 
 def API_URLS_PLUGIN_CONNECTION(token: str):
@@ -62,13 +62,15 @@ def register_the_plugin_token(token):
     url = API_URLS_PLUGIN_CONNECTION(token)
 
     try:
-        response = requests.put(url, json={'status': 1}, headers={'Content-Type': 'application/json'})
+        response = requests.put(
+            url, json={"status": 1}, headers={"Content-Type": "application/json"}
+        )
 
         if response.status_code != 200:
-            raise Exception('Plugin connection status update failed')
+            raise Exception("Plugin connection status update failed")
 
         status_data = response.json()
-        if status_data.get('success'):
+        if status_data.get("success"):
             # Your success logic here (e.g., stopping an interval in JavaScript)
             pass
     except Exception as error:
@@ -82,17 +84,19 @@ def get_connection_mappings(token: str):
     url = API_URLS_GET_CONNECTION_MAPPINGS(token)
 
     try:
-        response = requests.get(url, allow_redirects=True)  # 'allow_redirects=True' is default and follows redirects
+        response = requests.get(
+            url, allow_redirects=True
+        )  # 'allow_redirects=True' is default and follows redirects
 
         if response.status_code == 200:
             return response.json()
         else:
             # Handle the error case, perhaps log it or use a Python equivalent of your toast error notification
-            print('Error fetching connection mappings')
+            print("Error fetching connection mappings")
             return []
     except Exception as error:
         # Handle exceptions and log or notify as appropriate
-        print(f'Error fetching connection mappings: {error}')
+        print(f"Error fetching connection mappings: {error}")
         return []
 
 
@@ -114,14 +118,18 @@ def send_request(formatted_request_body):
     url = API_URLS_SEND_MESSAGE()
 
     try:
-        response = requests.post(url, json=formatted_request_body, headers={'Content-Type': 'application/json'})
+        response = requests.post(
+            url,
+            json=formatted_request_body,
+            headers={"Content-Type": "application/json"},
+        )
 
         if response.status_code != 201:
             print("RESPONSE ERROR: " + str(response))
             return
 
         response_data = response.json()
-        message_id = response_data.get('id')
+        message_id = response_data.get("id")
         return message_id
     except Exception as error:
         print(f"Error in network request: {error}")
@@ -131,17 +139,19 @@ def get_message_responses(message_id: str, token: str):
     url = API_MESSAGE_RESPONSES(message_id, token)
 
     try:
-        response = requests.get(url, allow_redirects=True)  # 'allow_redirects=True' is default and follows redirects
+        response = requests.get(
+            url, allow_redirects=True
+        )  # 'allow_redirects=True' is default and follows redirects
 
         if response.status_code == 200:
             return response.json()
         else:
             # Handle the error case, perhaps log it or use a Python equivalent of your toast error notification
-            print('Error fetching message responses')
+            print("Error fetching message responses")
             return []
     except Exception as error:
         # Handle exceptions and log or notify as appropriate
-        print(f'Error fetching message responses: {error}')
+        print(f"Error fetching message responses: {error}")
         return []
 
 
@@ -149,17 +159,19 @@ def get_message_responses(message_id: str, token: str):
     url = API_MESSAGE_RESPONSES(message_id, token)
 
     try:
-        response = requests.get(url, allow_redirects=True)  # 'allow_redirects=True' is default and follows redirects
+        response = requests.get(
+            url, allow_redirects=True
+        )  # 'allow_redirects=True' is default and follows redirects
 
         if response.status_code == 200:
             return response.json()
         else:
             # Handle the error case, perhaps log it or use a Python equivalent of your toast error notification
-            print('Error fetching message responses')
+            print("Error fetching message responses")
             return []
     except Exception as error:
         # Handle exceptions and log or notify as appropriate
-        print(f'Error fetching message responses: {error}')
+        print(f"Error fetching message responses: {error}")
         return []
 
 
@@ -170,26 +182,32 @@ def get_signed_upload_url(token: str, filename: str):
         response = requests.get(url, allow_redirects=True)
 
         if response.status_code == 200:
-            return response.json()['signed_url']
+            return response.json()["signed_url"]
         else:
-            raise Exception(f"UNABLE TO GET UPLOAD URL for token={token} and filename={filename}")
+            raise Exception(
+                f"UNABLE TO GET UPLOAD URL for token={token} and filename={filename}"
+            )
     except Exception as error:
-        raise Exception(f"UNABLE TO GET UPLOAD URL for token={token} and filename={filename}")
+        raise Exception(
+            f"UNABLE TO GET UPLOAD URL for token={token} and filename={filename}"
+        )
 
 
 def upload_file_to_gcp(file_path, signed_url, content_type):
     try:
-        with open(file_path, 'rb') as file:
-            headers = {'Content-Type': content_type}
+        with open(file_path, "rb") as file:
+            headers = {"Content-Type": content_type}
             response = requests.put(signed_url, data=file, headers=headers)
 
         if response.ok:
             print("File successfully uploaded to GCP Storage.")
         else:
             raise Exception(
-                f"File upload to GCP Storage failed. Status: {response.status_code}, Message: {response.text}")
+                f"File upload to GCP Storage failed. Status: {response.status_code}, Message: {response.text}"
+            )
     except Exception as error:
         raise Exception(f"Error during file upload to GCP Storage: {error}")
+
 
 # async function getSignedUrl(file) {
 #
