@@ -48,13 +48,18 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Miscellaneous
     "storages",
-    "widget_tweaks",
     "django_filters",
     "nested_admin",
     "django_celery_results",
     # Module
     "common",
     "user",
+    "allauth_ui",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -67,6 +72,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "app.logger.RequestLogMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "app.urls"
@@ -196,7 +202,14 @@ LOGIN_REDIRECT_URL = "/"
 OBJECTS_PER_PAGE = 25
 
 # django all auth
-AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+
 
 # Prevent warning
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
