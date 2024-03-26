@@ -16,6 +16,8 @@ services:
             - DJANGO_SETTINGS_MODULE=app.settings.web
             - SENTRY_DSN=${SENTRY_URL}
             - DEBUG=${DEBUG:-true}
+        env_file:
+            - ./.env
         ports:
             - 8082:8082
         networks:
@@ -31,6 +33,8 @@ services:
             - SENTRY_DSN=${SENTRY_URL}
             - DEBUG=${DEBUG:-true}
             - DN_WS_URL_BASE=${DN_WS_URL_BASE:-http://localhost:8081}
+        env_file:
+            - ./.env
         ports:
             - 8765:8765
         networks:
@@ -58,6 +62,8 @@ services:
             - GCP_ASSET_BUCKET=${GCP_ASSET_BUCKET:-empty}
             - SENTRY_DSN=${SENTRY_URL}
             - DEBUG=${DEBUG:-true}
+        env_file:
+            - ./.env
         ports:
             - 8081:8081
         networks:
@@ -73,6 +79,8 @@ services:
             - POSTGRES_PASSWORD=${POSTGRESQL_ADDON_PASSWORD:-toto42}
             - POSTGRES_USER=${POSTGRESQL_ADDON_USER:-postgres}
             - POSTGRES_DB=${POSTGRESQL_ADDON_DB:-django_seed}
+        env_file:
+            - ./.env
         networks:
             - django-seed-network
         volumes:
@@ -82,6 +90,8 @@ services:
         volumes:
             - ./nginx/conf:/etc/nginx/conf.d:ro
             - /etc/letsencrypt:/etc/letsencrypt:ro
+        env_file:
+            - ./.env
         ports:
             - "80:80"
             - "443:443"

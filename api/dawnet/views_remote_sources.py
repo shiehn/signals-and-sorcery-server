@@ -6,3 +6,9 @@ from .serializers import RemoteSourceSerializer
 class RemoteSourceListView(generics.ListCreateAPIView):
     queryset = RemoteSource.objects.all()
     serializer_class = RemoteSourceSerializer
+
+
+class RemoteSourceDeleteView(generics.DestroyAPIView):
+    queryset = RemoteSource.objects.all()
+    serializer_class = RemoteSourceSerializer
+    lookup_field = "id"

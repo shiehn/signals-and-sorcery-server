@@ -6,3 +6,9 @@ from .serializers import RemoteImageSerializer
 class RemoteImageListView(generics.ListCreateAPIView):
     queryset = RemoteImage.objects.all()
     serializer_class = RemoteImageSerializer
+
+
+class RemoteImageDeleteView(generics.DestroyAPIView):
+    queryset = RemoteImage.objects.all()
+    serializer_class = RemoteImageSerializer
+    lookup_field = "id"

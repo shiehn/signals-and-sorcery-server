@@ -88,5 +88,21 @@ After running this command, (BY DEFAULT) you should have the following services 
 
 Remember you'll need to expose your ports to the public internet on your VM.  (Query Chat-GPT for instructions on how to do this.)
 
+### NOTE:
+When running migrations and dabase command make sure you are using the correct .env values.  Note: they will be different from outside docker. e.x
+
+### Super User creation
+```
+make settings=xxx superuser
+```
+
+```
+POSTGRESQL_ADDON_DB=
+POSTGRESQL_ADDON_USER=
+POSTGRESQL_ADDON_PASSWORD=
+POSTGRESQL_ADDON_HOST=localhost
+POSTGRESQL_ADDON_PORT=5438 (localport)
+```
+
 
 
