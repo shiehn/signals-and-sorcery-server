@@ -1,4 +1,5 @@
 """Endpoints for dawnet"""
+
 from django.urls import include, path
 
 from api.urls import OptionalSlashRouter
@@ -25,13 +26,13 @@ from .views_remote_sources import RemoteSourceListView
 from . import views_connections
 
 router = OptionalSlashRouter()
-router.register(r"dawnet", DAWNetView, basename="dawnet")
+# router.register(r"dawnet", DAWNetView, basename="dawnet")
 # router.register(r'healthcheck', HealthCheckView, basename='healthcheck')
 
-post_dawnet_non_generic = DAWNetView.as_view({"post": "post_dawnet_non_generic"})
+# post_dawnet_non_generic = DAWNetView.as_view({"post": "post_dawnet_non_generic"})
 
 urlpatterns = [
-    path("dawnet/non-generic", post_dawnet_non_generic, name="post-dawnet-non-generic"),
+    # path("dawnet/non-generic", post_dawnet_non_generic, name="post-dawnet-non-generic"),
     # DAWNet HEALTH CHECK
     path("hub/healthcheck/", HealthCheckView.as_view(), name="health-check"),
     # DAWNet CONNECTION
@@ -99,7 +100,9 @@ urlpatterns = [
         views_connections.ConnectionDetailView.as_view(),
         name="connection-detail",
     ),
-    path('hub/remote-images/', RemoteImageListView.as_view(), name='remote-image-list'),
-    path('hub/remote-sources/', RemoteSourceListView.as_view(), name='remote-source-list'),
+    path("hub/remote-images/", RemoteImageListView.as_view(), name="remote-image-list"),
+    path(
+        "hub/remote-sources/", RemoteSourceListView.as_view(), name="remote-source-list"
+    ),
     path("", include(router.urls)),
 ]
