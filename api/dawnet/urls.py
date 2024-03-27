@@ -102,7 +102,7 @@ urlpatterns = [
     ),
     path("hub/remote-images/", RemoteImageListView.as_view(), name="remote-image-list"),
     path(
-        "hub/remote-images/<int:pk>/",
+        "hub/remote-images/<str:id>/",
         RemoteImageDeleteView.as_view(),
         name="remote-image-delete",
     ),
@@ -110,7 +110,7 @@ urlpatterns = [
         "hub/remote-sources/", RemoteSourceListView.as_view(), name="remote-source-list"
     ),
     path(
-        "hub/remote-sources/<int:id>/",
+        "hub/remote-sources/<str:id>/",
         RemoteSourceDeleteView.as_view(),
         name="remote-source-delete",
     ),
