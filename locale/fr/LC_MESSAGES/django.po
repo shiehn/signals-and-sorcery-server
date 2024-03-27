@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-08 11:04+0000\n"
+"POT-Creation-Date: 2024-03-26 23:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: api/sample/views.py:28 api/sample/views.py:41 api/sample/views.py:54
-#: api/sample/views.py:67 api/sample/views.py:80 api/sample/views.py:101
+#: api/dawnet/views.py:24 api/dawnet/views.py:32 api/dawnet/views.py:40
+#: api/dawnet/views.py:48 api/dawnet/views.py:56 api/dawnet/views.py:76
 msgid "Success"
 msgstr "Succès"
-
-#: api/sample/views.py:97
-msgid "Error"
-msgstr "Erreur"
 
 #: app/templates/base.html:8
 msgid "Admin"
@@ -68,7 +64,7 @@ msgstr "Connexion"
 msgid "Modules"
 msgstr "Modules"
 
-#: app/templates/sidebar.html:13 user/managers.py:15
+#: app/templates/sidebar.html:13 user/managers.py:13
 msgid "user"
 msgstr "Utilisateur"
 
@@ -84,39 +80,39 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-#: common/helper.py:70
+#: common/helper.py:61
 msgid "en"
 msgstr "Anglais"
 
-#: common/helper.py:71
+#: common/helper.py:62
 msgid "fr"
 msgstr "Français"
 
-#: user/filters.py:17 user/templates/user/list.html:30
+#: user/filters.py:15 user/templates/user/list.html:30
 msgid "Email"
 msgstr "Email"
 
-#: user/filters.py:19 user/templates/user/list.html:32
+#: user/filters.py:17 user/templates/user/list.html:32
 msgid "Role"
 msgstr "Rôle"
 
-#: user/filters.py:21
+#: user/filters.py:19
 msgid "Active"
 msgstr "Actif"
 
-#: user/managers.py:16
+#: user/managers.py:14
 msgid "superuser"
 msgstr "Super Utilisateur"
 
-#: user/managers.py:28
+#: user/managers.py:24
 msgid "EmailMandatory"
 msgstr "Le champ mail est obligatoire"
 
-#: user/managers.py:52
+#: user/managers.py:46
 msgid "StaffMuBeSet"
 msgstr "Le champ is_staff doit être à 'true'"
 
-#: user/managers.py:54
+#: user/managers.py:48
 msgid "SuperUserMustBeSet"
 msgstr "Le champ is_superuser doit être à 'true'"
 
@@ -168,3 +164,6 @@ msgstr "Actions"
 #: user/templates/user/list.html:47
 msgid "Edit"
 msgstr "Éditer"
+
+#~ msgid "Error"
+#~ msgstr "Erreur"

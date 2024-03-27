@@ -19,19 +19,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls.static import static
 
 # pylint: disable=invalid-name
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.APP_NAME == "web":
     from .views import DashboardView, LoginView, LogoutView
 
     urlpatterns += i18n_patterns(
-        path("login/", LoginView.as_view(), name="login"),
-        path("logout/", LogoutView.as_view(), name="logout"),
+        # path("login/", LoginView.as_view(), name="login"),
+        # path("logout/", LogoutView.as_view(), name="logout"),
         path("", DashboardView.as_view(), name="dashboard"),
         path("", include("user.urls", namespace="user")),
     )

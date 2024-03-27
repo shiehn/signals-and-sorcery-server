@@ -93,7 +93,7 @@ When running migrations and dabase command make sure you are using the correct .
 
 ### Super User creation
 ```
-make settings=xxx superuser
+make setting=web superuser
 ```
 
 ```

@@ -24,6 +24,8 @@ SECRET_KEY = "rand0m&k3yF0R-someus3"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "true").lower() == "true"
 
+DEBUG = True
+
 if not DEBUG:
     # Sentry will only be enabled if the debug flag is FALSE, as it
     # should run only to listen to production problems to avoid wasting
