@@ -22,7 +22,6 @@ CORS_ALLOW_HEADERS = [
 
 INSTALLED_APPS += [
     "corsheaders",
-    "rest_framework",
     "byo_network_hub",
     "drf_yasg",
 ]
@@ -40,7 +39,8 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",  # Add this line
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 

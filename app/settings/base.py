@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +41,7 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "rest_framework",
     # Miscellaneous
     "storages",
     "django_filters",
@@ -170,11 +173,11 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LANGUAGES = [("en", "English"), ("fr", "French")]
-
-LOCALE_PATHS = (
-    os.path.join(os.path.normpath(BASE_DIR + os.sep + os.pardir), "locale"),
-)
+# LANGUAGES = [("en", "English"), ("fr", "French")]
+#
+# LOCALE_PATHS = (
+#     os.path.join(os.path.normpath(BASE_DIR + os.sep + os.pardir), "locale"),
+# )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -208,6 +211,11 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=365),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
+}
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True

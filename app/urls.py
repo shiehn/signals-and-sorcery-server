@@ -20,19 +20,27 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 # pylint: disable=invalid-name
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.APP_NAME == "web":
     from .views import DashboardView, LoginView, LogoutView
 
     urlpatterns += i18n_patterns(
-        # path("login/", LoginView.as_view(), name="login"),
-        # path("logout/", LogoutView.as_view(), name="logout"),
+        path("login/", LoginView.as_view(), name="login"),
+        path("logout/", LogoutView.as_view(), name="logout"),
         path("", DashboardView.as_view(), name="dashboard"),
         path("", include("user.urls", namespace="user")),
     )
