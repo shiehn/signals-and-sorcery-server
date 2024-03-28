@@ -1,6 +1,6 @@
 """Main URLs endpoints"""
 
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 from rest_framework.routers import SimpleRouter
 
@@ -22,14 +22,27 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+
 class OptionalSlashRouter(SimpleRouter):
     """Router that makes the trailing slash optional."""
+
     def __init__(self):
         super().__init__()
         self.trailing_slash = "/?"
 
+
 urlpatterns = [
     path("", include("api.dawnet.urls")),
-    # ReDoc
+    # Swagger
+    re_path(
+        r"^swagger(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 ]
