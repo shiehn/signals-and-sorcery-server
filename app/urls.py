@@ -30,7 +30,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("auth/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
