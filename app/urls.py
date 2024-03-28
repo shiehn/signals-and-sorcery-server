@@ -28,7 +28,6 @@ from rest_framework_simplejwt.views import (
 
 # pylint: disable=invalid-name
 urlpatterns = [
-    path("api/", include("api.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -48,7 +47,7 @@ if settings.APP_NAME == "web":
 
 elif settings.APP_NAME == "api":
     urlpatterns += [
-      # any patterns specific to the api
+        path("api/", include("api.urls")),
     ]
 
 if settings.DEBUG:
