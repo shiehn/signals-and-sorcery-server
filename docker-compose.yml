@@ -22,6 +22,9 @@ services:
             - 8082:8082
         networks:
             - django-seed-network
+        volumes:
+            - static_volume:/cms/static # Matches the inside of your container where Django collects static files
+            - media_volume:/cms/media
         depends_on:
             - postgres
     websocket:
@@ -68,6 +71,9 @@ services:
             - 8081:8081
         networks:
             - django-seed-network
+        volumes:
+            - static_volume:/api/static # Matches the inside of your container where Django collects static files
+            - media_volume:/api/media # Matches the inside of your container where Django stores media files
         depends_on:
             - postgres
     postgres:
@@ -90,6 +96,8 @@ services:
         volumes:
             - ./nginx/conf:/etc/nginx/conf.d:ro
             - /etc/letsencrypt:/etc/letsencrypt:ro
+            - static_volume:/var/www/static
+            - media_volume:/var/www/media
         env_file:
             - ./.env
         ports:
@@ -104,6 +112,8 @@ services:
 
 volumes:
     postgres-data:
+    static_volume:
+    media_volume:
 
 networks:
   django-seed-network:
