@@ -88,6 +88,7 @@ services:
     nginx:
         image: nginx:alpine
         volumes:
+            - static-files:/var/www/static
             - ./nginx/conf:/etc/nginx/conf.d:ro
             - /etc/letsencrypt:/etc/letsencrypt:ro
         env_file:
@@ -104,6 +105,7 @@ services:
 
 volumes:
     postgres-data:
+    static-files:
 
 networks:
   django-seed-network:
