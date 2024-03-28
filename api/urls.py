@@ -22,11 +22,14 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+
 class OptionalSlashRouter(SimpleRouter):
     """Router that makes the trailing slash optional."""
+
     def __init__(self):
         super().__init__()
         self.trailing_slash = "/?"
+
 
 urlpatterns = [
     path("", include("api.dawnet.urls")),
