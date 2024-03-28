@@ -201,8 +201,8 @@ CELERY_RESULT_BACKEND = "django-db"
 
 # django auth
 AUTH_USER_MODEL = "user.CustomUser"
-LOGIN_URL = "/"
-LOGIN_REDIRECT_URL = "https://dawnet.tools/"
+# LOGIN_URL = "/"
+# LOGIN_REDIRECT_URL = "https://dawnet.tools/"
 
 OBJECTS_PER_PAGE = 25
 
