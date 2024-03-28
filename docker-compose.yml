@@ -68,6 +68,8 @@ services:
             - 8081:8081
         networks:
             - django-seed-network
+        volumes:
+            - static-files:/api/app/static
         depends_on:
             - postgres
     postgres:
