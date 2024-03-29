@@ -71,7 +71,7 @@ services:
         networks:
             - django-seed-network
         volumes:
-            - static-api:/api/static
+            - static-api:/api/app/static
         depends_on:
             - postgres
     postgres:
