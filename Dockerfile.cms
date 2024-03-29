@@ -10,4 +10,6 @@ WORKDIR /cms
 # Copy the rest of the files
 COPY . /cms
 
-ENTRYPOINT ["sh", "setup.sh", "8082"]
+ENTRYPOINT ["sh", "setup-cms.sh", "8082"]
+
+

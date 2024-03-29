@@ -10,4 +10,4 @@ WORKDIR /api
 # Copy the rest of the files
 COPY . /api
 
-ENTRYPOINT ["sh", "setup.sh", "8081"]
+ENTRYPOINT ["sh", "setup-api.sh", "8081"]
