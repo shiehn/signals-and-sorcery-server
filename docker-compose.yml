@@ -23,7 +23,7 @@ services:
         networks:
             - django-seed-network
         volumes:
-            - static-files:/cms/app/static
+            - static-cms:/cms/app/static
         depends_on:
             - postgres
     websocket:
@@ -71,7 +71,7 @@ services:
         networks:
             - django-seed-network
         volumes:
-            - static-files:/api/app/static
+            - static-api:/api/app/static
         depends_on:
             - postgres
     postgres:
@@ -92,7 +92,8 @@ services:
     nginx:
         image: nginx:alpine
         volumes:
-            - static-files:/var/www/static
+            - static-api:/var/www/api/static
+            - static-cms:/var/www/cms/static
             - ./nginx/conf:/etc/nginx/conf.d:ro
             - /etc/letsencrypt:/etc/letsencrypt:ro
         env_file:
@@ -109,7 +110,8 @@ services:
 
 volumes:
     postgres-data:
-    static-files:
+    static-api:
+    static-cms:
 
 networks:
   django-seed-network:
