@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Import Tailwind CSS from CDN -->
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
+    <style>
+        .rye-regular {
+            font-family: "Rye", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#22272e] text-[#adbac7]">
+    <div class="flex items-center w-screen h-screen">
+        <div class="flex flex-col w-full items-center">
+            <img src="https://storage.googleapis.com/docs-assets/user_profile_img_1.png" class="w-[30%]"/>
+            <h1 class="text-4xl font-bold underline rye-regular text-white mb-4">
+                Signals & Sorcery
+            </h1>
+
+            {% if user.is_authenticated %}
+            <p class="text-md mb-4">
+                Welcome, you are logged as user: <span class="text-[#3aa675]">{{ user.email }}</span>
+            </p>
+            {% else %}
+            <p class="text-md mb-4">Welcome, please login or create an account.</p>
+            {% endif %}
+
+
+
+            <span class="flex flex-row justify-center w-full items-center mb-8 text-sm">
+                <span class="text-md text-gray-500 hover:text-[#adbac7]">
+                    <a href="https://signalsandsorcery.com" target="_blank">Docs</a>
+                </span>
+                <span class="w-2"></span>
+                <span class="text-gray-500">|</span>
+                <span class="w-2"></span>
+                <span class="text-md text-gray-500 hover:text-[#adbac7]">
+                    <a href="https://dawnet.tools/" target="_blank">Crucible</a>
+                </span>
+                <span class="w-2"></span>
+                <span class="text-gray-500">|</span>
+                <span class="w-2"></span>
+                {% if user.is_authenticated %}
+                <span class="text-gray-500 hover:text-[#adbac7]">
+                    <a href="/accounts/logout/">Sign Out</a>
+                </span>
+                {% else %}
+                <span class="text-gray-500 hover:text-[#adbac7]">
+                    <a href="/accounts/login/">Sign In</a>
+                </span>
+                {% endif %}
+                </span>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -70,7 +70,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -201,8 +200,8 @@ CELERY_RESULT_BACKEND = "django-db"
 
 # django auth
 AUTH_USER_MODEL = "user.CustomUser"
-LOGIN_URL = "/"
-LOGIN_REDIRECT_URL = "https://dawnet.tools/"
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/auth/profile/"
 
 OBJECTS_PER_PAGE = 25
 
