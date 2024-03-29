@@ -45,3 +45,5 @@ REST_FRAMEWORK = {
 }
 
 SITE_ID = 1
+
+STATIC_URL = "/api/static/"

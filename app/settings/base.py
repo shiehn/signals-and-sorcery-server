@@ -180,14 +180,6 @@ USE_TZ = True
 #     os.path.join(os.path.normpath(BASE_DIR + os.sep + os.pardir), "locale"),
 # )
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-if settings.APP_NAME == "web":
-    STATIC_URL = "/cms/static/"
-elif settings.APP_NAME == "api":
-    STATIC_URL = "/api/static/"
-else:
-    STATIC_URL = "/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "..", "static")
 STATICFILES_DIRS = [

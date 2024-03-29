@@ -8,3 +8,7 @@ from .base import *
 APP_NAME = 'web'
 
 SITE_ID = 2
+
+
+
+STATIC_URL = "/cms/static/"
