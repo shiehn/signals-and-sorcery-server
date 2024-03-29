@@ -22,6 +22,8 @@ services:
             - 8082:8082
         networks:
             - django-seed-network
+        volumes:
+            - static-files:/cms/app/static
         depends_on:
             - postgres
     websocket:
@@ -69,7 +71,7 @@ services:
         networks:
             - django-seed-network
         volumes:
-            - static-files:/api/static
+            - static-files:/api/app/static
         depends_on:
             - postgres
     postgres:
