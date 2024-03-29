@@ -26,6 +26,9 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
+
+from .views import DashboardView, LoginView, LogoutView, profile
+
 # pylint: disable=invalid-name
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,14 +39,13 @@ urlpatterns = [
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.APP_NAME == "web":
-    from .views import DashboardView, LoginView, LogoutView
-
-    urlpatterns += i18n_patterns(
+    urlpatterns += [
+        path("auth/profile/", profile, name="profile"),
         path("login/", LoginView.as_view(), name="login"),
         path("logout/", LogoutView.as_view(), name="logout"),
-        path("", DashboardView.as_view(), name="dashboard"),
+        path("", profile, name="dashboard"),
         path("", include("user.urls", namespace="user")),
-    )
+    ]
 
 elif settings.APP_NAME == "api":
     urlpatterns += [
