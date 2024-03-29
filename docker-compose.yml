@@ -23,7 +23,7 @@ services:
         networks:
             - django-seed-network
         volumes:
-            - static-cms:/cms/app/static
+            - static-cms:app/static
         depends_on:
             - postgres
     websocket:
@@ -71,7 +71,7 @@ services:
         networks:
             - django-seed-network
         volumes:
-            - static-api:/api/app/static
+            - static-api:app/static
         depends_on:
             - postgres
     postgres:
