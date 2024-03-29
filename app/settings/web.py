@@ -10,4 +10,4 @@ APP_NAME = "web"
 SITE_ID = 2
 
 
-STATIC_URL = "/cms/static/"
+STATIC_URL = "/api/static/"
