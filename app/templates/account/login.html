@@ -21,7 +21,7 @@ Sign in
     {% if field.errors %}
     {% render_field field class="flex items-center w-64 h-12 px-4 pb-2 mt-2 border-red-500 rounded focus:outline-none focus:ring-2" %}
     {% else %}
-    {% render_field field class="flex items-center w-64 h-12 px-4 pb-2 mt-2 rounded focus:outline-none focus:ring-2" %}
+    {% render_field field class="flex items-center w-64 h-12 px-4 pb-2 mt-2 rounded bg-gray-800 border-gray-400 focus:outline-none focus:ring-2" %}
     {% endif %}
     {% for error in field.errors %}
     <span class="flex items-center max-w-xs mt-1 ml-1 text-xs font-medium tracking-wide text-red-500">
@@ -36,9 +36,9 @@ Sign in
   {% include "account/_button.html" with text="Login" %}
 
   <div class="flex justify-center mt-6 text-xs">
-    <a class="text-blue-400 hover:text-blue-500" href="{% url 'account_reset_password' %}">Forgot Password</a>
+    <a class="text-gray-400 hover:text-gray-500" href="{% url 'account_reset_password' %}">Forgot Password</a>
     <span class="mx-2 text-gray-300">/</span>
-    <a class="text-blue-400 hover:text-blue-500" href="{% url 'account_signup' %}">Sign Up</a>
+    <a class="text-gray-400 hover:text-gray-500" href="{% url 'account_signup' %}">Sign Up</a>
   </div>
 
   {% if redirect_field_value %}
