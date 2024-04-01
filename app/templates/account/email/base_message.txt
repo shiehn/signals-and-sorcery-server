@@ -1,0 +1,8 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}Hello from Signals & Sorcery!{% endblocktrans %}
+
+{% block content %}{% endblock content %}
+
+{% blocktrans with site_domain=current_site.domain %}Thank you for using Signals & Sorcery!
+{{ site_domain }}{% endblocktrans %}
+{% endautoescape %}
