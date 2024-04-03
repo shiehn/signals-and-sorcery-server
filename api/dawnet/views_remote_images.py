@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework.exceptions import PermissionDenied
 from byo_network_hub.models import RemoteImage
 from .serializers import RemoteImageSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -34,3 +35,16 @@ class RemoteImageDeleteView(generics.DestroyAPIView):
     lookup_field = "id"
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def perform_destroy(self, instance):
+        # Assuming request.user.email holds the email of the authenticated user
+        user_email = self.request.user.email
+
+        if instance.remote_author != user_email:
+            # If the emails don't match, raise PermissionDenied
+            raise PermissionDenied(
+                {"detail": "You do not have permission to delete this image."}
+            )
+
+        # If the check passes, proceed with the default deletion process
+        super().perform_destroy(instance)

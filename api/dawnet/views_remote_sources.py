@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework.exceptions import PermissionDenied
 from byo_network_hub.models import RemoteSource
 from .serializers import RemoteSourceSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -35,4 +36,15 @@ class RemoteSourceDeleteView(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    # Note: No changes needed for RemoteSourceDeleteView, as it always requires authentication.
+    def perform_destroy(self, instance):
+        # Assuming request.user.email holds the email of the authenticated user
+        user_email = self.request.user.email
+
+        if instance.remote_author != user_email:
+            # If the emails don't match, raise PermissionDenied
+            raise PermissionDenied(
+                {"detail": "You do not have permission to delete this source."}
+            )
+
+        # If the check passes, proceed with the default deletion process
+        super().perform_destroy(instance)
