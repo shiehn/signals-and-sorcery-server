@@ -60,14 +60,32 @@ class BYOCMessageState(models.Model):
         return str(self.id)
 
 
+ELIXIR_CATEGORIES = [
+    ("audio", "AUDIO"),
+    ("video", "VIDEO"),
+    ("image", "IMAGE"),
+    ("text", "TEXT"),
+]
+
+PROCESSOR = [
+    ("cpu", "CPU"),
+    ("gpu", "GPU"),
+]
+
+
 class RemoteImage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     remote_name = models.CharField(max_length=100, null=False)
     remote_description = models.CharField(max_length=250, null=False)
-    remote_category = models.CharField(max_length=100, null=False)
-    remote_author = models.CharField(max_length=100, null=False)
+    remote_category = models.CharField(
+        max_length=100, choices=ELIXIR_CATEGORIES, null=False
+    )
+    remote_author = models.CharField(max_length=100, null=False, blank=False)
     image_name = models.CharField(max_length=250, null=False)
     remote_version = models.CharField(max_length=25, null=False, default="v0")
+    processor = models.CharField(
+        max_length=25, choices=PROCESSOR, null=False, default="cpu"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -79,11 +97,16 @@ class RemoteSource(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     remote_name = models.CharField(max_length=100, null=False)
     remote_description = models.CharField(max_length=250, null=False)
-    remote_category = models.CharField(max_length=100, null=False)
-    remote_author = models.CharField(max_length=100, null=False)
+    remote_category = models.CharField(
+        max_length=100, choices=ELIXIR_CATEGORIES, null=False
+    )
+    remote_author = models.CharField(max_length=100, null=False, blank=False)
     source_url = models.CharField(max_length=1500, null=False)
     colab_url = models.CharField(max_length=1500, null=True)
     remote_version = models.CharField(max_length=25, null=False, default="v0")
+    processor = models.CharField(
+        max_length=25, choices=PROCESSOR, null=False, default="cpu"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
