@@ -28,6 +28,10 @@ class RemoteImageListView(generics.ListCreateAPIView):
         # Return the authentication instances
         return [auth() for auth in authentication_classes]
 
+    def perform_create(self, serializer):
+        # Automatically set the remote_author to the user's email
+        serializer.save(remote_author=self.request.user.email)
+
 
 class RemoteImageDeleteView(generics.DestroyAPIView):
     queryset = RemoteImage.objects.all()
@@ -42,9 +46,7 @@ class RemoteImageDeleteView(generics.DestroyAPIView):
 
         if instance.remote_author != user_email:
             # If the emails don't match, raise PermissionDenied
-            raise PermissionDenied(
-                {"detail": "You do not have permission to delete this image."}
-            )
+            raise PermissionDenied({"detail": "You do not have permission to delete this image."})
 
         # If the check passes, proceed with the default deletion process
         super().perform_destroy(instance)
