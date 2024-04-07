@@ -24,6 +24,9 @@ from .views_byoc_storage import SignedURLAPIView
 from .views_remote_images import RemoteImageListView, RemoteImageDeleteView
 from .views_remote_sources import RemoteSourceListView, RemoteSourceDeleteView
 from . import views_connections
+from .views_connection_expiration import ConnectionsTimeout
+from .views_connection_cleanup import ConnectionsCleanUp
+
 
 router = OptionalSlashRouter()
 # router.register(r"dawnet", DAWNetView, basename="dawnet")
@@ -48,6 +51,16 @@ urlpatterns = [
     ),
     path("hub/connections/", Connect.as_view(), name="connection-all"),
     path("hub/connections/<str:id>/", Connect.as_view(), name="connection"),
+    path(
+        "hub/connections_timeout/",
+        ConnectionsTimeout.as_view(),
+        name="connections-timeout",
+    ),
+    path(
+        "hub/connections_timeout/",
+        ConnectionsCleanUp.as_view(),
+        name="connections-cleanup",
+    ),
     # DAWNet COMPUTE CONTRACTS
     path(
         "hub/compute/contract/",

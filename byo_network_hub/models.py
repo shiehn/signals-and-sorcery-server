@@ -17,9 +17,14 @@ class Connection(models.Model):
 
 class ConnectionStatus(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    plugin = models.BooleanField(null=False, default=False)
-    compute = models.BooleanField(null=False, default=False)
-    updated_at = models.DateTimeField(auto_now=True)
+    plugin = models.BooleanField(default=False)
+    compute = models.BooleanField(default=False)
+    plugin_updated_at = models.DateTimeField(
+        auto_now_add=True
+    )  # For the first creation
+    compute_updated_at = models.DateTimeField(
+        auto_now_add=True
+    )  # For the first creation
 
     def __str__(self):
         return str(self.id)
