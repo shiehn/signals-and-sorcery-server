@@ -46,7 +46,9 @@ class RemoteImageDeleteView(generics.DestroyAPIView):
 
         if instance.remote_author != user_email:
             # If the emails don't match, raise PermissionDenied
-            raise PermissionDenied({"detail": "You do not have permission to delete this image."})
+            raise PermissionDenied(
+                {"detail": "You do not have permission to delete this image."}
+            )
 
         # If the check passes, proceed with the default deletion process
         super().perform_destroy(instance)
