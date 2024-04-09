@@ -13,13 +13,13 @@ URL_EXPIRE_CONNECTIONS = "/api/hub/connections_expiry/"
 
 
 async def timeout_connections_endpoint() -> bool:
+    timout_url = urljoin(CONFIG["URL_BASE"], URL_TIMEOUT_CONNECTIONS)
+    print(f"timeout_connections_endpoint: {timout_url}")
     max_retries = 3  # Maximum number of retries
     for attempt in range(max_retries):
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    urljoin(CONFIG["URL_BASE"], URL_TIMEOUT_CONNECTIONS)
-                ) as response:
+                async with session.get(timout_url) as response:
                     if response.status != 200:
                         print(
                             f"Error attempting to timeout_connections. Status code: {response.status}"
@@ -39,13 +39,13 @@ async def timeout_connections_endpoint() -> bool:
 
 
 async def expire_connections_endpoint() -> bool:
+    expire_url = urljoin(CONFIG["URL_BASE"], URL_EXPIRE_CONNECTIONS)
+    print(f"expire_connections_endpoint: {expire_url}")
     max_retries = 3  # Maximum number of retries
     for attempt in range(max_retries):
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    urljoin(CONFIG["URL_BASE"], URL_EXPIRE_CONNECTIONS)
-                ) as response:
+                async with session.get(expire_url) as response:
                     if response.status != 200:
                         print(
                             f"Error attempting to expire_connections. Status code: {response.status}"
