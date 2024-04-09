@@ -57,7 +57,7 @@ urlpatterns = [
         name="connections-timeout",
     ),
     path(
-        "hub/connections_timeout/",
+        "hub/connections_expiry/",
         ConnectionsCleanUp.as_view(),
         name="connections-cleanup",
     ),

@@ -58,4 +58,16 @@ CONFIG = {
             parser.get("DEFAULT", "CLIENT_SOCKET_HEALTH_CHECK_INTERVAL"),
         )
     ),
+    "TIMEOUT_CONNECTION_INTERVAL": int(
+        os.getenv(
+            "DN_TIMEOUT_CONNECTION_INTERVAL",
+            parser.get("DEFAULT", "TIMEOUT_CONNECTION_INTERVAL"),
+        )
+    ),
+    "EXPIRE_CONNECTION_INTERVAL": int(
+        os.getenv(
+            "DN_EXPIRE_CONNECTION_INTERVAL",
+            parser.get("DEFAULT", "EXPIRE_CONNECTION_INTERVAL"),
+        )
+    ),
 }
