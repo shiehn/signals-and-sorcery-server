@@ -14,7 +14,7 @@ URL_EXPIRE_CONNECTIONS = "/api/hub/connections_expiry/"
 
 async def timeout_connections_endpoint() -> bool:
     timout_url = urljoin(CONFIG["URL_BASE"], URL_TIMEOUT_CONNECTIONS)
-    print(f"timeout_connections_endpoint: {timout_url}")
+    logging.info(f"timeout_connections_endpoint: {timout_url}")
     max_retries = 3  # Maximum number of retries
     for attempt in range(max_retries):
         try:
@@ -40,7 +40,7 @@ async def timeout_connections_endpoint() -> bool:
 
 async def expire_connections_endpoint() -> bool:
     expire_url = urljoin(CONFIG["URL_BASE"], URL_EXPIRE_CONNECTIONS)
-    print(f"expire_connections_endpoint: {expire_url}")
+    logging.info(f"expire_connections_endpoint: {expire_url}")
     max_retries = 3  # Maximum number of retries
     for attempt in range(max_retries):
         try:
