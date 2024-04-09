@@ -87,7 +87,7 @@ urlpatterns = [
         "hub/reply_to_message/", ReplyToMessageView.as_view(), name="reply-to-message"
     ),
     path(
-        "hub/get_latest_pending_messages/",
+        "hub/get_latest_pending_messages/<uuid:connection_token>/",
         GetLatestPendingMessagesView.as_view(),
         name="get-latest-pending-messages",
     ),
