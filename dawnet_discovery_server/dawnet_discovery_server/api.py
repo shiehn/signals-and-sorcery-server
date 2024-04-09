@@ -31,7 +31,9 @@ async def timeout_connections_endpoint() -> bool:
                         )
                         return True
         except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-            logging.error(f"Compute Contract Attempt {attempt + 1} for endpoint: {timout_url} failed: {e}")
+            logging.error(
+                f"Compute Contract Attempt {attempt + 1} for endpoint: {timout_url} failed: {e}"
+            )
             if attempt < max_retries - 1:
                 await asyncio.sleep(2**attempt)  # Exponential backoff
             else:
@@ -57,7 +59,9 @@ async def expire_connections_endpoint() -> bool:
                         )
                         return True
         except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-            logging.error(f"Compute Contract Attempt {attempt + 1} for endpoint: {expire_url} failed: {e}")
+            logging.error(
+                f"Compute Contract Attempt {attempt + 1} for endpoint: {expire_url} failed: {e}"
+            )
             if attempt < max_retries - 1:
                 await asyncio.sleep(2**attempt)  # Exponential backoff
             else:

@@ -10,7 +10,7 @@ class ConnectionsCleanUp(APIView):
     authentication_classes = []  # Adjust as necessary
     permission_classes = []  # Adjust as necessary
 
-    def post(self, request):
+    def get(self, request):
         # Calculate the threshold datetime: 24 hours ago from now
         threshold_time = timezone.now() - timedelta(hours=24)
 
