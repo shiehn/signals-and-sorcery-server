@@ -7,7 +7,7 @@ from api.urls import OptionalSlashRouter
 from .views import DAWNetView
 
 from .views_byoc_ws_health_check import HealthCheckView
-from .views_connect import Connect
+from .views_connect import Connect, UpdateLoadedStatus
 from .views_byoc_compute_contract import (
     ComputeContractListCreateView,
     ComputeContractRetrieveUpdateDestroyView,
@@ -51,6 +51,11 @@ urlpatterns = [
     ),
     path("hub/connections/", Connect.as_view(), name="connection-all"),
     path("hub/connections/<str:id>/", Connect.as_view(), name="connection"),
+    path(
+        "hub/connections/<str:connection_token>/loaded/",
+        UpdateLoadedStatus.as_view(),
+        name="connection-loaded-update",
+    ),
     path(
         "hub/connections_timeout/",
         ConnectionsTimeout.as_view(),

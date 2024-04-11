@@ -59,6 +59,8 @@ source env/bin/activate
 pip install -r requirements.txt
 make setting=api migrations
 ```
+*note: the migrations will be applied when you do the `docker-compose up --build`*
+
 
 The server will be ready on http://localhost:8080.
 
@@ -89,7 +91,7 @@ After running this command, (BY DEFAULT) you should have the following services 
 Remember you'll need to expose your ports to the public internet on your VM.  (Query Chat-GPT for instructions on how to do this.)
 
 ### NOTE:
-When running migrations and dabase command make sure you are using the correct .env values.  Note: they will be different from outside docker. e.x
+When running migrations and database command make sure you are using the correct .env values.  Note: they will be different from outside docker. e.x
 
 ### Super User creation
 ```

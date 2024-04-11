@@ -19,6 +19,7 @@ class ConnectionStatus(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     plugin = models.BooleanField(default=False)
     compute = models.BooleanField(default=False)
+    loaded = models.BooleanField(default=False)
     plugin_updated_at = models.DateTimeField(
         auto_now_add=True
     )  # For the first creation
