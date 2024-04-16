@@ -8,6 +8,8 @@ from pathlib import Path
 import sys
 import requests
 import json
+from datetime import datetime
+
 
 from dawnet_api import register_the_plugin_token, get_connection_mappings, fetch_contract, send_request, \
     get_message_responses, get_signed_upload_url, upload_file_to_gcp
@@ -47,14 +49,13 @@ def main():
     service_process = 0
     try:
         start_time = time.time()  # Capture the start time
-        print(f"Test started for {upload_filepath} at: {start_time}")
+        print(f"Test started for {upload_filepath} at: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]}")
 
         register_the_plugin_token(token)
 
         service_process = start_service()
 
         connection_mappings = []
-        print("Waiting for connected remotes")
 
         while not get_connection_mappings(token):
             # Check if the loop has run for more than 60 seconds
@@ -71,7 +72,9 @@ def main():
 
         print("CONTRACT: " + str(contract))
 
+        print(f"Getting Signed URL for {upload_filepath} at: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]}")
         signed_url = get_signed_upload_url(connection_token, upload_filepath.name)
+        print(f"Received Signed URL for {upload_filepath} at: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]}")
 
         print(f"XXX:{signed_url}")
 
