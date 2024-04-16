@@ -120,7 +120,7 @@ def main():
 
             responses = get_message_responses(message_id, connection_token)
             print("MESSAGE_NONE_RESPONSES: " + str(responses))
-            time.sleep(2)
+            #time.sleep(2)
 
         if 'files' in responses['response'] and responses['response']['files'] is not None and responses['response']['files'][0]['url'] == input_file_url:
             stop_service(service_process)
