@@ -42,7 +42,7 @@ def main():
     global upload_filepath
     upload_filepath = Path(sys.argv[1])  # Set upload_filepath based on command line argument
 
-    logging.info(f"Test started for {upload_filepath}")
+    print(f"Test started for {upload_filepath}")
 
     service_process = 0
     try:
@@ -130,7 +130,7 @@ def main():
 
     # Shutdown the service
     stop_service(service_process)
-    logging.info(f"Test completed for {upload_filepath}. Duration: {time.time() - start_time} seconds")
+    print(f"Test completed for {upload_filepath}. Duration: {time.time() - start_time} seconds")
 
     print("----------------------")
     print("TEST SUCCESS!!!!")
