@@ -49,7 +49,7 @@ def main():
     service_process = 0
     try:
         start_time = time.time()  # Capture the start time
-        print(f"Test started for {upload_filepath} at: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]}")
+        print(f"Test started for {upload_filepath} at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
 
         register_the_plugin_token(token)
 
@@ -72,9 +72,9 @@ def main():
 
         print("CONTRACT: " + str(contract))
 
-        print(f"Getting Signed URL for {upload_filepath} at: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]}")
+        print(f"Getting Signed URL for {upload_filepath} at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
         signed_url = get_signed_upload_url(connection_token, upload_filepath.name)
-        print(f"Received Signed URL for {upload_filepath} at: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]}")
+        print(f"Received Signed URL for {upload_filepath} at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
 
         print(f"XXX:{signed_url}")
 
