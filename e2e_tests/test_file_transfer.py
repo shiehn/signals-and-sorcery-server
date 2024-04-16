@@ -39,11 +39,11 @@ def main():
         print("Usage: script_name.py <upload_file_path>")
         sys.exit(1)
 
-    start_time = time.time()
-    logging.info(f"Test started for {upload_filepath}")
-
     global upload_filepath
     upload_filepath = Path(sys.argv[1])  # Set upload_filepath based on command line argument
+
+    start_time = time.time()
+    logging.info(f"Test started for {upload_filepath}")
 
     service_process = 0
     try:
