@@ -11,12 +11,12 @@ parser.add_argument("token", help="Token for DAWNet server connection")
 args = parser.parse_args()
 
 import runes_client as runes
-from runes_client.core import DAWNetFilePath
+from runes_client.core import RunesFilePath
 
 
 #@ui_param("a", "DAWNetNumberSlider", min=0, max=10, step=1, default=5)
 # @ui_param('c', 'DAWNetMultiChoice', options=['cherries', 'oranges', 'grapes'], default='grapes')
-async def arbitrary_method(input_file: DAWNetFilePath):
+async def arbitrary_method(input_file: RunesFilePath):
     try:
         print(f"Input File: {input_file}")
 
