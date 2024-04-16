@@ -109,12 +109,13 @@ def main():
 
         message_id = send_request(data_dict)
 
-        start_time = time.time()  # Capture the start time
+        polling_start_time = time.time()  # Capture the start time
         responses = {}
 
+        print(f"POLL RESULTS START for: {upload_filepath} at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
         while 'response' not in responses or responses['response'] is None:
             # Check if the loop has run for more than 60 seconds
-            if time.time() - start_time > 60:
+            if time.time() - polling_start_time > 60:
                 raise TimeoutError("The operation has timed out after 60 seconds.")
 
             responses = get_message_responses(message_id, connection_token)
@@ -128,6 +129,8 @@ def main():
         else:
             stop_service(service_process)
             raise Exception("FILE NOT RETURNED")
+
+        print(f"POLL RESULTS STOP for: {upload_filepath} at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
 
     except Exception as e:
         stop_service(service_process)
