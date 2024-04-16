@@ -4,14 +4,14 @@ import argparse
 import time
 import random
 
-from dawnet_client import ui_param
+from runes_client import ui_param
 
 parser = argparse.ArgumentParser(description="Connect to DAWNet server.")
 parser.add_argument("token", help="Token for DAWNet server connection")
 args = parser.parse_args()
 
-import dawnet_client as dawnet
-from dawnet_client.core import DAWNetFilePath
+import runes_client as runes
+from runes_client.core import DAWNetFilePath
 
 
 #@ui_param("a", "DAWNetNumberSlider", min=0, max=10, step=1, default=5)
@@ -26,33 +26,33 @@ async def arbitrary_method(input_file: DAWNetFilePath):
         time.sleep(sleep_time)
 
 
-        await dawnet.output().add_file(input_file)
-        await dawnet.output().add_message("This is a message send to the plugin")
+        await runes.output().add_file(input_file)
+        await runes.output().add_message("This is a message send to the plugin")
 
         return True
     except Exception as e:
-        await dawnet.output().add_error(f"This is an error sent to the plugin: {e}")
+        await runes.output().add_error(f"This is an error sent to the plugin: {e}")
 
         return False
 
 
-dawnet.set_input_target_format("wav")
-dawnet.set_input_target_channels(2)
-dawnet.set_input_target_sample_rate(44100)
-dawnet.set_input_target_bit_depth(16)
+runes.set_input_target_format("wav")
+runes.set_input_target_channels(2)
+runes.set_input_target_sample_rate(44100)
+runes.set_input_target_bit_depth(16)
 
-dawnet.set_output_target_format("wav")
-dawnet.set_output_target_channels(2)
-dawnet.set_output_target_sample_rate(44100)
-dawnet.set_output_target_bit_depth(16)
+runes.set_output_target_format("wav")
+runes.set_output_target_channels(2)
+runes.set_output_target_sample_rate(44100)
+runes.set_output_target_bit_depth(16)
 
-dawnet.set_token(token=args.token)
-dawnet.set_name("DAWNet Template")
-dawnet.set_description(
+runes.set_token(token=args.token)
+runes.set_name("DAWNet Template")
+runes.set_description(
     "This is a template intended as a starting place to create custom DAWNet functions."
 )
-dawnet.register_method(arbitrary_method)
+runes.register_method(arbitrary_method)
 
 
 print("REGISTERED TOKEN & " + str(arbitrary_method))
-dawnet.connect_to_server()
+runes.connect_to_server()
