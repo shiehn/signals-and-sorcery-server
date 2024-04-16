@@ -24,7 +24,7 @@ def run_test(file_path):
 
 def main():
     # Use ThreadPoolExecutor to run tests in parallel
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         # Map each file path to the run_test function and execute them in parallel
         futures = [executor.submit(run_test, file_path) for file_path in file_paths]
 
