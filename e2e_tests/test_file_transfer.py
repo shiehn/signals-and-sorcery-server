@@ -80,7 +80,9 @@ def main():
         print(f"XXX:{signed_url}")
 
         mime_type, _ = mimetypes.guess_type(upload_filepath)
+        print(f"Upload to GCP: {upload_filepath} at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
         upload_file_to_gcp(upload_filepath.absolute(), signed_url, mime_type)
+        print(f"Finish upload to GCP: {upload_filepath} at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
 
         # Example usage
         token_value = connection_token
