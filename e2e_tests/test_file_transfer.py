@@ -1,3 +1,4 @@
+import logging
 import mimetypes
 import os
 import uuid
@@ -37,6 +38,9 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: script_name.py <upload_file_path>")
         sys.exit(1)
+
+    start_time = time.time()
+    logging.info(f"Test started for {upload_filepath}")
 
     global upload_filepath
     upload_filepath = Path(sys.argv[1])  # Set upload_filepath based on command line argument
@@ -120,10 +124,15 @@ def main():
     except Exception as e:
         stop_service(service_process)
         print("Service has been stopped.")
+        # At the end of your main function, log the completion time
+        logging.info(f"Test completed for {upload_filepath}. Duration: {time.time() - start_time} seconds")
+
         raise Exception(f"ERROR: {e}")
 
     # Shutdown the service
     stop_service(service_process)
+    logging.info(f"Test completed for {upload_filepath}. Duration: {time.time() - start_time} seconds")
+
     print("----------------------")
     print("TEST SUCCESS!")
     print("----------------------")
