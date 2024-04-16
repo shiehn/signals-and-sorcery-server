@@ -8,7 +8,8 @@ from pathlib import Path
 import sys
 import requests
 import json
-from datetime import datetime
+import datetime
+
 
 
 from dawnet_api import register_the_plugin_token, get_connection_mappings, fetch_contract, send_request, \
