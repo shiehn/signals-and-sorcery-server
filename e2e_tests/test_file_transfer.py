@@ -42,7 +42,6 @@ def main():
     global upload_filepath
     upload_filepath = Path(sys.argv[1])  # Set upload_filepath based on command line argument
 
-    start_time = time.time()
     logging.info(f"Test started for {upload_filepath}")
 
     service_process = 0
@@ -134,7 +133,7 @@ def main():
     logging.info(f"Test completed for {upload_filepath}. Duration: {time.time() - start_time} seconds")
 
     print("----------------------")
-    print("TEST SUCCESS!")
+    print("TEST SUCCESS!!!!")
     print("----------------------")
     print("Service has been stopped.")
 
