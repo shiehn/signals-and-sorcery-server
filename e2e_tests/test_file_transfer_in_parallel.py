@@ -5,8 +5,8 @@ import sys
 # List of file paths to test
 file_paths = [
     "/home/stevehiehn/dawnet/dawnet-server/e2e_tests/assets/old_mcdonald.wav",
-    "/home/stevehiehn/dawnet/dawnet-server/e2e_tests/assets/old_mcdonald.wav",
-    #"/home/stevehiehn/dawnet/dawnet-server/e2e_tests/assets/guns_n_roses.mid",
+    #"/home/stevehiehn/dawnet/dawnet-server/e2e_tests/assets/old_mcdonald.wav",
+    "/home/stevehiehn/dawnet/dawnet-server/e2e_tests/assets/guns_n_roses.mid",
     # Add more file paths as needed
 ]
 
