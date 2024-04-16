@@ -21,7 +21,7 @@ async def arbitrary_method(input_file: RunesFilePath):
         print(f"Input File: {input_file}")
 
         # Pause execution for a random number of seconds between 1 and 30
-        sleep_time = random.randint(1, 30)
+        sleep_time = random.randint(1, 20)
         print(f"Pausing for {sleep_time} seconds")
         time.sleep(sleep_time)
 
