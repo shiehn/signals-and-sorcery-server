@@ -42,17 +42,20 @@ def main():
     global upload_filepath
     upload_filepath = Path(sys.argv[1])  # Set upload_filepath based on command line argument
 
-    print(f"Test started for {upload_filepath}")
+
 
     service_process = 0
     try:
+        start_time = time.time()  # Capture the start time
+        print(f"Test started for {upload_filepath} at: {start_time}")
+
         register_the_plugin_token(token)
 
         service_process = start_service()
 
         connection_mappings = []
         print("Waiting for connected remotes")
-        start_time = time.time()  # Capture the start time
+
         while not get_connection_mappings(token):
             # Check if the loop has run for more than 60 seconds
             if time.time() - start_time > 60:
