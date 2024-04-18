@@ -1,6 +1,7 @@
-# DAWNet
+![signals_and_sorcery_logo](https://storage.googleapis.com/docs-assets/sas_logo.png)
+# Signals & Sorcery
 
-`DAWNet` is a DAW (digit audio workstation) plugin that connects to a remote Google Colab or Script.  A user can send audio files from the plugin for remote processing. Hence, perform computationally expensive tasks such as text-2-audio or stem separation without leaving the DAW. 
+`Signals & Sorcery` is a DAW (digit audio workstation) plugin that connects to a remote Google Colab or Script.  A user can send audio files from the plugin for remote processing. Hence, perform computationally expensive tasks such as text-2-audio or stem separation without leaving the DAW. 
 
 For more information:
 
@@ -9,13 +10,13 @@ For more information:
 - [Community Discord](https://discord.gg/UcHCjfpRkV)
 
 
-# DAWNet infrastructure (DockerCompose)
+# Signals & Sorcery infrastructure (DockerCompose)
 
-This is a monorepo containing all the services needed to support the DAWNet plugin and client.  The repo contains the following services:
+This is a monorepo containing all the services needed to support the Crucible plugin and runes-client.  The repo contains the following services:
 
-* **DAWNET API SERVER:** The Django server (DRF) which serves the API and handles uploads/downloads to cloud storage.
-* **DAWNET WEBSOCKET SERVER:** A Python websockets server which handles the realtime communication between the dawnet remote Google Colabs (or scripts)
-* **POSTGRES DATABASE:** The database which stores all the data for the DAWNet infrastructure
+* **Signals & Sorcery API SERVER:** The Django server (DRF) which serves the API and handles uploads/downloads to cloud storage.
+* **Signals & Sorcery WEBSOCKET SERVER:** A Python websockets server which handles the realtime communication between the RUNES / Google Colabs (or scripts)
+* **POSTGRES DATABASE:** The database which stores all the data for the Signals & Sorcery infrastructure
 
 NOTE: there are a few other services which are currently just placeholders to support potential functionality such as a web frontend for user auth, etc.
 
@@ -83,8 +84,8 @@ docker-compose up --build
 ````
 After running this command, (BY DEFAULT) you should have the following services exposed on the following ports:
 
-* **DAWNET API SERVER:** `http://[YOUR-IP-AT-PORT]:8081`
-* **DAWNET WEB SOCKET:** `http://[YOUR-IP-AT-PORT]:8765`
+* **Signals & Sorcery API SERVER:** `http://[YOUR-IP-AT-PORT]:8081`
+* **Signals & Sorcery WEB SOCKET:** `http://[YOUR-IP-AT-PORT]:8765`
 
 ### NOTE:
 
