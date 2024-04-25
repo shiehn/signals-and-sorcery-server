@@ -7,6 +7,7 @@ class Connection(models.Model):
     master_token = models.UUIDField()
     connection_token = models.UUIDField(unique=True)
     connection_name = models.CharField(max_length=255)
+    connection_type = models.CharField(max_length=255, default="unknown")
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

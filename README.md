@@ -5,7 +5,7 @@
 
 For more information:
 
-- [https://dawnet.tools/](https://dawnet.tools/)
+- [https://signalsandsorcery.app/](https://signalsandsorcery.app/)
 
 - [Community Discord](https://discord.gg/UcHCjfpRkV)
 

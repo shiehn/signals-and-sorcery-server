@@ -23,6 +23,7 @@ from .views_byoc_messages import (
 from .views_byoc_storage import SignedURLAPIView
 from .views_remote_images import RemoteImageListView, RemoteImageDeleteView
 from .views_remote_sources import RemoteSourceListView, RemoteSourceDeleteView
+from .views_game_engine import GameQueryView
 from . import views_connections
 from .views_connection_expiration import ConnectionsTimeout
 from .views_connection_cleanup import ConnectionsCleanUp
@@ -131,6 +132,11 @@ urlpatterns = [
         "hub/remote-sources/<str:id>/",
         RemoteSourceDeleteView.as_view(),
         name="remote-source-delete",
+    ),
+    path(
+        "game-engine/query/",
+        GameQueryView.as_view(),
+        name="handle-user-query",
     ),
     path("", include(router.urls)),
 ]
