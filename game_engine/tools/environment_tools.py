@@ -1,10 +1,11 @@
 # Define custom tools with proper arguments and descriptions
 from langchain_core.tools import BaseTool
 
-from api.environment import get_environment
+from game_engine.api.environment import get_environment
 
 
 # ENVIRONMENT TOOLS
+
 
 class CurrentEnvironment(BaseTool):
     name = "DescribeEnvironment"

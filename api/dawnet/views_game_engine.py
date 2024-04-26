@@ -1,6 +1,6 @@
-from game_engine.messages import handle_user_message
 from rest_framework import status, views
 from rest_framework.response import Response
+from game_engine.rpg_chat_service import RPGChatService
 
 
 def handle_message(message: str, token: str):
@@ -25,11 +25,16 @@ class GameQueryView(views.APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Handle the user's message
-        response_message = handle_message(query, token)
+        # # Handle the user's message
+        # response_message = handle_message(query, token)
+        #
+        # # Return a success response with the handled message or other response data
+        # return Response(
+        #     {"status": "success", "response": response_message},
+        #     status=status.HTTP_200_OK,
+        # )
 
-        # Return a success response with the handled message or other response data
-        return Response(
-            {"status": "success", "response": response_message},
-            status=status.HTTP_200_OK,
-        )
+        rpg_chat_service = RPGChatService()  # Get the singleton instance
+        response = rpg_chat_service.ask_question(token, query)
+
+        return Response({"response": response}, status=status.HTTP_200_OK)
