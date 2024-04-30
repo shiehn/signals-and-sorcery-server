@@ -54,7 +54,8 @@ make setting=api port=8080 server
 ```
 
 *note: migrations require you to have a virtual environment setup i.e:*
-```bash
+```
+cd signals-and-sorcery-server
 python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt

@@ -24,6 +24,7 @@ from .views_byoc_storage import SignedURLAPIView
 from .views_remote_images import RemoteImageListView, RemoteImageDeleteView
 from .views_remote_sources import RemoteSourceListView, RemoteSourceDeleteView
 from .views_game_engine import GameQueryView
+from .views_game_engine_map import GameMapView, GameMapCreateView
 from . import views_connections
 from .views_connection_expiration import ConnectionsTimeout
 from .views_connection_cleanup import ConnectionsCleanUp
@@ -137,6 +138,13 @@ urlpatterns = [
         "game-engine/query/",
         GameQueryView.as_view(),
         name="handle-user-query",
+    ),
+    path("game-map/<uuid:uuid>/", GameMapView.as_view(), name="game-map"),
+    path("game-map/", GameMapCreateView.as_view(), name="create-game-map"),
+    path(
+        "game-map-states/",
+        GameMapStateViewSet.as_view({"get": "list", "post": "create"}),
+        name="game-map-states",
     ),
     path("", include(router.urls)),
 ]

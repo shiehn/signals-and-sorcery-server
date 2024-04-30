@@ -4,29 +4,30 @@ from rest_framework import serializers
 
 from byo_network_hub.models import ConnectionStatus, ComputeContract, BYOCMessageState
 
+
 class ConnectionStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConnectionStatus
-        fields = '__all__'
+        fields = "__all__"
 
 
 from rest_framework import serializers
 from byo_network_hub.models import ComputeContract
+
 
 class ComputeContractSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(required=False)
 
     class Meta:
         model = ComputeContract
-        fields = '__all__'
+        fields = "__all__"
 
     def create(self, validated_data):
         # Check if an instance with the provided id exists
-        contract_id = validated_data.get('id')
+        contract_id = validated_data.get("id")
         if contract_id:
             instance, created = ComputeContract.objects.get_or_create(
-                id=contract_id,
-                defaults=validated_data
+                id=contract_id, defaults=validated_data
             )
             if not created:
                 # Update instance if it already exists
@@ -46,9 +47,8 @@ class ComputeContractSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class BYOCMessageStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BYOCMessageState
-        fields = '__all__'
-        read_only_fields = ('id', 'created_at', 'updated_at')
+        fields = "__all__"
+        read_only_fields = ("id", "created_at", "updated_at")

@@ -119,3 +119,31 @@ class RemoteSource(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+# GAME ENGINE MODELS -----------------------------------------------
+
+
+class GameMap(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    level = models.IntegerField()
+    description = models.TextField()
+    map_graph = models.JSONField()  # Add this line for the JSON field
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class GameMapState(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.UUIDField()
+    map_id = models.UUIDField()
+    item_id = models.UUIDField()
+    consumed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
