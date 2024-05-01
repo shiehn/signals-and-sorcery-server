@@ -13,7 +13,13 @@ class MapGenerator:
 
     def get_node_json(self):
         return [
-            {"id": n, "label": n[:3], "shape": "box"} for n in self.dist_graph.nodes()
+            {
+                "id": n,
+                "label": n[:3],
+                "shape": "box",
+                "game_info": {"items": [], "encounters": [], "doors": []},
+            }
+            for n in self.dist_graph.nodes()
         ]
 
     def get_json(self):
@@ -51,42 +57,4 @@ class MapGenerator:
 
         print(f"Added {added} edges, did not add {not_added} edges")
 
-        # Print nodes and edges
-        # print("Nodes of the graph:")
-        # for node in graph.nodes():
-        #     print(node)
-        # print("\nEdges of the graph:")
-        # for edge in graph.edges():
-        #     print(edge)
-
         return graph
-
-    # rooms = []
-    #
-    # print(f"Generating {self.num_rooms} rooms...")
-    #
-    # for i in range(self.num_rooms):
-    #     room = MapRoom(room_id=str(uuid.uuid4()))
-    #     rooms.append(room)
-    #
-    # print(f"Rooms generated: {rooms}")
-    #
-    # print("Generating Doors & Connections...")
-    #
-    # # min of 2 rooms (entrance and exit)
-    # # every other room can have 0-3 doors
-    # if self.num_rooms < 2:
-    #     print("Error: Must have at least 2 rooms")
-    #     return
-    #
-    # elif self.num_rooms == 2:
-    #     rooms[0].set_label("Entrance")
-    #     rooms[1].set_label("Exit")
-    #
-    #     rooms[0].add_connection(rooms[1].id)
-    #     rooms[1].add_connection(rooms[0].id)
-    #
-    #     print(f"Entrance and exit generated: {rooms}")
-    #     return
-    #
-    # else:
