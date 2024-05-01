@@ -30,6 +30,12 @@ from .views_game_engine_map_generation import GameMapGeneration
 from . import views_connections
 from .views_connection_expiration import ConnectionsTimeout
 from .views_connection_cleanup import ConnectionsCleanUp
+from .views_game_engine_state import (
+    GameStateDetailView,
+    GameStateDeleteView,
+    GameStateUpdateView,
+    GameStateCreateView,
+)
 
 
 router = OptionalSlashRouter()
@@ -150,6 +156,22 @@ urlpatterns = [
     ),
     path(
         "game-map-generation/", GameMapGeneration.as_view(), name="game-map-generation"
+    ),
+    path("game-state/", GameStateCreateView.as_view(), name="game-state-create"),
+    path(
+        "game-state/<uuid:user_id>/",
+        GameStateDetailView.as_view(),
+        name="game-state-detail",
+    ),
+    path(
+        "game-state/<uuid:id>/delete/",
+        GameStateDeleteView.as_view(),
+        name="game-state-delete",
+    ),
+    path(
+        "game-state/<uuid:id>/update/",
+        GameStateUpdateView.as_view(),
+        name="game-state-update",
     ),
     path("", include(router.urls)),
 ]

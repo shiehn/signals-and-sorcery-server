@@ -124,6 +124,21 @@ class RemoteSource(models.Model):
 # GAME ENGINE MODELS -----------------------------------------------
 
 
+class GameState(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.UUIDField(
+        unique=True, null=False, blank=False
+    )  # Enforce uniqueness
+    level = models.IntegerField()
+    aesthetic = models.CharField(max_length=1024)
+    map_id = models.UUIDField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"User {self.user_id} - Game {self.game_id} at Level {self.level}"
+
+
 class GameMap(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     level = models.IntegerField()
