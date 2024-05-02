@@ -36,6 +36,7 @@ from .views_game_engine_state import (
     GameStateUpdateView,
     GameStateCreateView,
 )
+from .views_game_inventory import InventoryListView, InventoryCreateView
 
 
 router = OptionalSlashRouter()
@@ -172,6 +173,16 @@ urlpatterns = [
         "game-state/<uuid:id>/update/",
         GameStateUpdateView.as_view(),
         name="game-state-update",
+    ),
+    path(
+        "game-inventory/<uuid:user_id>/",
+        InventoryListView.as_view(),
+        name="inventory-list",
+    ),
+    path(
+        "game-inventory/<uuid:user_id>/add/",
+        InventoryCreateView.as_view(),
+        name="inventory-add",
     ),
     path("", include(router.urls)),
 ]

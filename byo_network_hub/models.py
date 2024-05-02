@@ -122,6 +122,10 @@ class RemoteSource(models.Model):
 
 
 # GAME ENGINE MODELS -----------------------------------------------
+class GameElementLookup(models.Model):
+    element_id = models.UUIDField(primary_key=True, unique=True)
+    user_id = models.UUIDField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class GameState(models.Model):
@@ -158,6 +162,18 @@ class GameMapState(models.Model):
     map_id = models.UUIDField()
     item_id = models.UUIDField()
     consumed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class GameInventory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.UUIDField()
+    item_id = models.UUIDField()
+    item_details = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

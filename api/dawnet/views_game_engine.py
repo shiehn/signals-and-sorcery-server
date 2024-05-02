@@ -1,6 +1,7 @@
 from rest_framework import status, views
 from rest_framework.response import Response
 from game_engine.rpg_chat_service import RPGChatService
+from byo_network_hub.models import GameState
 
 
 def handle_message(message: str, token: str):
@@ -25,14 +26,11 @@ class GameQueryView(views.APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # # Handle the user's message
-        # response_message = handle_message(query, token)
-        #
-        # # Return a success response with the handled message or other response data
-        # return Response(
-        #     {"status": "success", "response": response_message},
-        #     status=status.HTTP_200_OK,
-        # )
+        # Get the game state for the user
+        game_state = GameState.objects.get(user_id=token)
+
+        # append user context and state to the query
+        query = f"{query} user_id={token} environment_id={game_state.environment_id}"
 
         rpg_chat_service = RPGChatService()  # Get the singleton instance
         response = rpg_chat_service.ask_question(token, query)

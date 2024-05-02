@@ -40,3 +40,24 @@ class TestGameMapInspector(unittest.TestCase):
         exit_id = map_inspector.get_env_id_of_exit()
 
         self.assertIsNotNone(exit_id)
+
+    def test_get_element_ids(self):
+        map_generator = MapGenerator()
+        unprocessed_map = map_generator.generate(
+            num_rooms=3, percent_connected=0.25
+        ).get_json()
+
+        map_processor = MapProcessor(unprocessed_map)
+        map_processor = map_processor.add_entrance_exit()
+        map_processor = map_processor.add_items()
+        map_processor = map_processor.add_encounters()
+
+        map = map_processor.get_map()
+
+        map_inspector = MapInspector(map)
+
+        uuids = map_inspector.extract_uuids()
+
+        print(str(uuids))
+
+        self.assertGreater(len(uuids), 5)

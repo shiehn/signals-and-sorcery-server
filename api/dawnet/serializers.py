@@ -1,7 +1,14 @@
 """DAWNet data validators"""
 from rest_framework import serializers
-from byo_network_hub.models import Connection, RemoteImage, RemoteSource
-from byo_network_hub.models import GameMap, GameMapState, GameState
+from byo_network_hub.models import (
+    Connection,
+    RemoteImage,
+    RemoteSource,
+    GameMap,
+    GameMapState,
+    GameState,
+    GameInventory,
+)
 
 
 # pylint: disable=abstract-method
@@ -50,3 +57,16 @@ class GameMapStateSerializer(serializers.ModelSerializer):
         model = GameMapState
         fields = "__all__"
         read_only_fields = ("id", "created_at", "updated_at")
+
+
+class GameInventorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GameInventory
+        fields = [
+            "id",
+            "user_id",
+            "item_id",
+            "item_details",
+            "created_at",
+            "updated_at",
+        ]
