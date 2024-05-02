@@ -132,6 +132,7 @@ class GameState(models.Model):
     level = models.IntegerField()
     aesthetic = models.CharField(max_length=1024)
     map_id = models.UUIDField()
+    environment_id = models.UUIDField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

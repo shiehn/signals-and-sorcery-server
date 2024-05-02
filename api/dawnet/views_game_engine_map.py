@@ -19,7 +19,15 @@ class GameMapView(APIView):
             raise Http404
 
     def get(self, request, uuid, format=None):
+        # Get the GameMap instance
         gamemap = self.get_object(uuid)
+
+        # Get the GameMapState
+
+        # Get the GameState
+
+        # Merge the GameMap and States
+
         serializer = GameMapSerializer(gamemap)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

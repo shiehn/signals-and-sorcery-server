@@ -1,6 +1,7 @@
 from rest_framework import generics
 from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
+from game_engine.api.map_inspector import MapInspector
 from byo_network_hub.models import GameState, GameMap
 from .serializers import GameStateSerializer
 
@@ -31,8 +32,16 @@ class GameStateCreateView(generics.CreateAPIView):
             level=level, description=aesthetic, map_graph=map
         )
 
+        # when the map is created,
+
         # Set the map_id in the validated_data before saving
         serializer.validated_data["map_id"] = game_map.id
+
+        # Assume the user is starting at the entrance, so set the current_room to the entrance
+        map_inspector = MapInspector(map)
+        serializer.validated_data[
+            "environment_id"
+        ] = map_inspector.get_env_id_of_entrance()
 
         # Save the instance with the new map_id
         serializer.save()

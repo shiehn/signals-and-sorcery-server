@@ -5,18 +5,7 @@ from game_engine.api.map_processor import MapProcessor
 # python manage.py test game_engine.tests.test_generator
 
 
-class TestCalculator(unittest.TestCase):
-    def test_node_count(self):
-        map_generator = MapGenerator()
-        unprocessed_map = map_generator.generate(
-            num_rooms=3, percent_connected=0.25
-        ).get_json()
-
-        self.assertEqual(len(unprocessed_map["nodes"]), 3)
-
-        # processed_map = MapProcessor(unprocessed_map)
-        # processed_map = processed_map.add_entrance_exit()
-
+class TestMapGenerator(unittest.TestCase):
     def test_adding_enter_exit(self):
         map_generator = MapGenerator()
         unprocessed_map = map_generator.generate(
