@@ -48,3 +48,12 @@ class MapInspector:
             if node["id"] == env_id:
                 return node
         return None
+
+    def get_adjacent_environments(self, env_id):
+        adjacent_env_ids = []
+        for edge in self.map["edges"]:
+            if edge["to"] == env_id:
+                adjacent_env_ids.append(edge["from"])
+            elif edge["from"] == env_id:
+                adjacent_env_ids.append(edge["to"])
+        return adjacent_env_ids

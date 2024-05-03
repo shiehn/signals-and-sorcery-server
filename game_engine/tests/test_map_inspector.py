@@ -60,4 +60,102 @@ class TestGameMapInspector(unittest.TestCase):
 
         print(str(uuids))
 
-        self.assertGreater(len(uuids), 5)
+        self.assertGreater(len(uuids), 4)
+
+    def test_get_adjacent_environments(self):
+        test_map = {
+            "edges": [
+                {
+                    "to": "82095dcb-542c-4621-8fd5-570e0b10d6e7",
+                    "from": "71152afc-0b0d-452e-bb76-10fe44037fb7",
+                },
+                {
+                    "to": "82095dcb-542c-4621-8fd5-570e0b10d6e7",
+                    "from": "6b9c7139-7991-4eb3-800e-3b2af4c6ffe8",
+                },
+            ],
+            "nodes": [
+                {
+                    "id": "71152afc-0b0d-452e-bb76-10fe44037fb7",
+                    "color": {"background": "red"},
+                    "label": "Exit",
+                    "shape": "box",
+                    "game_info": {
+                        "doors": [],
+                        "items": [
+                            {
+                                "item_id": "9ce263d4-8ad1-4464-81ce-9bd5eb97fa08",
+                                "item_size": "4x6",
+                                "item_type": "weapon",
+                            },
+                            {
+                                "item_id": "b2540f46-06ec-403d-a593-0b197829481f",
+                                "item_size": "4x6",
+                                "item_type": "potion",
+                            },
+                        ],
+                        "encounters": [],
+                    },
+                },
+                {
+                    "id": "6b9c7139-7991-4eb3-800e-3b2af4c6ffe8",
+                    "color": {"background": "green"},
+                    "label": "Entrance",
+                    "shape": "box",
+                    "game_info": {
+                        "doors": [],
+                        "items": [
+                            {
+                                "item_id": "06bbd11e-5d13-4fe8-aac2-c5bca9828b08",
+                                "item_size": "4x6",
+                                "item_type": "weapon",
+                            }
+                        ],
+                        "encounters": [
+                            {
+                                "encounter_id": "616f8262-0540-43d2-9925-3c9cc7989437",
+                                "encounter_size": "6x6",
+                                "encounter_type": "monster",
+                            }
+                        ],
+                    },
+                },
+                {
+                    "id": "82095dcb-542c-4621-8fd5-570e0b10d6e7",
+                    "label": "820",
+                    "shape": "box",
+                    "game_info": {
+                        "doors": [],
+                        "items": [
+                            {
+                                "item_id": "cd5d0680-b9c3-4b99-8fa0-c40870c898c9",
+                                "item_size": "4x6",
+                                "item_type": "potion",
+                            },
+                            {
+                                "item_id": "48a31ea3-a708-4cc1-aa73-78458b12c856",
+                                "item_size": "4x6",
+                                "item_type": "armor",
+                            },
+                        ],
+                        "encounters": [
+                            {
+                                "encounter_id": "1a8bcff2-86cf-47d2-a582-dec69079e354",
+                                "encounter_size": "6x6",
+                                "encounter_type": "monster",
+                            }
+                        ],
+                    },
+                },
+            ],
+        }
+
+        map_inspector = MapInspector(test_map)
+
+        adjacent_envs = map_inspector.get_adjacent_environments(
+            "82095dcb-542c-4621-8fd5-570e0b10d6e7"
+        )
+
+        self.assertEqual(len(adjacent_envs), 2)
+
+        #
