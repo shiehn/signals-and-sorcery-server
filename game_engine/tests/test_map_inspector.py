@@ -70,8 +70,8 @@ class TestGameMapInspector(unittest.TestCase):
                     "from": "71152afc-0b0d-452e-bb76-10fe44037fb7",
                 },
                 {
-                    "to": "82095dcb-542c-4621-8fd5-570e0b10d6e7",
-                    "from": "6b9c7139-7991-4eb3-800e-3b2af4c6ffe8",
+                    "from": "82095dcb-542c-4621-8fd5-570e0b10d6e7",
+                    "to": "6b9c7139-7991-4eb3-800e-3b2af4c6ffe8",
                 },
             ],
             "nodes": [
