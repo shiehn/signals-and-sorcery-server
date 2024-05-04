@@ -186,12 +186,12 @@ urlpatterns = [
         name="inventory-add",
     ),
     path(
-        "game-navigate-to/<int:user_id>/<str:environment_id>/",
+        "game-navigate-to/<uuid:user_id>/<uuid:environment_id>/",
         GameNavigateToView.as_view(),
         name="navigate-to",
     ),
     path(
-        "game-navigate-get-adjacent/<int:user_id>/<str:environment_id>/",
+        "game-navigate-get-adjacent/<uuid:user_id>/<uuid:environment_id>/",
         GameNavigateGetAdjacentView.as_view(),
         name="navigate-get-adjacent",
     ),

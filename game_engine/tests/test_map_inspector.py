@@ -158,4 +158,46 @@ class TestGameMapInspector(unittest.TestCase):
 
         self.assertEqual(len(adjacent_envs), 2)
 
-        #
+    def test_get_adjacent_environments_one_result(self):
+        fuck = {
+            "edges": [
+                {
+                    "to": "92d3e1d7-8f65-4271-b105-3d653b86f0cc",
+                    "from": "37ea742e-1693-4001-be17-2f9c90b22f03",
+                },
+                {
+                    "to": "f0dc650f-b555-4ff8-8435-852e239de974",
+                    "from": "37ea742e-1693-4001-be17-2f9c90b22f03",
+                },
+            ],
+            "nodes": [
+                {
+                    "id": "37ea742e-1693-4001-be17-2f9c90b22f03",
+                    "label": "37e",
+                    "shape": "box",
+                    "game_info": {"doors": [], "items": [], "encounters": []},
+                },
+                {
+                    "id": "92d3e1d7-8f65-4271-b105-3d653b86f0cc",
+                    "color": {"background": "red"},
+                    "label": "Exit",
+                    "shape": "box",
+                    "game_info": {"doors": [], "items": [], "encounters": []},
+                },
+                {
+                    "id": "f0dc650f-b555-4ff8-8435-852e239de974",
+                    "color": {"background": "green"},
+                    "label": "Entrance",
+                    "shape": "box",
+                    "game_info": {"doors": [], "items": [], "encounters": []},
+                },
+            ],
+        }
+
+        map_inspector = MapInspector(fuck)
+
+        adjacent_envs = map_inspector.get_adjacent_environments(
+            "f0dc650f-b555-4ff8-8435-852e239de974"
+        )
+
+        self.assertEqual(len(adjacent_envs), 1)
