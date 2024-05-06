@@ -46,6 +46,9 @@ class MapInspector:
     def get_env_by_id(self, env_id):
         for node in self.map["nodes"]:
             if node["id"] == env_id:
+                adjacent_env_ids = self.get_adjacent_environments(env_id)
+                if adjacent_env_ids:
+                    node["game_info"]["doors"] = adjacent_env_ids
                 return node
         return None
 

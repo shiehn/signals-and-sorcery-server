@@ -1,45 +1,5 @@
-# environments = [
-#     {
-#         "id": "abc",
-#         "size": "60x20x10",
-#         "material": "stone",
-#         "items": [
-#             {
-#                 "item_id": "necklace-x3e1",
-#                 "size": "4x4in",
-#             },
-#             {
-#                 "item_id": "ring-r4r3",
-#                 "size": "1x1in",
-#             },
-#         ],
-#     },
-#     {
-#         "id": "def",
-#         "size": "20x20x20",
-#         "material": "marble",
-#         "items": [
-#             {
-#                 "item_id": "sword-z2z6",
-#                 "size": "1x36in",
-#             },
-#         ],
-#     },
-#     {
-#         "id": "ghi",
-#         "size": "20x20x20",
-#         "material": "quilt",
-#         "items": [
-#             {
-#                 "item_id": "ball-555s",
-#                 "size": "2x2in",
-#             },
-#         ],
-#     },
-# ]
-
 from game_engine.api.map_inspector import MapInspector
-from byo_network_hub.models import GameMap, GameState
+from byo_network_hub.models import GameMap, GameState, GameElementLookup
 
 
 def get_environment(environment_id, user_id):
@@ -51,3 +11,24 @@ def get_environment(environment_id, user_id):
     environment = map_inspector.get_env_by_id(environment_id)
 
     return environment
+
+
+def navigate_environment(environment_id):
+    user_id = GameElementLookup.objects.get(element_id=environment_id).user_id
+
+    game_state = GameState.objects.get(user_id=user_id)
+
+    current_env_id = game_state.environment_id
+
+    map_id = game_state.map_id
+
+    map = GameMap.objects.get(id=map_id).map_graph
+
+    map_inspector = MapInspector(map)
+
+    adjacent_env_ids = map_inspector.get_adjacent_environments(str(current_env_id))
+
+    if str(environment_id) in adjacent_env_ids:
+        game_state.environment_id = str(environment_id)
+        game_state.save()
+        return True

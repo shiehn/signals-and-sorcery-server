@@ -8,6 +8,7 @@ from collections import defaultdict  # For managing multiple chat histories
 
 from .tools.environment_tools import DescribeEnvironment
 from .tools.item_tools import ListItems, StoreItem
+from .tools.navigation_tools import NavigateEnvironment
 
 
 open_api_key = os.getenv("OPENAI_API_KEY")
@@ -28,7 +29,7 @@ class RPGChat:
         )
 
         self.chat = ChatOpenAI(model="gpt-4-turbo", temperature=0)
-        tools = [DescribeEnvironment(), ListItems(), StoreItem()]
+        tools = [DescribeEnvironment(), ListItems(), StoreItem(), NavigateEnvironment()]
 
         self.agent = create_openai_tools_agent(self.chat, tools, prompt)
         self.agent_executor = AgentExecutor(agent=self.agent, tools=tools, verbose=True)
