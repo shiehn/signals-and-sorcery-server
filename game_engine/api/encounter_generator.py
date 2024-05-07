@@ -1,5 +1,6 @@
 import random
 import uuid
+from game_engine.conf.config import IMG_ENCOUNTER_PLACEHOLDER
 
 
 class EncounterGenerator:
@@ -14,7 +15,7 @@ class EncounterGenerator:
                 "encounter_size": "6x6",
                 "aesthetic": {
                     "description": "",
-                    "image": "",
+                    "image": IMG_ENCOUNTER_PLACEHOLDER,
                 },
             }
 

@@ -30,5 +30,8 @@ def navigate_environment(environment_id):
 
     if str(environment_id) in adjacent_env_ids:
         game_state.environment_id = str(environment_id)
+        game_state.environment_img = map_inspector.get_env_by_id(
+            environment_id
+        ).aesthetic.image
         game_state.save()
         return True

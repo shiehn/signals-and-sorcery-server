@@ -5,6 +5,9 @@ from game_engine.api.map_processor import MapProcessor
 from game_engine.api.map_inspector import MapInspector
 from byo_network_hub.models import GameState, GameMap, GameElementLookup
 from .serializers import GameStateSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def add_uuids_to_lookup(user_id, uuids):
@@ -50,9 +53,15 @@ class GameStateCreateView(generics.CreateAPIView):
 
         # Assume the user is starting at the entrance, so set the current_room to the entrance
 
-        serializer.validated_data[
-            "environment_id"
-        ] = map_inspector.get_env_id_of_entrance()
+        entrance_env_id = map_inspector.get_env_id_of_entrance()
+
+        serializer.validated_data["environment_id"] = entrance_env_id
+
+        serializer.validated_data["environment_img"] = map_inspector.get_env_by_id(
+            entrance_env_id
+        )["game_info"]["environment"]["aesthetic"]["image"]
+
+        # logger.info("DA_HELL " + str(map_inspector.get_env_by_id(entrance_env_id)))
 
         # Save the instance with the new map_id
         serializer.save()

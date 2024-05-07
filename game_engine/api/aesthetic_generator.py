@@ -1,15 +1,17 @@
-def generate_image(description):
-    return "https://alphauniverseglobal.media.zestyio.com/Alpha-Universe-BTS-Christopher-Byler-1.jpeg?width=400&height=400"
-
-
 def generate_description(type, aesthetic):
     return f"This is a placeholder description for {type} in {aesthetic} style."
 
 
+from game_engine.gen_ai.asset_generator import AssetGenerator
+
+
 class AestheticGenerator:
-    def __init__(self, aesthetic="default", map=None):
+    def __init__(
+        self, aesthetic="default", map=None, asset_generator: AssetGenerator = None
+    ):
         self.aesthetic = aesthetic
         self.map = map
+        self.asset_generator = asset_generator
 
     def ensure_list(self, dictionary, key):
         if key not in dictionary:
@@ -21,7 +23,7 @@ class AestheticGenerator:
             for item in node["game_info"]["items"]:
                 item["aesthetic"] = {
                     "description": generate_description("item", self.aesthetic),
-                    "image": generate_image("item"),
+                    "image": self.asset_generator.generate_image("item"),
                 }
 
     def add_encounter_aesthetic(self):
@@ -30,7 +32,7 @@ class AestheticGenerator:
             for encounter in node["game_info"]["encounters"]:
                 encounter["aesthetic"] = {
                     "description": generate_description("encounter", self.aesthetic),
-                    "image": generate_image("encounter"),
+                    "image": self.asset_generator.generate_image("item"),
                 }
 
     def add_environment_aesthetic(self):
@@ -39,7 +41,7 @@ class AestheticGenerator:
                 node["game_info"]["environment"] = {}
             node["game_info"]["environment"]["aesthetic"] = {
                 "description": generate_description("environment", self.aesthetic),
-                "image": generate_image("environment"),
+                "image": self.asset_generator.generate_image("item"),
             }
 
     def add_all_aesthetics(self):

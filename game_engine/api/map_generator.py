@@ -1,6 +1,7 @@
 import random
 import uuid
 import networkx as nx
+from game_engine.conf.config import IMG_ENV_PLACEHOLDER
 
 
 class MapGenerator:
@@ -24,7 +25,7 @@ class MapGenerator:
                     "environment": {
                         "aesthetic": {
                             "description": "",
-                            "image": "",
+                            "image": IMG_ENV_PLACEHOLDER,
                         },
                     },
                 },

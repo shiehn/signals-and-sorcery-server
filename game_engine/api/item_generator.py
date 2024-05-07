@@ -1,5 +1,6 @@
 import random
 import uuid
+from game_engine.conf.config import IMG_ITEM_PLACEHOLDER
 
 
 class ItemGenerator:
@@ -14,7 +15,7 @@ class ItemGenerator:
                 "item_size": "4x6",
                 "aesthetic": {
                     "description": "",
-                    "image": "",
+                    "image": IMG_ITEM_PLACEHOLDER,
                 },
             }
 
