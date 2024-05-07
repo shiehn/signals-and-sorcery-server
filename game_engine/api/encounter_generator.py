@@ -12,6 +12,10 @@ class EncounterGenerator:
                 "encounter_id": str(uuid.uuid4()),
                 "encounter_type": encounter_type,
                 "encounter_size": "6x6",
+                "aesthetic": {
+                    "description": "",
+                    "image": "",
+                },
             }
 
             encounters.append(item)

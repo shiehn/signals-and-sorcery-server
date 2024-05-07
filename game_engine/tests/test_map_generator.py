@@ -1,6 +1,7 @@
 import unittest
 from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
+import networkx as nx
 
 # python manage.py test game_engine.tests.test_generator
 
@@ -77,3 +78,26 @@ class TestMapGenerator(unittest.TestCase):
                 item_count += 1
 
         self.assertEqual(len(map["nodes"]), item_count)
+
+    def test_all_nodes_are_traversable(self):
+        # Test the graph for 30% connectivity
+        num_rooms = 10
+        percent_connected = 0.3
+        map_generator = MapGenerator()
+        graph = map_generator.generate(num_rooms, percent_connected).get_full_graph()
+
+        # Check if the graph is connected
+        self.assertTrue(nx.is_connected(graph), "Graph should be connected")
+
+        # Calculate the expected number of edges
+        num_all_possible_edges = num_rooms * (num_rooms - 1) // 2
+        expected_edges = int(percent_connected * num_all_possible_edges)
+
+        # Check if the actual number of edges is close to the expected number
+        # Allow some margin as randomness can slightly vary the edge count
+        actual_edges = graph.number_of_edges()
+        self.assertTrue(
+            abs(actual_edges - expected_edges)
+            <= 3,  # Adjust tolerance based on your needs
+            f"Expected around {expected_edges} edges, but got {actual_edges}",
+        )

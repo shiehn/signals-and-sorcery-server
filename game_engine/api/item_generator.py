@@ -12,6 +12,10 @@ class ItemGenerator:
                 "item_id": str(uuid.uuid4()),
                 "item_type": item_type,
                 "item_size": "4x6",
+                "aesthetic": {
+                    "description": "",
+                    "image": "",
+                },
             }
 
             items.append(item)
