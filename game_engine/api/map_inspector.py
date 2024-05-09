@@ -32,18 +32,21 @@ class MapInspector:
         return None
 
     def get_items_by_env_id(self, env_id):
+        env_id = str(env_id)
         for node in self.map["nodes"]:
             if node["id"] == env_id:
                 return node["game_info"]["items"]
         return None
 
     def get_encounters_by_env_id(self, env_id):
+        env_id = str(env_id)
         for node in self.map["nodes"]:
             if node["id"] == env_id:
                 return node["game_info"]["encounters"]
         return None
 
     def get_env_by_id(self, env_id):
+        env_id = str(env_id)
         for node in self.map["nodes"]:
             if node["id"] == env_id:
                 adjacent_env_ids = self.get_adjacent_environments(env_id)
@@ -53,6 +56,7 @@ class MapInspector:
         return None
 
     def get_adjacent_environments(self, env_id):
+        env_id = str(env_id)
         adjacent_env_ids = []
         for edge in self.map["edges"]:
             if edge["to"] == env_id:

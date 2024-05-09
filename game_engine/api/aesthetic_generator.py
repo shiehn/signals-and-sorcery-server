@@ -23,7 +23,9 @@ class AestheticGenerator:
             for item in node["game_info"]["items"]:
                 item["aesthetic"] = {
                     "description": generate_description("item", self.aesthetic),
-                    "image": self.asset_generator.generate_image("item"),
+                    "image": self.asset_generator.generate_image(
+                        "A potion in a " + self.aesthetic + " world."
+                    ),
                 }
 
     def add_encounter_aesthetic(self):
@@ -32,7 +34,9 @@ class AestheticGenerator:
             for encounter in node["game_info"]["encounters"]:
                 encounter["aesthetic"] = {
                     "description": generate_description("encounter", self.aesthetic),
-                    "image": self.asset_generator.generate_image("item"),
+                    "image": self.asset_generator.generate_image(
+                        "A monster in a " + self.aesthetic + " world."
+                    ),
                 }
 
     def add_environment_aesthetic(self):
@@ -41,13 +45,17 @@ class AestheticGenerator:
                 node["game_info"]["environment"] = {}
             node["game_info"]["environment"]["aesthetic"] = {
                 "description": generate_description("environment", self.aesthetic),
-                "image": self.asset_generator.generate_image("item"),
+                "image": self.asset_generator.generate_image(
+                    "A room in a " + self.aesthetic + " world."
+                ),
             }
 
     def add_all_aesthetics(self):
         self.add_item_aesthetic()
         self.add_encounter_aesthetic()
         self.add_environment_aesthetic()
+
+        return self.map
 
 
 # Example usage:
@@ -56,7 +64,3 @@ map_data = {
         # Nodes data as specified earlier
     ]
 }
-
-gen = AestheticGenerator(aesthetic="fantasy", map=map_data)
-gen.add_all_aesthetics()
-print(map_data)

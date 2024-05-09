@@ -19,9 +19,3 @@ class DescribeEnvironment(BaseTool):
 
     def _arun(self, environment_id: str):
         return self._run(environment_id)
-
-
-# ITEM TOOLS
-
-
-# STORAGE TOOLS

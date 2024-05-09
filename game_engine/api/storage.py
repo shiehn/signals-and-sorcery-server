@@ -26,7 +26,9 @@ def add_item(item_id: str):
     if item is None:
         return False
 
-    GameInventory.objects.create(user_id=user_id, item_id=item_id, item_details=item)
+    GameInventory.objects.create(
+        user_id=user_id, item_id=item_id, map_id=map_id, item_details=item
+    )
     return True
 
 

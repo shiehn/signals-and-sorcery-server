@@ -4,10 +4,15 @@ from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
 from game_engine.api.map_inspector import MapInspector
 from byo_network_hub.models import GameState, GameMap, GameElementLookup
+from game_engine.api.aesthetic_generator import AestheticGenerator
+from game_engine.gen_ai.asset_generator import AssetGenerator
 from .serializers import GameStateSerializer
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+GENERATE_ASSETS_ON_GAME_STATE_CREATE = True
 
 
 def add_uuids_to_lookup(user_id, uuids):
@@ -37,6 +42,14 @@ class GameStateCreateView(generics.CreateAPIView):
         processed_map = processed_map.add_encounters()
 
         map = processed_map.get_map()
+
+        if GENERATE_ASSETS_ON_GAME_STATE_CREATE:
+            asset_generator = AssetGenerator(open_ai_key="OPEN_AI_KEY")
+            aesthetic_generator = AestheticGenerator(
+                aesthetic=aesthetic, map=map, asset_generator=asset_generator
+            )
+            map = aesthetic_generator.add_all_aesthetics()
+
         # Create the GameMap object and save it to the database
         game_map = GameMap.objects.create(
             level=level, description=aesthetic, map_graph=map

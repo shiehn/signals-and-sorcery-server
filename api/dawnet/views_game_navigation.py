@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class GameNavigateToView(views.APIView):
     def get(self, request, user_id, environment_id):
-        navigate_environment(environment_id)
+        navigate_environment(str(environment_id))
 
         return Response(
             {
@@ -25,7 +25,7 @@ class GameNavigateToView(views.APIView):
 class GameNavigateGetAdjacentView(views.APIView):
     def get(self, request, user_id, environment_id):
         try:
-            game_state = GameState.objects.get(user_id=user_id)
+            game_state = GameState.objects.get(user_id=str(user_id))
 
             map_id = game_state.map_id
 

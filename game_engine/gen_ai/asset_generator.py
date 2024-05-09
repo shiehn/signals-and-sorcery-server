@@ -1,6 +1,9 @@
 import os
+import uuid
+
 import requests
 from game_engine.cdn.file_uploader import FileUploader
+from openai import OpenAI
 
 
 class AssetGenerator:
@@ -20,8 +23,9 @@ class AssetGenerator:
         )
         temp_url = response.data[0].url
 
+        rand_img_name = str(uuid.uuid4())
         # Download the image from the temporary URL
-        local_file_path = self.download_file(temp_url, img_description)
+        local_file_path = self.download_file(temp_url, rand_img_name)
 
         # Upload the file to GCP
         file_url = self.file_uploader.upload(

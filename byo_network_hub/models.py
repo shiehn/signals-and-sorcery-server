@@ -142,7 +142,7 @@ class GameState(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"User {self.user_id} - Game {self.game_id} at Level {self.level}"
+        return str(self.id)
 
 
 class GameMap(models.Model):
@@ -172,6 +172,7 @@ class GameMapState(models.Model):
 
 class GameInventory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    map_id = models.UUIDField()
     user_id = models.UUIDField()
     item_id = models.UUIDField()
     item_details = models.JSONField()

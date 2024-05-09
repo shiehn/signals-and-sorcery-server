@@ -1,36 +1,46 @@
 import os
+import requests
 
-from aiohttp import ClientSession
+from google.cloud import storage
+from google.cloud.storage import Blob
+from datetime import timedelta
 
-API_BASE_URL = "TODO"
-STORAGE_BUCKET_PATH = "TODO"
+# API_BASE_URL = os.environ.get("API_BASE_URL", "https://localhost:8000")
+# API_BASE_URL = "https://localhost:8081"
+STORAGE_BUCKET_PATH = "https://storage.googleapis.com/byoc-file-transfer/"
 
 
 class FileUploader:
-    async def get_signed_url(self, filename, token) -> str:
-        url = (
-            f"{API_BASE_URL}/api/hub/get_signed_url/?token={token}&filename={filename}"
+    def get_signed_url(self, filename, token) -> str:
+        # Ensure the service account file exists
+        service_account_file = os.environ.get("GCP_SERVICE_ACCOUNT_FILE")
+
+        # Initialize the GCP Storage client
+        storage_client = storage.Client.from_service_account_json(service_account_file)
+        bucket_name = os.environ.get("GCP_ASSET_BUCKET")
+        bucket = storage_client.bucket(bucket_name)
+        blob = Blob(filename, bucket)
+
+        # Generate a signed URL for the upload
+        signed_url = blob.generate_signed_url(
+            version="v4", expiration=timedelta(minutes=15), method="PUT"
         )
-        async with ClientSession() as session:
-            async with session.get(url) as response:
-                # TODO: Check if response is ok
-                data = await response.json()
-                return data["signed_url"]
 
-    async def upload_file_to_gcp(self, file_path, signed_url, file_type) -> bool:
-        async with ClientSession() as session:
-            with open(file_path, "rb") as file:
-                async with session.put(
-                    signed_url, data=file, headers={"Content-Type": file_type}
-                ) as response:
-                    return response.status == 200
+        return signed_url
 
-    async def upload(self, file_path, file_type) -> str:
+    def upload_file_to_gcp(self, file_path, signed_url, file_type) -> bool:
+        with open(file_path, "rb") as file:
+            response = requests.put(
+                signed_url, data=file, headers={"Content-Type": file_type}
+            )
+            return response.status_code == 200
+
+    def upload(self, file_path, file_type) -> str:
         file_name = os.path.basename(file_path)
         storage_bucket_path = STORAGE_BUCKET_PATH.rstrip("/")
         file_url = f"{storage_bucket_path}/{file_name}"
-        signed_url = await self.get_signed_url(file_name, "myToken")
-        result = await self.upload_file_to_gcp(file_path, signed_url, file_type)
+        signed_url = self.get_signed_url(file_name, "myToken")
+        result = self.upload_file_to_gcp(file_path, signed_url, file_type)
 
         if result:
             return file_url

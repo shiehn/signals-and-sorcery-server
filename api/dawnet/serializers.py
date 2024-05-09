@@ -65,6 +65,7 @@ class GameInventorySerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user_id",
+            "map_id",
             "item_id",
             "item_details",
             "created_at",

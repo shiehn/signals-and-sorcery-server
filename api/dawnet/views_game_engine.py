@@ -1,7 +1,12 @@
 from rest_framework import status, views
 from rest_framework.response import Response
 from game_engine.rpg_chat_service import RPGChatService
-from byo_network_hub.models import GameState
+from byo_network_hub.models import GameState, GameMap
+from game_engine.api.map_inspector import MapInspector
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def handle_message(message: str, token: str):
@@ -26,11 +31,18 @@ class GameQueryView(views.APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # START -- CRAFTING  THE QUERY
         # Get the game state for the user
         game_state = GameState.objects.get(user_id=token)
+        map = GameMap.objects.get(id=game_state.map_id).map_graph
+        map_inspector = MapInspector(map)
+        environment = map_inspector.get_env_by_id(game_state.environment_id)
+
+        logger.info(f"Environment: {environment['game_info']}")
 
         # append user context and state to the query
-        query = f"{query} user_id={token} environment_id={game_state.environment_id}"
+        query = f"{query} user_id={token} environment_id={game_state.environment_id} doors={environment['game_info']['doors']} items={[item['item_id'] for item in environment['game_info']['items']]}"
+        # END -- CRAFTING  THE QUERY
 
         rpg_chat_service = RPGChatService()  # Get the singleton instance
         response = rpg_chat_service.ask_question(token, query)

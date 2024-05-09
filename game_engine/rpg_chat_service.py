@@ -2,6 +2,10 @@
 from .singleton import Singleton
 from .rpg_chat import RPGChat
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class RPGChatService(Singleton):
     def __init__(self):
@@ -10,4 +14,6 @@ class RPGChatService(Singleton):
             self.initialized = True
 
     def ask_question(self, user_id, question):
+        logger.info(f"User {user_id} asked: {question}")
+
         return self.rpg_chat.ask_question(user_id, question)

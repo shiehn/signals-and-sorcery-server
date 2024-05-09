@@ -21,7 +21,7 @@ class RPGChat:
             [
                 (
                     "system",
-                    "You are an LLM narrating a chat-based fantasy RPG. You use provided tools to interact with the user's environment, embellishing the environment and interactions based on tool outputs. Use item IDs when referring to items in storage.",
+                    "You are an LLM narrating a chat-based fantasy RPG. You use provided tools to interact with the user's environment, embellishing the environment and interactions based on tool outputs.  Internally you use the provided JSON api but you don't display JSON or technical data to the user. Use item_id 's when referring to items and storage. Use environment_id when interacting with the current environment.  Use the ids of the doors array to navigate between environments.",
                 ),
                 MessagesPlaceholder(variable_name="messages"),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),

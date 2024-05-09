@@ -38,6 +38,8 @@ from .views_game_engine_state import (
 )
 from .views_game_inventory import InventoryListView, InventoryCreateView
 from .views_game_navigation import GameNavigateToView, GameNavigateGetAdjacentView
+from .views_game_assets_generate import GameAssetsGenerateView
+from .views_game_environment import GameEnvironmentView
 
 
 router = OptionalSlashRouter()
@@ -181,6 +183,11 @@ urlpatterns = [
         name="inventory-list",
     ),
     path(
+        "game-environment/<uuid:environment_id>/",
+        GameEnvironmentView.as_view(),
+        name="game-environment",
+    ),
+    path(
         "game-inventory/<uuid:user_id>/add/",
         InventoryCreateView.as_view(),
         name="inventory-add",
@@ -194,6 +201,11 @@ urlpatterns = [
         "game-navigate-get-adjacent/<uuid:user_id>/<uuid:environment_id>/",
         GameNavigateGetAdjacentView.as_view(),
         name="navigate-get-adjacent",
+    ),
+    path(
+        "game-assets/generate/<uuid:user_id>/",
+        GameAssetsGenerateView.as_view(),
+        name="game-assets-generate",
     ),
     path("", include(router.urls)),
 ]
