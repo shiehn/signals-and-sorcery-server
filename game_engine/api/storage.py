@@ -1,4 +1,10 @@
-from byo_network_hub.models import GameMap, GameState, GameElementLookup, GameInventory
+from byo_network_hub.models import (
+    GameMap,
+    GameMapState,
+    GameState,
+    GameElementLookup,
+    GameInventory,
+)
 from game_engine.api.map_inspector import MapInspector
 
 
@@ -29,6 +35,14 @@ def add_item(item_id: str):
     GameInventory.objects.create(
         user_id=user_id, item_id=item_id, map_id=map_id, item_details=item
     )
+
+    game_state_item = GameMapState.objects.filter(
+        map_id=map_id, item_id=item_id
+    ).first()
+    if game_state_item is not None:
+        game_state_item.consumed = True
+        game_state_item.save()
+
     return True
 
 

@@ -9,10 +9,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def handle_message(message: str, token: str):
-    # This function should be called by the game engine to handle the user message
-    # The game engine should pass the message
-    return handle_user_message(message, token)
+# def handle_message(message: str, token: str):
+#     # This function should be called by the game engine to handle the user message
+#     # The game engine should pass the message
+#     return handle_user_message(message, token)
 
 
 class GameQueryView(views.APIView):
@@ -34,11 +34,11 @@ class GameQueryView(views.APIView):
         # START -- CRAFTING  THE QUERY
         # Get the game state for the user
         game_state = GameState.objects.get(user_id=token)
+        logger.info(f"XXX GAME_STATE: {game_state}")
         map = GameMap.objects.get(id=game_state.map_id).map_graph
         map_inspector = MapInspector(map)
         environment = map_inspector.get_env_by_id(game_state.environment_id)
-
-        logger.info(f"Environment: {environment['game_info']}")
+        logger.info(f"XXX ENVIRONMENT: {environment}")
 
         # append user context and state to the query
         query = f"{query} user_id={token} environment_id={game_state.environment_id} doors={environment['game_info']['doors']} items={[item['item_id'] for item in environment['game_info']['items']]}"

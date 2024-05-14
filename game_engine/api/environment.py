@@ -1,5 +1,6 @@
 from game_engine.api.map_inspector import MapInspector
-from byo_network_hub.models import GameMap, GameState, GameElementLookup
+from game_engine.api.map_state_filter import MapStateFilter
+from byo_network_hub.models import GameMap, GameState, GameElementLookup, GameMapState
 
 import logging
 
@@ -10,7 +11,14 @@ def get_environment(environment_id, user_id):
     map_id = GameState.objects.get(user_id=user_id).map_id
     map = GameMap.objects.get(id=map_id).map_graph
 
-    map_inspector = MapInspector(map)
+    game_map_state = GameMapState.objects.filter(map_id=map_id).first()
+
+    if game_map_state is not None and len(game_map_state) > 0:
+        map_filter = MapStateFilter(map)
+        filtered_map = map_filter.filter(game_map_state)
+        map_inspector = MapInspector(filtered_map)
+    else:
+        map_inspector = MapInspector(map)
 
     environment = map_inspector.get_env_by_id(environment_id)
 
