@@ -159,7 +159,7 @@ class TestGameMapInspector(unittest.TestCase):
         self.assertEqual(len(adjacent_envs), 2)
 
     def test_get_adjacent_environments_one_result(self):
-        fuck = {
+        map = {
             "edges": [
                 {
                     "to": "92d3e1d7-8f65-4271-b105-3d653b86f0cc",
@@ -194,10 +194,51 @@ class TestGameMapInspector(unittest.TestCase):
             ],
         }
 
-        map_inspector = MapInspector(fuck)
+        map_inspector = MapInspector(map)
 
         adjacent_envs = map_inspector.get_adjacent_environments(
             "f0dc650f-b555-4ff8-8435-852e239de974"
         )
 
         self.assertEqual(len(adjacent_envs), 1)
+
+    def test_get_environment_by_id(self):
+        test_map = {
+            "edges": [],
+            "nodes": [
+                {
+                    "id": "6b9c7139-7991-4eb3-800e-3b2af4c6ffe8",
+                    "color": {"background": "green"},
+                    "label": "Entrance",
+                    "shape": "box",
+                    "game_info": {
+                        "doors": [],
+                        "items": [
+                            {
+                                "item_id": "06bbd11e-5d13-4fe8-aac2-c5bca9828b08",
+                                "item_size": "4x6",
+                                "item_type": "weapon",
+                            },
+                            {
+                                "item_id": "36bbd11e-4d13-3fe8-aac2-d5bca9828b08",
+                                "item_size": "4x6",
+                                "item_type": "armor",
+                            },
+                        ],
+                        "encounters": [
+                            {
+                                "encounter_id": "616f8262-0540-43d2-9925-3c9cc7989437",
+                                "encounter_size": "6x6",
+                                "encounter_type": "monster",
+                            }
+                        ],
+                    },
+                },
+            ],
+        }
+
+        map_inspector = MapInspector(test_map)
+
+        env = map_inspector.get_env_by_id("6b9c7139-7991-4eb3-800e-3b2af4c6ffe8")
+
+        self.assertEqual(len(env["game_info"]["items"]), 2)

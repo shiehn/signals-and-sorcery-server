@@ -18,6 +18,9 @@ class MapGenerator:
                 "id": n,
                 "label": n[:3],
                 "shape": "box",
+                "color": {
+                    "background": "gray",
+                },
                 "game_info": {
                     "items": [],
                     "encounters": [],

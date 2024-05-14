@@ -25,10 +25,10 @@ class MapProcessor:
         random_nodes = random.sample(self.map_graph["nodes"], 2)
 
         # Ensure the color attribute exists for each node, if not, initialize it
-        if "color" not in random_nodes[0]:
-            random_nodes[0]["color"] = {}
-        if "color" not in random_nodes[1]:
-            random_nodes[1]["color"] = {}
+        # if "color" not in random_nodes[0]:
+        #     random_nodes[0]["color"] = {}
+        # if "color" not in random_nodes[1]:
+        #     random_nodes[1]["color"] = {}
 
         # Entrance
         random_nodes[0]["label"] = "Entrance"

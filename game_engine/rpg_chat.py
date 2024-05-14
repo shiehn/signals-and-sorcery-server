@@ -27,8 +27,8 @@ class RPGChat:
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )
-
-        self.chat = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+        # gpt-4-turbo
+        self.chat = ChatOpenAI(model="gpt-4o", temperature=0)
         tools = [DescribeEnvironment(), ListItems(), StoreItem(), NavigateEnvironment()]
 
         self.agent = create_openai_tools_agent(self.chat, tools, prompt)
