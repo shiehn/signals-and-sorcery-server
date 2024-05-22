@@ -13,20 +13,12 @@ class AssetGenerator:
         self.file_uploader = FileUploader()
 
     def generate_description(self, type: str, aesthetic: str) -> str:
-        # response = self.client.chat.completions.create(
-        #     model="gpt-3.5-turbo-0125",  # Choose the appropriate model
-        #     prompt=f"Generate a descriptive paragraph for a {type} based on the following aesthetic guidelines and details: {aesthetic}",
-        #     max_tokens=100,
-        # )
-        # return response.choices[0].text.strip()
-
         response = self.client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
-            response_format={"type": "json_object"},
             messages=[
                 {
                     "role": "system",
-                    "content": f"You are content creator for a chat-based fantasy RPG. Your role is to colorfully embellish the descriptions provided by the user based on the following aesthetic guidelines and details: {aesthetic}",
+                    "content": f"You are a content creator for a chat-based fantasy RPG. Your role is to colorfully embellish descriptions based on specific aesthetic guidelines and details. Please describe a {type} based on: {aesthetic}",
                 },
                 {
                     "role": "user",
@@ -34,7 +26,7 @@ class AssetGenerator:
                 },
             ],
         )
-        return response.choices[0].message.content.strip()
+        return response.choices[0].message.content
 
     def generate_image(self, type: str, aesthetic: str) -> str:
         # Generate the image and get temporary URL

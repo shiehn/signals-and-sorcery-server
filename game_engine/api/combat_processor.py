@@ -10,7 +10,7 @@ class CombatProcessor:
     def attack(self, item_id: str) -> bool:
         logger.info(f"ATTACK WITH ITEM_ID: {item_id}")
 
-        user_id = GameElementLookup.objects.get(item_id=item_id).user_id
+        user_id = GameElementLookup.objects.get(element_id=item_id).user_id
         game_state = GameState.objects.get(user_id=user_id)
         map = GameMap.objects.get(id=game_state.map_id).map_graph
         map_inspector = MapInspector(map)

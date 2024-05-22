@@ -41,14 +41,28 @@ class AestheticGenerator:
 
     def add_environment_aesthetic(self):
         for node in self.map["nodes"]:
+            items_info = [
+                item["aesthetic"]["description"]
+                for item in node["game_info"].get("items", [])
+            ]
+            encounters_info = [
+                encounter["aesthetic"]["description"]
+                for encounter in node["game_info"].get("encounters", [])
+            ]
+
+            combined_description = (
+                f"environment with {' and '.join(items_info + encounters_info)}"
+            )
+
             if "environment" not in node["game_info"]:
                 node["game_info"]["environment"] = {}
+
             node["game_info"]["environment"]["aesthetic"] = {
                 "description": self.asset_generator.generate_description(
-                    "environment", self.aesthetic
+                    combined_description, self.aesthetic
                 ),
                 "image": self.asset_generator.generate_image(
-                    "environment", self.aesthetic
+                    combined_description, self.aesthetic
                 ),
             }
 
