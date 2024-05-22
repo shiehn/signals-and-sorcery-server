@@ -23,6 +23,7 @@ class GameQueryView(views.APIView):
         # Extract data from the request body
         token = request.data.get("token")
         query = request.data.get("query")
+        action = {"encounter": None}
 
         if not token or not query:
             # If either token or query is missing, return a bad request response
@@ -40,6 +41,13 @@ class GameQueryView(views.APIView):
         environment = map_inspector.get_env_by_id(game_state.environment_id)
         logger.info(f"XXX ENVIRONMENT: {environment}")
 
+        # handle potential encounters
+        if (
+            environment["game_info"]["encounters"] is not None
+            and len(environment["game_info"]["encounters"]) > 0
+        ):
+            action["encounter"] = environment["game_info"]["encounters"][0]
+
         # append user context and state to the query
         query = f"{query} user_id={token} environment_id={game_state.environment_id} doors={environment['game_info']['doors']} items={[item['item_id'] for item in environment['game_info']['items']]}"
         # END -- CRAFTING  THE QUERY
@@ -47,4 +55,6 @@ class GameQueryView(views.APIView):
         rpg_chat_service = RPGChatService()  # Get the singleton instance
         response = rpg_chat_service.ask_question(token, query)
 
-        return Response({"response": response}, status=status.HTTP_200_OK)
+        return Response(
+            {"response": response, "action": action}, status=status.HTTP_200_OK
+        )

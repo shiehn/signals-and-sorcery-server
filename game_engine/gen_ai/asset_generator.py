@@ -12,11 +12,35 @@ class AssetGenerator:
         self.client = OpenAI()
         self.file_uploader = FileUploader()
 
-    def generate_image(self, img_description) -> str:
+    def generate_description(self, type: str, aesthetic: str) -> str:
+        # response = self.client.chat.completions.create(
+        #     model="gpt-3.5-turbo-0125",  # Choose the appropriate model
+        #     prompt=f"Generate a descriptive paragraph for a {type} based on the following aesthetic guidelines and details: {aesthetic}",
+        #     max_tokens=100,
+        # )
+        # return response.choices[0].text.strip()
+
+        response = self.client.chat.completions.create(
+            model="gpt-3.5-turbo-0125",
+            response_format={"type": "json_object"},
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"You are content creator for a chat-based fantasy RPG. Your role is to colorfully embellish the descriptions provided by the user based on the following aesthetic guidelines and details: {aesthetic}",
+                },
+                {
+                    "role": "user",
+                    "content": f"Describe a {type} based on the following aesthetic guidelines and details: {aesthetic}",
+                },
+            ],
+        )
+        return response.choices[0].message.content.strip()
+
+    def generate_image(self, type: str, aesthetic: str) -> str:
         # Generate the image and get temporary URL
         response = self.client.images.generate(
             model="dall-e-3",
-            prompt=img_description,
+            prompt=f"Generate an image for a {type} based on the following aesthetic guidelines and details: {aesthetic}",
             size="1024x1024",
             quality="standard",
             n=1,

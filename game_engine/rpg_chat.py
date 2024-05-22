@@ -9,6 +9,7 @@ from collections import defaultdict  # For managing multiple chat histories
 from .tools.environment_tools import DescribeEnvironment
 from .tools.item_tools import ListItems, StoreItem
 from .tools.navigation_tools import NavigateEnvironment
+from .tools.combat_tools import Combat
 
 
 open_api_key = os.getenv("OPENAI_API_KEY")
@@ -21,15 +22,22 @@ class RPGChat:
             [
                 (
                     "system",
-                    "You are an LLM narrating a chat-based fantasy RPG. You use provided tools to interact with the user's environment, embellishing the environment and interactions based on tool outputs.  Internally you use the provided JSON api but you don't display JSON or technical data to the user. Use item_id 's when referring to items and storage. Use environment_id when interacting with the current environment.  Use the ids of the doors array to navigate between environments.",
+                    "As the narrator of this chat-based fantasy RPG, your role is to vividly describe the game world and events, enhancing the player's experience. Use tools to interpret and enrich information about the environment and items without displaying raw data like JSON or technical identifiers to the player. For example, when a player explores a new room, you might describe its eerie ambiance and lurking shadows instead of just listing available exits. Similarly, in combat, focus on creating a dynamic scene rather than only reporting numerical outcomes. Always maintain the narrative's flow and keep technical details in the background, ensuring the story remains immersive and engaging.",
                 ),
                 MessagesPlaceholder(variable_name="messages"),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )
+
         # gpt-4-turbo
         self.chat = ChatOpenAI(model="gpt-4o", temperature=0)
-        tools = [DescribeEnvironment(), ListItems(), StoreItem(), NavigateEnvironment()]
+        tools = [
+            DescribeEnvironment(),
+            ListItems(),
+            StoreItem(),
+            NavigateEnvironment(),
+            Combat(),
+        ]
 
         self.agent = create_openai_tools_agent(self.chat, tools, prompt)
         self.agent_executor = AgentExecutor(agent=self.agent, tools=tools, verbose=True)
@@ -51,19 +59,3 @@ class RPGChat:
         user_chat_history.add_ai_message(response["output"])
 
         return response["output"]
-
-
-# Example usage
-# if __name__ == "__main__":
-#     rpg_chat = RPGChat()
-#
-#     keep_asking = True
-#
-#     while keep_asking:
-#         user_uuid = uuid.uuid4()  # Generate a unique UUID for the user
-#         user_question = input("ADVENTURER: ")
-#         if user_question.lower() in ["quit", "exit"]:
-#             keep_asking = False
-#         else:
-#             response = rpg_chat.ask_question(user_uuid, user_question)
-#             print(f"BOT: {response}")

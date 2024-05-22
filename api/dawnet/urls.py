@@ -40,7 +40,7 @@ from .views_game_inventory import InventoryListView, InventoryCreateView
 from .views_game_navigation import GameNavigateToView, GameNavigateGetAdjacentView
 from .views_game_assets_generate import GameAssetsGenerateView
 from .views_game_environment import GameEnvironmentView
-
+from .views_game_combat import GameCombatAttackView
 
 router = OptionalSlashRouter()
 # router.register(r"dawnet", DAWNetView, basename="dawnet")
@@ -207,5 +207,6 @@ urlpatterns = [
         GameAssetsGenerateView.as_view(),
         name="game-assets-generate",
     ),
+    path("game-combat/", GameCombatAttackView.as_view(), name="game-combat-attack"),
     path("", include(router.urls)),
 ]

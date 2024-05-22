@@ -1,7 +1,3 @@
-def generate_description(type, aesthetic):
-    return f"This is a placeholder description for {type} in {aesthetic} style."
-
-
 from game_engine.gen_ai.asset_generator import AssetGenerator
 
 
@@ -22,9 +18,11 @@ class AestheticGenerator:
             self.ensure_list(node["game_info"], "items")
             for item in node["game_info"]["items"]:
                 item["aesthetic"] = {
-                    "description": generate_description("item", self.aesthetic),
+                    "description": self.asset_generator.generate_description(
+                        "weapon", self.aesthetic
+                    ),
                     "image": self.asset_generator.generate_image(
-                        "A potion in a " + self.aesthetic + " world."
+                        "weapon", self.aesthetic
                     ),
                 }
 
@@ -33,9 +31,11 @@ class AestheticGenerator:
             self.ensure_list(node["game_info"], "encounters")
             for encounter in node["game_info"]["encounters"]:
                 encounter["aesthetic"] = {
-                    "description": generate_description("encounter", self.aesthetic),
+                    "description": self.asset_generator.generate_description(
+                        "monster", self.aesthetic
+                    ),
                     "image": self.asset_generator.generate_image(
-                        "A monster in a " + self.aesthetic + " world."
+                        "monster", self.aesthetic
                     ),
                 }
 
@@ -44,9 +44,11 @@ class AestheticGenerator:
             if "environment" not in node["game_info"]:
                 node["game_info"]["environment"] = {}
             node["game_info"]["environment"]["aesthetic"] = {
-                "description": generate_description("environment", self.aesthetic),
+                "description": self.asset_generator.generate_description(
+                    "environment", self.aesthetic
+                ),
                 "image": self.asset_generator.generate_image(
-                    "A room in a " + self.aesthetic + " world."
+                    "environment", self.aesthetic
                 ),
             }
 

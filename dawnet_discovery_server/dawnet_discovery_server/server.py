@@ -339,7 +339,8 @@ def run():
     asyncio.set_event_loop(loop)
     try:
         # Run the async main function within the event loop
-        loop.run_until_complete(async_main())
+        # loop.run_until_complete(async_main()) # Disabled for now
+        loop.run_forever()
     finally:
         # Close the loop when done
         loop.close()
