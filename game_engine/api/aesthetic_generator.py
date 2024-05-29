@@ -17,12 +17,13 @@ class AestheticGenerator:
         for node in self.map["nodes"]:
             self.ensure_list(node["game_info"], "items")
             for item in node["game_info"]["items"]:
+                item_type = item.get("item_type", "item")
                 item["aesthetic"] = {
                     "description": self.asset_generator.generate_description(
-                        "weapon", self.aesthetic
+                        item_type, self.aesthetic
                     ),
                     "image": self.asset_generator.generate_image(
-                        "weapon", self.aesthetic
+                        item_type, self.aesthetic
                     ),
                 }
 
@@ -30,23 +31,23 @@ class AestheticGenerator:
         for node in self.map["nodes"]:
             self.ensure_list(node["game_info"], "encounters")
             for encounter in node["game_info"]["encounters"]:
+                encounter_type = encounter.get("encounter_type", "encounter")
                 encounter["aesthetic"] = {
                     "description": self.asset_generator.generate_description(
-                        "monster", self.aesthetic
+                        encounter_type, self.aesthetic
                     ),
                     "image": self.asset_generator.generate_image(
-                        "monster", self.aesthetic
+                        encounter_type, self.aesthetic
                     ),
                 }
 
     def add_environment_aesthetic(self):
         for node in self.map["nodes"]:
             items_info = [
-                item["aesthetic"]["description"]
-                for item in node["game_info"].get("items", [])
+                item["item_type"] for item in node["game_info"].get("items", [])
             ]
             encounters_info = [
-                encounter["aesthetic"]["description"]
+                encounter["encounter_type"]
                 for encounter in node["game_info"].get("encounters", [])
             ]
 

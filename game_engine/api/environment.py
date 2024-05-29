@@ -11,16 +11,22 @@ def get_environment(environment_id, user_id):
     map_id = GameState.objects.get(user_id=user_id).map_id
     map = GameMap.objects.get(id=map_id).map_graph
 
-    game_map_state = GameMapState.objects.filter(map_id=map_id).first()
+    game_map_states = list(GameMapState.objects.filter(map_id=map_id))
 
-    if game_map_state is not None and len(game_map_state) > 0:
+    if game_map_states is not None and len(game_map_states) > 0:
         map_filter = MapStateFilter(map)
-        filtered_map = map_filter.filter(game_map_state)
+        filtered_map = map_filter.filter(game_map_states)
         map_inspector = MapInspector(filtered_map)
     else:
         map_inspector = MapInspector(map)
 
-    environment = map_inspector.get_env_by_id(environment_id)
+    environment = map_inspector.get_env_by_id(str(environment_id))
+
+    if (
+        environment["game_info"]["encounters"] is not None
+        and len(environment["game_info"]["encounters"]) > 0
+    ):
+        environment["message"] = "You must deal with the encounter!"
 
     return environment
 
@@ -48,6 +54,16 @@ def navigate_environment(environment_id):
 
     map_inspector = MapInspector(map)
 
+    current_env = map_inspector.get_env_by_id(str(current_env_id))
+
+    if (
+        current_env["game_info"]["encounters"] is not None
+        and len(current_env["game_info"]["encounters"]) > 0
+    ):
+        return "You must deal with the encounter!"
+
+    logger.info(f"NAV_DEBUG - CURRENT ENV: {current_env}")
+
     adjacent_env_ids = map_inspector.get_adjacent_environments(str(current_env_id))
 
     logger.info(f"NAV_DEBUG - environment_id={str(environment_id)}")
@@ -69,6 +85,6 @@ def navigate_environment(environment_id):
 
         logger.info(f"NAV_DEBUG - GAME STATE: {game_state}")
         game_state.save()
-        return True
+        return "success"
 
-    return False
+    return "Error"
