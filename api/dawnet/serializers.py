@@ -8,6 +8,7 @@ from byo_network_hub.models import (
     GameMapState,
     GameState,
     GameInventory,
+    GameUpdateQueue,
 )
 
 
@@ -71,3 +72,9 @@ class GameInventorySerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+
+class GameUpdateQueueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GameUpdateQueue
+        fields = ["user_id", "level", "status"]

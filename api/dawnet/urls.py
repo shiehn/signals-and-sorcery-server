@@ -41,6 +41,7 @@ from .views_game_navigation import GameNavigateToView, GameNavigateGetAdjacentVi
 from .views_game_assets_generate import GameAssetsGenerateView
 from .views_game_environment import GameEnvironmentView
 from .views_game_combat import GameCombatAttackView
+from .views_game_update import GetGameUpdateQueueByUserId
 
 router = OptionalSlashRouter()
 # router.register(r"dawnet", DAWNetView, basename="dawnet")
@@ -206,6 +207,11 @@ urlpatterns = [
         "game-assets/generate/<uuid:user_id>/",
         GameAssetsGenerateView.as_view(),
         name="game-assets-generate",
+    ),
+    path(
+        "game-update-queue/<uuid:user_id>/",
+        GetGameUpdateQueueByUserId.as_view(),
+        name="get_game_update_queue_by_user_id",
     ),
     path("game-combat/", GameCombatAttackView.as_view(), name="game-combat-attack"),
     path("", include(router.urls)),

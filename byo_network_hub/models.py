@@ -181,3 +181,23 @@ class GameInventory(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class GameUpdateQueue(models.Model):
+    user_id = models.UUIDField(unique=True)  # Ensures each user_id is unique
+    level = models.IntegerField(default=0)
+
+    # Define choices for status
+    STATUS_CHOICES = [
+        ("queued", "Queued"),
+        ("started", "Started"),
+        ("completed", "Completed"),
+        ("error", "Error"),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="queued")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user_id} - {self.status}"
