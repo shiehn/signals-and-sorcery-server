@@ -10,6 +10,7 @@ from .tools.environment_tools import DescribeEnvironment
 from .tools.item_tools import ListItems, StoreItem
 from .tools.navigation_tools import NavigateEnvironment
 from .tools.combat_tools import Combat
+from .tools.level_up_tools import LevelUp
 
 
 open_api_key = os.getenv("OPENAI_API_KEY")
@@ -37,6 +38,7 @@ class RPGChat:
             StoreItem(),
             NavigateEnvironment(),
             Combat(),
+            LevelUp(),
         ]
 
         self.agent = create_openai_tools_agent(self.chat, tools, prompt)

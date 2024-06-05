@@ -201,3 +201,20 @@ class GameUpdateQueue(models.Model):
 
     def __str__(self):
         return f"{self.user_id} - {self.status}"
+
+
+class GameEvent(models.Model):
+    user_id = models.UUIDField()
+    EVENT_CHOICES = [
+        ("level-up-ready", "LevelUpReady"),
+        ("level-up-complete", "LevelUpComplete"),
+        ("encounter-start", "EncounterStart"),
+        ("encounter-victory", "EncounterVictory"),
+        ("encounter-loss", "EncounterLoss"),
+        ("inventory-update", "InventoryUpdate"),
+    ]
+    event = models.CharField(max_length=32, choices=EVENT_CHOICES, default="combat")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user_id} - {self.event}"

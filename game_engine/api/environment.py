@@ -1,5 +1,6 @@
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.map_state_filter import MapStateFilter
+from game_engine.api.event_publisher import EventPublisher
 from byo_network_hub.models import GameMap, GameState, GameElementLookup, GameMapState
 
 import logging
@@ -27,6 +28,11 @@ def get_environment(environment_id, user_id):
         and len(environment["game_info"]["encounters"]) > 0
     ):
         environment["message"] = "You must deal with the encounter!"
+        # FIRED ENCOUNTER EVENT
+        # FIRED ENCOUNTER EVENT
+        EventPublisher().publish(user_id, "combat")
+        # FIRED ENCOUNTER EVENT
+        # FIRED ENCOUNTER EVENT
 
     return environment
 
@@ -60,6 +66,11 @@ def navigate_environment(environment_id):
         current_env["game_info"]["encounters"] is not None
         and len(current_env["game_info"]["encounters"]) > 0
     ):
+        # FIRED ENCOUNTER EVENT
+        # FIRED ENCOUNTER EVENT
+        EventPublisher().publish(user_id, "combat")
+        # FIRED ENCOUNTER EVENT
+        # FIRED ENCOUNTER EVENT
         return "You must deal with the encounter!"
 
     logger.info(f"NAV_DEBUG - CURRENT ENV: {current_env}")
