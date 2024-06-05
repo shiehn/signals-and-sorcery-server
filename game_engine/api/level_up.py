@@ -43,7 +43,7 @@ def level_up(environment_id):
 
             # FIRED LEVEL_UP EVENT
             # FIRED LEVEL_UP EVENT
-            EventPublisher().publish(user_id, "levelup")
+            EventPublisher().publish(user_id, "level-up-complete")
             # FIRED LEVEL_UP EVENT
             # FIRED LEVEL_UP EVENT
 

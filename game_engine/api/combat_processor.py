@@ -1,6 +1,7 @@
 from byo_network_hub.models import GameElementLookup, GameMapState, GameMap, GameState
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.map_state_filter import MapStateFilter
+from game_engine.api.event_publisher import EventPublisher
 
 import logging
 
@@ -31,6 +32,12 @@ class CombatProcessor:
 
         elements = [item_id, encounter_id]
         GameMapState.objects.filter(item_id__in=elements).update(consumed=True)
+
+        # FIRED EVENT
+        EventPublisher().publish(user_id, "encounter-victory")
+        # FIRED EVENT
+        # encounter-victory
+        # encounter-loss
 
         logger.info(f"ATTACK SUCCESS")
 

@@ -6,6 +6,7 @@ from byo_network_hub.models import (
     GameInventory,
 )
 from game_engine.api.map_inspector import MapInspector
+from game_engine.api.event_publisher import EventPublisher
 
 
 def add_item(item_id: str):
@@ -42,6 +43,8 @@ def add_item(item_id: str):
     if game_state_item is not None:
         game_state_item.consumed = True
         game_state_item.save()
+
+    EventPublisher().publish(user_id, "inventory-update")
 
     return True
 

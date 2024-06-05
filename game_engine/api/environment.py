@@ -23,6 +23,11 @@ def get_environment(environment_id, user_id):
 
     environment = map_inspector.get_env_by_id(str(environment_id))
 
+    env_exit_id = map_inspector.get_env_id_of_exit()
+    if str(environment_id) == str(env_exit_id):
+        # FIRED ENCOUNTER EVENT
+        EventPublisher().publish(user_id, "level-up-ready")
+
     if (
         environment["game_info"]["encounters"] is not None
         and len(environment["game_info"]["encounters"]) > 0
@@ -30,7 +35,7 @@ def get_environment(environment_id, user_id):
         environment["message"] = "You must deal with the encounter!"
         # FIRED ENCOUNTER EVENT
         # FIRED ENCOUNTER EVENT
-        EventPublisher().publish(user_id, "combat")
+        EventPublisher().publish(user_id, "encounter-start")
         # FIRED ENCOUNTER EVENT
         # FIRED ENCOUNTER EVENT
 
@@ -62,13 +67,18 @@ def navigate_environment(environment_id):
 
     current_env = map_inspector.get_env_by_id(str(current_env_id))
 
+    env_exit_id = map_inspector.get_env_id_of_exit()
+    if str(current_env_id) == str(env_exit_id):
+        # FIRED ENCOUNTER EVENT
+        EventPublisher().publish(user_id, "level-up-ready")
+
     if (
         current_env["game_info"]["encounters"] is not None
         and len(current_env["game_info"]["encounters"]) > 0
     ):
         # FIRED ENCOUNTER EVENT
         # FIRED ENCOUNTER EVENT
-        EventPublisher().publish(user_id, "combat")
+        EventPublisher().publish(user_id, "encounter-start")
         # FIRED ENCOUNTER EVENT
         # FIRED ENCOUNTER EVENT
         return "You must deal with the encounter!"
