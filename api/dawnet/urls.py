@@ -163,7 +163,11 @@ urlpatterns = [
     path(
         "game-map-generation/", GameMapGeneration.as_view(), name="game-map-generation"
     ),
-    path("game-state/", GameStateCreateView.as_view(), name="game-state-create"),
+    path(
+        "game-state/create/<str:open_ai_key>/",
+        GameStateCreateView.as_view(),
+        name="game-state-create",
+    ),
     path(
         "game-state/<uuid:user_id>/",
         GameStateDetailView.as_view(),

@@ -136,8 +136,10 @@ class GameState(models.Model):
     level = models.IntegerField()
     aesthetic = models.CharField(max_length=1024)
     map_id = models.UUIDField()
-    environment_id = models.UUIDField()
-    environment_img = models.CharField(max_length=1024)
+    environment_id = models.UUIDField(null=True, blank=True)  # Allow null values
+    environment_img = models.CharField(
+        max_length=1024, null=True, blank=True
+    )  # Allow null values
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -162,6 +164,7 @@ class GameMapState(models.Model):
     user_id = models.UUIDField()
     map_id = models.UUIDField()
     item_id = models.UUIDField()
+    aesthetic = models.CharField(max_length=1024)
     consumed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

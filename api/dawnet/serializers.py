@@ -41,9 +41,32 @@ class RemoteSourceSerializer(serializers.ModelSerializer):
 
 
 class GameStateSerializer(serializers.ModelSerializer):
+    environment_id = serializers.UUIDField(required=False, allow_null=True)
+    environment_img = serializers.URLField(required=False, allow_null=True)
+
     class Meta:
         model = GameState
-        fields = "__all__"  # or list specific fields you want to include
+        fields = [
+            "user_id",
+            "map_id",
+            "level",
+            "created_at",
+            "updated_at",
+            "aesthetic",
+            "environment_id",
+            "environment_img",
+        ]
+        extra_kwargs = {
+            "map_id": {"read_only": True},
+            "created_at": {"read_only": True},
+            "updated_at": {"read_only": True},
+        }
+
+    def create(self, validated_data):
+        # Ensure non-model fields are handled correctly before creating the instance
+        # validated_data.pop("environment_id", None)
+        # validated_data.pop("environment_img", None)
+        return super().create(validated_data)
 
 
 class GameMapSerializer(serializers.ModelSerializer):
