@@ -1,6 +1,7 @@
 # e2e_game_tests/test_api.py
 import uuid
-
+import requests
+import time
 import requests
 
 BASE_URL = "http://localhost:8081"
@@ -8,6 +9,29 @@ BASE_URL = "http://localhost:8081"
 USER_ID = uuid.uuid4()
 
 OPEN_AI_KEY = "xyz"
+
+
+def wait_for_queue_status_completion(base_url, user_id, timeout=300, interval=10):
+    start_time = time.time()
+
+    while time.time() - start_time < timeout:
+        response = requests.get(f"{base_url}/api/game-update-queue/{user_id}/")
+        assert response.status_code == 200
+
+        response_data = response.json()
+        assert response_data["user_id"] == str(user_id)
+
+        if response_data["status"] == "completed":
+            print("Queue status completed.")
+            return response_data  # Return the final response data if needed
+        else:
+            print(f"Current status: {response_data['status']}. Waiting...")
+
+        time.sleep(interval)
+
+    raise TimeoutError(
+        "The queue status did not change to 'completed' within the timeout period."
+    )
 
 
 def test_game_creation_flow():
@@ -44,34 +68,15 @@ def test_game_creation_flow():
     assert response.status_code == 200
     assert response.json() == {"level": 1, "status": "queued", "user_id": str(USER_ID)}
 
+    # FOURTH GENERATE ASSETS
+    response = requests.post(
+        f"{BASE_URL}/api/game-state/generate/assets/{USER_ID}/{OPEN_AI_KEY}/"
+    )
 
-# def test_api_endpoint_2():
-#     response = requests.post(f"{BASE_URL}/api/endpoint_2/", json={"key": "value"})
-#     assert response.status_code == 200
-#     assert response.json() == {"expected": "response"}
-#
-# def test_api_calls_in_sequence():
-#     # First API call
-#     response1 = requests.post(f"{BASE_URL}/api/endpoint_1/", json={"key": "value"})
-#     assert response1.status_code == 200
-#     # Additional assertions for response1
-#
-#     # Second API call
-#     response2 = requests.post(f"{BASE_URL}/api/endpoint_2/", json={"key": "value"})
-#     assert response2.status_code == 200
-#     # Additional assertions for response2
-#
-#     # Third API call
-#     response3 = requests.post(f"{BASE_URL}/api/endpoint_3/", json={"key": "value"})
-#     assert response3.status_code == 200
-#     # Additional assertions for response3
-#
-#     # Fourth API call
-#     response4 = requests.post(f"{BASE_URL}/api/endpoint_4/", json={"key": "value"})
-#     assert response4.status_code == 200
-#     # Additional assertions for response4
-#
-#     # Fifth API call
-#     response5 = requests.post(f"{BASE_URL}/api/endpoint_5/", json={"key": "value"})
-#     assert response5.status_code == 200
-#     # Additional assertions for response5
+    game_queue_update = wait_for_queue_status_completion(BASE_URL, USER_ID)
+
+    assert game_queue_update["status"] == "completed"
+
+    assert response.status_code == 200
+
+    # FIFTH CONFIRM THAT THE GAME UPDATE QUEUE IS EMPTY

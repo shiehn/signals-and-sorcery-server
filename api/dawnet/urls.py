@@ -44,6 +44,7 @@ from .views_game_environment import GameEnvironmentView
 from .views_game_combat import GameCombatAttackView
 from .views_game_update import GetGameUpdateQueueByUserId
 from .views_game_events import GetGameEventView, AddGameEventView
+from .views_game_gen_assets import AssetGenerateView
 
 router = OptionalSlashRouter()
 # router.register(r"dawnet", DAWNetView, basename="dawnet")
@@ -168,6 +169,11 @@ urlpatterns = [
         "game-state/create/<str:open_ai_key>/",
         GameStateCreateView.as_view(),
         name="game-state-create",
+    ),
+    path(
+        "game-state/generate/assets/<str:user_id>/<str:open_ai_key>/",
+        AssetGenerateView.as_view(),
+        name="asset_generate",
     ),
     path(
         "game-state/<uuid:user_id>/",

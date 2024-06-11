@@ -1,6 +1,6 @@
 import uuid
 
-from dawnet_client import SentryEventLogger, DNSystemType, DNTag, DNMsgStage
+from dawnet_client import DNSystemType, DNTag, DNMsgStage
 
 from django.db.models import Max
 from rest_framework import status, views
@@ -11,7 +11,7 @@ from byo_network_hub.models import BYOCMessageState, BYOCMessageStates
 
 from api.serializers import BYOCMessageStateSerializer
 
-dn_tracer = SentryEventLogger(service_name=DNSystemType.DN_API_SERVER.value)
+dn_tracer = None  # SentryEventLogger(service_name=DNSystemType.DN_API_SERVER.value)
 
 
 class SendMessageView(views.APIView):
