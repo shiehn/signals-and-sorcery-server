@@ -13,12 +13,20 @@ from byo_network_hub.models import (
 )
 from game_engine.api.aesthetic_generator import AestheticGenerator
 from game_engine.gen_ai.asset_generator import AssetGenerator
+from game_engine.api.level_up import level_up
 from .serializers import GameStateSerializer
 import logging
+from rest_framework.views import APIView
+from game_engine.api.environment import get_environment
+from byo_network_hub.models import GameElementLookup
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import HttpResponseServerError
 
 logger = logging.getLogger(__name__)
 
-GENERATE_ASSETS_ON_GAME_STATE_CREATE = True
+GENERATE_ASSETS_ON_GAME_STATE_CREATE = False
 
 
 def add_uuids_to_lookup(user_id, uuids):
@@ -100,7 +108,7 @@ class GameStateCreateView(generics.CreateAPIView):
 
             serializer.save()
 
-            game_update.status = "completed"
+            game_update.status = "queued"
             game_update.save()
 
         except Exception as e:
@@ -119,10 +127,23 @@ class GameStateDetailView(generics.RetrieveAPIView):
 class GameStateDeleteView(generics.DestroyAPIView):
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
-    lookup_field = "id"
+    lookup_field = "user_id"
 
 
 class GameStateUpdateView(generics.UpdateAPIView):
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
     lookup_field = "id"
+
+
+class LevelUpView(APIView):
+    """
+    Level UP the users game
+    """
+
+    def get(self, request, environment_id):
+        try:
+            response = level_up(environment_id)
+            return Response(response, status=status.HTTP_200_OK)
+        except GameMap.DoesNotExist:
+            raise HttpResponseServerError

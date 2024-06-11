@@ -9,12 +9,13 @@ class TestAestheticGenerator(unittest.TestCase):
         # Setup the mock for AssetGenerator
         self.mock_asset_generator = MagicMock(spec=AssetGenerator)
         self.mock_asset_generator.generate_image.return_value = "https://alphauniverseglobal.media.zestyio.com/Alpha-Universe-BTS-Christopher-Byler-1.jpeg?width=400&height=400"
+        self.mock_asset_generator.generate_description.return_value = (
+            "This is a placeholder description."
+        )
 
     def test_add_item_aesthetic_with_existing_items(self):
-        map_data = {"nodes": [{"game_info": {"items": [{}]}}]}
-        expected_description = (
-            "This is a placeholder description for item in fantasy style."
-        )
+        map_data = {"nodes": [{"game_info": {"items": [{"item_type": "item"}]}}]}
+        expected_description = "This is a placeholder description."
 
         gen = AestheticGenerator(
             aesthetic="fantasy", map=map_data, asset_generator=self.mock_asset_generator
@@ -50,10 +51,17 @@ class TestAestheticGenerator(unittest.TestCase):
         self.assertEqual(len(map_data["nodes"][0]["game_info"]["encounters"]), 0)
 
     def test_add_all_aesthetics_complete(self):
-        map_data = {"nodes": [{"game_info": {"items": [{}], "encounters": [{}]}}]}
-        expected_description = (
-            "This is a placeholder description for environment in fantasy style."
-        )
+        map_data = {
+            "nodes": [
+                {
+                    "game_info": {
+                        "items": [{"item_type": "item"}],
+                        "encounters": [{"encounter_type": "encounter"}],
+                    }
+                }
+            ]
+        }
+        expected_description = "This is a placeholder description."
 
         gen = AestheticGenerator(
             aesthetic="fantasy", map=map_data, asset_generator=self.mock_asset_generator

@@ -35,6 +35,7 @@ from .views_game_engine_state import (
     GameStateDeleteView,
     GameStateUpdateView,
     GameStateCreateView,
+    LevelUpView,
 )
 from .views_game_inventory import InventoryListView, InventoryCreateView
 from .views_game_navigation import GameNavigateToView, GameNavigateGetAdjacentView
@@ -174,7 +175,7 @@ urlpatterns = [
         name="game-state-detail",
     ),
     path(
-        "game-state/<uuid:id>/delete/",
+        "game-state/<uuid:user_id>/delete/",
         GameStateDeleteView.as_view(),
         name="game-state-delete",
     ),
@@ -182,6 +183,11 @@ urlpatterns = [
         "game-state/<uuid:id>/update/",
         GameStateUpdateView.as_view(),
         name="game-state-update",
+    ),
+    path(
+        "game-state/levelup/<str:environment_id>/",
+        LevelUpView.as_view(),
+        name="game-state-levelup",
     ),
     path(
         "game-inventory/<uuid:user_id>/",
