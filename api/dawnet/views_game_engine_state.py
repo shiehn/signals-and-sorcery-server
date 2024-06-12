@@ -59,40 +59,6 @@ class GameStateCreateView(generics.CreateAPIView):
         game_update.save()
 
         try:
-            # map_generator = MapGenerator()
-            # unprocessed_map = map_generator.generate(
-            #     num_rooms=int(game_update.level) + 2, percent_connected=0.25
-            # ).get_json()
-            #
-            # processed_map = MapProcessor(unprocessed_map)
-            # processed_map = processed_map.add_entrance_exit()
-            # processed_map = processed_map.add_items()
-            # processed_map = processed_map.add_encounters()
-            #
-            # map = processed_map.get_map()
-            #
-            # game_map = GameMap.objects.create(
-            #     level=game_update.level,
-            #     description=serializer.validated_data["aesthetic"],
-            #     map_graph=map,
-            # )
-            #
-            # map_inspector = MapInspector(map)
-            # uuids = map_inspector.extract_uuids()
-            # add_uuids_to_lookup(user_id, uuids)
-            #
-            # entrance_env_id = map_inspector.get_env_id_of_entrance()
-            # entrance_env_img = map_inspector.get_env_by_id(entrance_env_id)[
-            #     "game_info"
-            # ]["environment"]["aesthetic"]["image"]
-            #
-            # logger.info(f"Calculated environment_id: {entrance_env_id}")
-            # logger.info(f"Calculated environment_img: {entrance_env_img}")
-            #
-            # serializer.validated_data["map_id"] = game_map.id
-            # serializer.validated_data["environment_id"] = entrance_env_id
-            # serializer.validated_data["environment_img"] = entrance_env_img
-
             logger.info(f"Validated data before save: {serializer.validated_data}")
 
             serializer.save()

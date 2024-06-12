@@ -3,6 +3,8 @@ import uuid
 import requests
 import time
 import requests
+from byo_network_hub.models import GameStates, GameMap
+from game_engine.api.map_inspector import MapInspector
 
 BASE_URL = "http://localhost:8081"
 
@@ -79,4 +81,32 @@ def test_game_creation_flow():
 
     assert response.status_code == 200
 
-    # FIFTH CONFIRM THAT THE GAME UPDATE QUEUE IS EMPTY
+    # FIFTH NOW, set the environment_id to the exit environment so level will work
+    # game_state = GameStates.objects.get(user_id=USER_ID).first()
+    # game_map = GameMap.objects.get(id=game_state.map_id).first()
+    #
+    # map_inspector = MapInspector(game_map.map_graph)
+    #
+    # exit_env_id = map_inspector.get_env_id_of_exit()
+    # game_state.environment_id = exit_env_id
+    # game_state.save()
+    #
+    # # SIXTH LEVEL UP
+    # response = requests.get(f"{BASE_URL}/api/game-state/levelup/{exit_env_id}/")
+    # assert response.status_code == 200
+    #
+    # # SEVENTH CONFIRM THAT THE GAME UPDATE QUEUE IS NOT EMPTY
+    # response = requests.get(f"{BASE_URL}/api/game-update-queue/{USER_ID}/")
+    # assert response.status_code == 200
+    # assert response.json() == {"level": 1, "status": "queued", "user_id": str(USER_ID)}
+    #
+    # # EIGHTH GENERATE ASSETS FROM THE LEVEL UP
+    # response = requests.post(
+    #     f"{BASE_URL}/api/game-state/generate/assets/{USER_ID}/{OPEN_AI_KEY}/"
+    # )
+    #
+    # game_queue_update = wait_for_queue_status_completion(BASE_URL, USER_ID)
+    #
+    # assert game_queue_update["status"] == "completed"
+    #
+    # assert response.statustatus_code == 200
