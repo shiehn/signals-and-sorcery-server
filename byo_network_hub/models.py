@@ -217,6 +217,7 @@ class GameEvent(models.Model):
         ("inventory-update", "InventoryUpdate"),
     ]
     event = models.CharField(max_length=32, choices=EVENT_CHOICES, default="combat")
+    payload = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

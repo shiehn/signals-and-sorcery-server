@@ -34,7 +34,22 @@ class CombatProcessor:
         GameMapState.objects.filter(item_id__in=elements).update(consumed=True)
 
         # FIRED EVENT
-        EventPublisher().publish(user_id, "encounter-victory")
+
+        combat_stats = {
+            "encounter": 6,
+            "modifiers": [
+                {
+                    "item": "jewel_dagger",
+                    "modifier": 32,
+                },
+            ],
+            "health": 0,
+            "chance_of_success_base": 40,
+            "chance_of_success_total": 72,
+            "result": 63,
+        }
+
+        EventPublisher().publish(user_id, "encounter-victory", combat_stats)
         # FIRED EVENT
         # encounter-victory
         # encounter-loss
