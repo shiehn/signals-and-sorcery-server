@@ -8,6 +8,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def create_encounter_start_event(encounters):
+    combat_stats = {
+        "phase": "encounter-start",
+        "encounter": encounters[0]["encounter_level"],
+        "chance_of_success_base": 100 - (encounters[0]["encounter_level"] * 10),
+    }
+    return combat_stats
+
+
 def get_environment(environment_id, user_id):
     map_id = GameState.objects.get(user_id=user_id).map_id
     map = GameMap.objects.get(id=map_id).map_graph
@@ -35,11 +44,10 @@ def get_environment(environment_id, user_id):
         environment["message"] = "You must deal with the encounter!"
         # FIRED ENCOUNTER EVENT
         # FIRED ENCOUNTER EVENT
-        combat_stats = {
-            "phase": "encounter-start",
-            "encounter": 6,
-            "chance_of_success_base": 40,
-        }
+
+        combat_stats = create_encounter_start_event(
+            environment["game_info"]["encounters"]
+        )
         EventPublisher().publish(user_id, "encounter-start", combat_stats)
         # FIRED ENCOUNTER EVENT
         # FIRED ENCOUNTER EVENT
@@ -90,15 +98,10 @@ def navigate_environment(environment_id):
         and len(current_env["game_info"]["encounters"]) > 0
     ):
         # FIRED ENCOUNTER EVENT
-        # FIRED ENCOUNTER EVENT
-        combat_stats = {
-            "phase": "encounter-start",
-            "encounter": 6,
-            "chance_of_success_base": 40,
-        }
+        combat_stats = create_encounter_start_event(
+            current_env["game_info"]["encounters"]
+        )
         EventPublisher().publish(user_id, "encounter-start", combat_stats)
-        # FIRED ENCOUNTER EVENT
-        # FIRED ENCOUNTER EVENT
         return "You must deal with the encounter!"
 
     logger.info(f"NAV_DEBUG - CURRENT ENV: {current_env}")

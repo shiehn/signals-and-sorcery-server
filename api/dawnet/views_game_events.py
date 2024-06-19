@@ -14,6 +14,7 @@ class GetGameEventView(APIView):
             response = {
                 "user_id": str(event.user_id),
                 "event": event.event,
+                "payload": event.payload,
                 "created_at": event.created_at,
             }
             event.delete()

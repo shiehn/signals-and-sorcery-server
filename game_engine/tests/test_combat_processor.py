@@ -34,8 +34,9 @@ class TestCombatProcessor(unittest.TestCase):
                 "image": "IMG_ENCOUNTER_PLACEHOLDER",
             },
         }
-        item = {
-            "item_id": "item_1",
+        item = MagicMock()
+        item.item_id = "item_1"
+        item.item_details = {
             "item_level": 60,
             "aesthetic": {
                 "description": "",
@@ -69,8 +70,9 @@ class TestCombatProcessor(unittest.TestCase):
                 "image": "IMG_ENCOUNTER_PLACEHOLDER",
             },
         }
-        item = {
-            "item_id": "item_2",
+        item = MagicMock()
+        item.item_id = "item_2"
+        item.item_details = {
             "item_level": 30,
             "aesthetic": {
                 "description": "",
@@ -104,8 +106,9 @@ class TestCombatProcessor(unittest.TestCase):
                 "image": "IMG_ENCOUNTER_PLACEHOLDER",
             },
         }
-        item = {
-            "item_id": "item_3",
+        item = MagicMock()
+        item.item_id = "item_3"
+        item.item_details = {
             "item_level": 5,
             "aesthetic": {
                 "description": "",

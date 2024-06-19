@@ -76,11 +76,17 @@ class CombatProcessor:
             map_inspector = MapInspector(map)
 
         environment = map_inspector.get_env_by_id(game_state.environment_id)
+
+        if (
+            environment["game_info"]["encounters"] is None
+            or len(environment["game_info"]["encounters"]) == 0
+        ):
+            return False
+
+        encounter = environment["game_info"]["encounters"][0]
         encounter_id = environment["game_info"]["encounters"][0]["encounter_id"]
 
         logger.info(f"ATTACK ENCOUNTER_ID: {encounter_id}")
-
-        encounter = environment["game_info"]["encounters"][0]
 
         # lookup the item in the database
         item = GameInventory.objects.get(item_id=item_id)
