@@ -4,7 +4,7 @@ from game_engine.rpg_chat_service import RPGChatService
 from byo_network_hub.models import GameState, GameMap, GameMapState
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.map_state_filter import MapStateFilter
-
+from game_engine.api.storage import list_items
 import logging
 import re
 
@@ -48,19 +48,22 @@ class GameQueryView(views.APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # START -- CRAFTING  THE QUERY
+        # START -- CRAFTING THE QUERY
         # Get the game state for the user
         game_state = GameState.objects.get(user_id=token)
         logger.info(f"XXX GAME_STATE: {game_state}")
 
         map_id = game_state.map_id
         map = GameMap.objects.get(id=map_id).map_graph
+        logger.info(f"XXX GAME_MAP: {map}")
         game_map_states = list(GameMapState.objects.filter(map_id=map_id))
 
         if game_map_states is not None and len(game_map_states) > 0:
             map_filter = MapStateFilter(map)
             filtered_map = map_filter.filter(game_map_states)
             map_inspector = MapInspector(filtered_map)
+
+            logger.info(f"XXX GAME_FILTERED_MAP: {filtered_map}")
         else:
             map_inspector = MapInspector(map)
 
@@ -74,9 +77,23 @@ class GameQueryView(views.APIView):
         ):
             action["encounter"] = environment["game_info"]["encounters"][0]
 
+        # Get the user's items
+        inventory_items = list_items(token)
+
+        # Extract item IDs from inventory items
+        inventory_item_ids = [item.item_id for item in inventory_items]
+
+        # Ensure inventory_items is a list of objects with item_id attribute
+        inventory_item_ids = [str(item.item_id) for item in inventory_items]
+
         # append user context and state to the query
-        query = f"{query} user_id={token} environment_id={game_state.environment_id} doors={environment['game_info']['doors']} items={[item['item_id'] for item in environment['game_info']['items']]}"
-        # END -- CRAFTING  THE QUERY
+        query = (
+            f"{query} user_id={token} environment_id={game_state.environment_id} "
+            f"doors={environment['game_info']['doors']} "
+            f"environment_items={[item['item_id'] for item in environment['game_info']['items']]} "
+            f"inventory_items={inventory_item_ids}"
+        )
+        # END -- CRAFTING THE QUERY
 
         rpg_chat_service = RPGChatService()  # Get the singleton instance
         response = rpg_chat_service.ask_question(token, query)

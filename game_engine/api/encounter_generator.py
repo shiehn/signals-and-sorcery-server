@@ -12,7 +12,7 @@ class EncounterGenerator:
             item = {
                 "encounter_id": str(uuid.uuid4()),
                 "encounter_type": encounter_type,
-                "encounter_size": "6x6",
+                "encounter_level": random.randint(1, 10),
                 "aesthetic": {
                     "description": "",
                     "image": IMG_ENCOUNTER_PLACEHOLDER,

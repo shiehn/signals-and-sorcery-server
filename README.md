@@ -33,7 +33,7 @@ make clean
 ```
 
 All the command from the Makefile would require to have your environment setup with the variables listed at the end of this file.
-You may used `example.env` as a sample.
+You may use `example.env` as a sample.
 
 ### DB MIGRATIONS
 

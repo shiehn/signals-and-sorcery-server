@@ -5,8 +5,10 @@ from rest_framework import generics
 from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
 from game_engine.api.map_inspector import MapInspector
+from game_engine.api.item_generator import ItemGenerator
 from byo_network_hub.models import (
     GameState,
+    GameInventory,
     GameMap,
     GameElementLookup,
     GameUpdateQueue,
@@ -55,11 +57,30 @@ class GameStateCreateView(generics.CreateAPIView):
             user_id=user_id, defaults={"level": 1, "status": "started"}
         )
 
+        # add a default unarmed item to the user's inventory
+        item_generator = ItemGenerator()
+        unarmed_item = item_generator.generate_unarmed_item()
+        GameInventory.objects.create(
+            user_id=user_id,
+            item_id=unarmed_item["item_id"],
+            map_id=uuid.UUID(int=0),
+            item_details=unarmed_item,
+        )
+
+        # add the item to the lookup table
+        GameElementLookup.objects.create(
+            element_id=unarmed_item["item_id"], user_id=user_id
+        )
+
         game_update.status = "started"
         game_update.save()
 
         try:
             logger.info(f"Validated data before save: {serializer.validated_data}")
+
+            # Ensure map_id defaults to uuid.UUID(int=0) if not provided
+            if "map_id" not in serializer.validated_data:
+                serializer.validated_data["map_id"] = uuid.UUID(int=0)
 
             serializer.save()
 

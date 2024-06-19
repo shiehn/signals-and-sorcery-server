@@ -1,3 +1,6 @@
+import uuid
+
+from django.db.models import Q
 from rest_framework import views, status
 from rest_framework.response import Response
 from .serializers import GameInventorySerializer
@@ -17,8 +20,8 @@ class InventoryListView(views.APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        inventory_items = GameInventory.objects.filter(
-            user_id=user_id, map_id=game_state.map_id
+        inventory_items = GameInventory.objects.filter(user_id=user_id).filter(
+            Q(map_id=game_state.map_id) | Q(map_id=uuid.UUID(int=0))
         )
         if not inventory_items:
             return Response(

@@ -12,7 +12,7 @@ class ItemGenerator:
             item = {
                 "item_id": str(uuid.uuid4()),
                 "item_type": item_type,
-                "item_size": "4x6",
+                "item_level": random.randint(1, 100),
                 "aesthetic": {
                     "description": "",
                     "image": IMG_ITEM_PLACEHOLDER,
@@ -22,3 +22,14 @@ class ItemGenerator:
             items.append(item)
 
         return items
+
+    def generate_unarmed_item(self):
+        return {
+            "item_id": str(uuid.uuid4()),
+            "item_type": "unarmed",
+            "item_level": 0,
+            "aesthetic": {
+                "description": "unarmed",
+                "image": IMG_ITEM_PLACEHOLDER,
+            },
+        }
