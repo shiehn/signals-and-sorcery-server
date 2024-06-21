@@ -1,6 +1,7 @@
 import random
 from game_engine.api.item_generator import ItemGenerator
 from game_engine.api.encounter_generator import EncounterGenerator
+import networkx as nx
 
 
 class MapProcessor:
@@ -9,6 +10,7 @@ class MapProcessor:
         self.item_range_min = 0
         self.item_range_max = 2
         self.encounter_probability = 0.25
+        self.nx_graph = self.build_networkx_graph()
 
     def set_item_range(self, item_range_min, item_range_max):
         self.item_range_min = item_range_min
@@ -21,22 +23,41 @@ class MapProcessor:
 
         return self
 
+    def build_networkx_graph(self):
+        nx_graph = nx.Graph()
+        for edge in self.map_graph["edges"]:
+            nx_graph.add_edge(edge["from"], edge["to"])
+        return nx_graph
+
+    def find_furthest_nodes(self):
+        # Choose an arbitrary starting node (first node in the list)
+        start_node = self.map_graph["nodes"][0]["id"]
+        # Perform BFS to find the node furthest from start_node
+        lengths = nx.single_source_shortest_path_length(self.nx_graph, start_node)
+        furthest_node = max(lengths, key=lengths.get)
+
+        # Perform BFS again from the furthest node found
+        lengths = nx.single_source_shortest_path_length(self.nx_graph, furthest_node)
+        furthest_from_furthest = max(lengths, key=lengths.get)
+
+        return furthest_node, furthest_from_furthest
+
     def add_entrance_exit(self):
-        random_nodes = random.sample(self.map_graph["nodes"], 2)
+        entrance_id, exit_id = self.find_furthest_nodes()
+
+        entrance_node = next(
+            node for node in self.map_graph["nodes"] if node["id"] == entrance_id
+        )
+        exit_node = next(
+            node for node in self.map_graph["nodes"] if node["id"] == exit_id
+        )
 
         # Ensure the color attribute exists for each node, if not, initialize it
-        # if "color" not in random_nodes[0]:
-        #     random_nodes[0]["color"] = {}
-        # if "color" not in random_nodes[1]:
-        #     random_nodes[1]["color"] = {}
+        entrance_node["label"] = "Entrance"
+        entrance_node["color"]["background"] = "green"
 
-        # Entrance
-        random_nodes[0]["label"] = "Entrance"
-        random_nodes[0]["color"]["background"] = "green"
-
-        # Exit
-        random_nodes[1]["label"] = "Exit"
-        random_nodes[1]["color"]["background"] = "red"
+        exit_node["label"] = "Exit"
+        exit_node["color"]["background"] = "red"
 
         return self
 
