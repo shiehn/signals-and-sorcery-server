@@ -4,6 +4,7 @@ from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
 from byo_network_hub.models import GameMap
 from .serializers import GameMapSerializer
+from game_engine.api.event_publisher import EventPublisher
 
 
 class GameMapGeneration(views.APIView):
@@ -33,6 +34,8 @@ class GameMapGeneration(views.APIView):
 
         # Serialize the newly created GameMap object
         serializer = GameMapSerializer(gamemap)
+
+        # EventPublisher().publish(user_id, "level-up-complete", {})
 
         # Return the serialized data
         return Response(serializer.data, status=status.HTTP_200_OK)

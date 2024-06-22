@@ -4,6 +4,7 @@ import requests
 import logging
 from game_engine.cdn.file_uploader import FileUploader
 from openai import OpenAI
+import asyncio
 
 # Set up logging
 logging.basicConfig(level=logging.ERROR)
@@ -16,14 +17,15 @@ class AssetGenerator:
         self.client = OpenAI()
         self.file_uploader = FileUploader()
 
-    def generate_description(self, type: str, aesthetic: str) -> str:
+    async def generate_description(self, type: str, aesthetic: str) -> str:
         try:
-            response = self.client.chat.completions.create(
+            response = await asyncio.to_thread(
+                self.client.chat.completions.create,
                 model="gpt-3.5-turbo-0125",
                 messages=[
                     {
                         "role": "system",
-                        "content": f"You are a content creator for a chat-based fantasy RPG. Your role is to colorfully embellish descriptions based on specific aesthetic guidelines and details. Please describe a {type} based on: {aesthetic}",
+                        "content": f"You are a content creator for a chat-based fantasy RPG. Your role is to embellish descriptions based on the specified aesthetic guidelines and details. Please describe a {type} based on: {aesthetic}",
                     },
                     {
                         "role": "user",
@@ -34,12 +36,13 @@ class AssetGenerator:
             return response.choices[0].message.content
         except Exception as e:
             logger.error(f"Error generating description asset: {e}")
-            return "Error generating description asset"
+            return "Error generating asset description "
 
-    def generate_image(self, type: str, aesthetic: str) -> str:
+    async def generate_image(self, type: str, aesthetic: str) -> str:
         try:
             # Generate the image and get temporary URL
-            response = self.client.images.generate(
+            response = await asyncio.to_thread(
+                self.client.images.generate,
                 model="dall-e-3",
                 prompt=f"Generate an image for a {type} based on the following aesthetic guidelines and details: {aesthetic}",
                 size="1024x1024",
@@ -50,11 +53,11 @@ class AssetGenerator:
 
             rand_img_name = str(uuid.uuid4())
             # Download the image from the temporary URL
-            local_file_path = self.download_file(temp_url, rand_img_name)
+            local_file_path = await self.download_file(temp_url, rand_img_name)
 
             # Upload the file to GCP
-            file_url = self.file_uploader.upload(
-                local_file_path, "image/png"
+            file_url = await asyncio.to_thread(
+                self.file_uploader.upload, local_file_path, "image/png"
             )  # Assuming PNG, change accordingly
 
             # Delete the local file after uploading
@@ -67,11 +70,11 @@ class AssetGenerator:
                 "https://storage.googleapis.com/byoc-file-transfer/img_placeholder.png"
             )
 
-    def download_file(self, url, img_description):
+    async def download_file(self, url, img_description):
         local_filename = (
             f"{img_description.replace(' ', '_')}.png"  # Generate a safe filename
         )
-        response = requests.get(url)
+        response = await asyncio.to_thread(requests.get, url)
         if response.status_code == 200:
             with open(local_filename, "wb") as f:
                 f.write(response.content)

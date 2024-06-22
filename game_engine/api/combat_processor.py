@@ -141,7 +141,7 @@ class CombatProcessor:
                     game_map_state.save()
                 logger.info("ABC 4")
 
-        EventPublisher().publish(user_id, combat_stats["phase"], combat_stats)
+        EventPublisher().publish_sync(user_id, combat_stats["phase"], combat_stats)
 
         logger.info("ATTACK SUCCESS")
 

@@ -5,12 +5,13 @@ from byo_network_hub.models import GameState, GameMap
 import logging
 from game_engine.api.aesthetic_generator import AestheticGenerator
 from game_engine.gen_ai.asset_generator import AssetGenerator
-from byo_network_hub.models import GameUpdateQueue
-from byo_network_hub.models import GameElementLookup
+from byo_network_hub.models import GameUpdateQueue, GameElementLookup
 from django.db import transaction
 from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
 from game_engine.api.map_inspector import MapInspector
+from game_engine.api.event_publisher import EventPublisher
+from asgiref.sync import sync_to_async, async_to_sync
 
 
 def add_uuids_to_lookup(user_id, uuids):
@@ -21,26 +22,25 @@ def add_uuids_to_lookup(user_id, uuids):
 
 class AssetGenerateView(APIView):
     def post(self, request, user_id, open_ai_key):
+        return async_to_sync(self.async_post)(request, user_id, open_ai_key)
+
+    async def async_post(self, request, user_id, open_ai_key):
+        logger = logging.getLogger(__name__)
+
         try:
-            game_state = GameState.objects.get(user_id=user_id)
+            game_state = await sync_to_async(GameState.objects.get)(user_id=user_id)
         except GameState.DoesNotExist:
             raise NotFound("GameState not found")
 
         if not open_ai_key:
             raise ValueError("No OpenAI Key provided")
 
-        logger = logging.getLogger(__name__)
         aesthetic = game_state.aesthetic
-        game_update = GameUpdateQueue.objects.get(user_id=user_id)
-        # map = game_state.map_id.map_graph  # assuming map_graph is the field in GameMap
-
-        # game_map = GameMap.objects.get(id=game_state.map_id)
-
-        # game_map = GameMap.objects.get(id=game_state.map_id)
+        game_update = await sync_to_async(GameUpdateQueue.objects.get)(user_id=user_id)
 
         # Set game update status to "started"
         game_update.status = "started"
-        game_update.save()
+        await sync_to_async(game_update.save)()
 
         # GENERATE THE MAP
         map_generator = MapGenerator()
@@ -55,7 +55,7 @@ class AssetGenerateView(APIView):
 
         map = processed_map.get_map()
 
-        game_map = GameMap.objects.create(
+        game_map = await sync_to_async(GameMap.objects.create)(
             level=game_update.level,
             description=game_state.aesthetic,
             map_graph=map,
@@ -63,7 +63,7 @@ class AssetGenerateView(APIView):
 
         map_inspector = MapInspector(map)
         uuids = map_inspector.extract_uuids()
-        add_uuids_to_lookup(user_id, uuids)
+        await sync_to_async(add_uuids_to_lookup)(user_id, uuids)
 
         entrance_env_id = map_inspector.get_env_id_of_entrance()
         entrance_env_img = map_inspector.get_env_by_id(entrance_env_id)["game_info"][
@@ -84,17 +84,19 @@ class AssetGenerateView(APIView):
                 map=game_map.map_graph,
                 asset_generator=asset_generator,
             )
-            map = aesthetic_generator.add_all_aesthetics()
+            map = await aesthetic_generator.add_all_aesthetics()
 
             game_map.map_graph = map
-            game_map.save()
+            await sync_to_async(game_map.save)()
 
             game_state.map_id = game_map.id
-            game_state.save()
+            await sync_to_async(game_state.save)()
 
             # Set game update status to "completed"
             game_update.status = "completed"
-            game_update.save()
+            await sync_to_async(game_update.save)()
+
+            await EventPublisher().publish_async(user_id, "level-up-complete", {})
 
             return Response({"status": "Assets generated successfully"})
 
@@ -103,6 +105,6 @@ class AssetGenerateView(APIView):
 
             # Set game update status to "error"
             game_update.status = "error"
-            game_update.save()
+            await sync_to_async(game_update.save)()
 
             return Response({"error": str(e)}, status=500)

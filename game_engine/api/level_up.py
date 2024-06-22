@@ -9,6 +9,8 @@ from byo_network_hub.models import (
     GameUpdateQueue,
 )
 
+from game_engine.api.environment import create_encounter_start_event
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -32,6 +34,20 @@ def level_up(environment_id):
         )
         env_exit_id = map_inspector.get_env_id_of_exit()
 
+        # CHECK IF USER IS IN COMBAT
+        current_env = map_inspector.get_env_by_id(str(current_env_id))
+        if (
+            current_env["game_info"]["encounters"] is not None
+            and len(current_env["game_info"]["encounters"]) > 0
+        ):
+            # FIRED ENCOUNTER EVENT
+            combat_stats = create_encounter_start_event(
+                current_env["game_info"]["encounters"]
+            )
+            EventPublisher().publish_sync(user_id, "encounter-start", combat_stats)
+            return "You must deal with the encounter!"
+        # CHECK IF USER IS IN COMBAT
+
         logger.info(
             f"LEVEL_UP_DEBUG - environment_id: {environment_id}, current_env_id: {current_env_id}, env_exit_id: {env_exit_id}"
         )
@@ -43,7 +59,7 @@ def level_up(environment_id):
 
             # FIRED LEVEL_UP EVENT
             # FIRED LEVEL_UP EVENT
-            EventPublisher().publish(user_id, "level-up-complete")
+            EventPublisher().publish_sync(user_id, "level-up-complete")
             # FIRED LEVEL_UP EVENT
             # FIRED LEVEL_UP EVENT
 

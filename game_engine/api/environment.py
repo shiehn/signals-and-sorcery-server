@@ -35,7 +35,7 @@ def get_environment(environment_id, user_id):
     env_exit_id = map_inspector.get_env_id_of_exit()
     if str(environment_id) == str(env_exit_id):
         # FIRED ENCOUNTER EVENT
-        EventPublisher().publish(user_id, "level-up-ready")
+        EventPublisher().publish_sync(user_id, "level-up-ready")
 
     if (
         environment["game_info"]["encounters"] is not None
@@ -48,7 +48,7 @@ def get_environment(environment_id, user_id):
         combat_stats = create_encounter_start_event(
             environment["game_info"]["encounters"]
         )
-        EventPublisher().publish(user_id, "encounter-start", combat_stats)
+        EventPublisher().publish_sync(user_id, "encounter-start", combat_stats)
         # FIRED ENCOUNTER EVENT
         # FIRED ENCOUNTER EVENT
 
@@ -91,7 +91,7 @@ def navigate_environment(environment_id):
     env_exit_id = map_inspector.get_env_id_of_exit()
     if str(current_env_id) == str(env_exit_id):
         # FIRED ENCOUNTER EVENT
-        EventPublisher().publish(user_id, "level-up-ready")
+        EventPublisher().publish_sync(user_id, "level-up-ready")
 
     if (
         current_env["game_info"]["encounters"] is not None
@@ -101,7 +101,7 @@ def navigate_environment(environment_id):
         combat_stats = create_encounter_start_event(
             current_env["game_info"]["encounters"]
         )
-        EventPublisher().publish(user_id, "encounter-start", combat_stats)
+        EventPublisher().publish_sync(user_id, "encounter-start", combat_stats)
         return "You must deal with the encounter!"
 
     logger.info(f"NAV_DEBUG - CURRENT ENV: {current_env}")

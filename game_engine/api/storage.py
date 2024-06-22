@@ -44,7 +44,7 @@ def add_item(item_id: str):
         game_state_item.consumed = True
         game_state_item.save()
 
-    EventPublisher().publish(user_id, "inventory-update")
+    EventPublisher().publish_sync(user_id, "inventory-update")
 
     return True
 
