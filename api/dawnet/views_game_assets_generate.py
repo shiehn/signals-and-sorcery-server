@@ -10,6 +10,11 @@ from asgiref.sync import sync_to_async
 
 class GameAssetsGenerateView(APIView):
     async def post(self, request, user_id):
+        api_key = request.data.get("api_key")  # Extract API
+
+        logger.info("BBB *******************************")
+        logger.info(f"BBB API_KEY: {api_key}")
+        logger.info("BBB *******************************")
         # Accessing aesthetic description from the POST data
         aesthetic = request.data.get("aesthetic")
         if not aesthetic:

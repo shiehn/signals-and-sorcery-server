@@ -1,3 +1,5 @@
+# views_game_engine.py
+
 from rest_framework import status, views
 from rest_framework.response import Response
 from game_engine.rpg_chat_service import RPGChatService
@@ -9,12 +11,6 @@ import logging
 import re
 
 logger = logging.getLogger(__name__)
-
-
-# def handle_message(message: str, token: str):
-#     # This function should be called by the game engine to handle the user message
-#     # The game engine should pass the message
-#     return handle_user_message(message, token)
 
 
 def strip_patterns(text):
@@ -39,12 +35,22 @@ class GameQueryView(views.APIView):
         # Extract data from the request body
         token = request.data.get("token")
         query = request.data.get("query")
+        api_key = request.data.get("api_key")  # Extract API key
+
+        logger.info("AAA *******************************")
+        logger.info(f"AAA TOKEN: {token}")
+        logger.info(f"AAA QUERY: {query}")
+        logger.info(f"AAA API_KEY: {api_key}")
+        logger.info("AAA *******************************")
+
         action = {"encounter": None}
 
-        if not token or not query:
-            # If either token or query is missing, return a bad request response
+        if not token or not query or not api_key:  # Check if api_key is provided
+            # If either token, query or api_key is missing, return a bad request response
             return Response(
-                {"error": "Both 'token' and 'query' are required in the request body"},
+                {
+                    "error": "Both 'token', 'query', and 'api_key' are required in the request body"
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -96,7 +102,9 @@ class GameQueryView(views.APIView):
         # END -- CRAFTING THE QUERY
 
         rpg_chat_service = RPGChatService()  # Get the singleton instance
-        response = rpg_chat_service.ask_question(token, query)
+        response = rpg_chat_service.ask_question(
+            token, query, api_key
+        )  # Pass the API key
 
         filtered_response = strip_patterns(response)
 

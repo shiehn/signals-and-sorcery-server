@@ -32,6 +32,12 @@ class AssetGenerateView(APIView):
         except GameState.DoesNotExist:
             raise NotFound("GameState not found")
 
+        open_ai_key = request.data.get("api_key")  # Extract API
+
+        logger.info("CCC *******************************")
+        logger.info(f"CCC API_KEY: {open_ai_key}")
+        logger.info("CCC *******************************")
+
         if not open_ai_key:
             raise ValueError("No OpenAI Key provided")
 

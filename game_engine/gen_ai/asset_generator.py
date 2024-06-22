@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
 
 class AssetGenerator:
     def __init__(self, open_ai_key):
-        self.open_ai_key = open_ai_key
-        self.client = OpenAI()
+        self.client = OpenAI(api_key=open_ai_key)
         self.file_uploader = FileUploader()
 
     async def generate_description(self, type: str, aesthetic: str) -> str:

@@ -1,3 +1,5 @@
+# rpg_chat.py
+
 import os
 import uuid
 from langchain.agents import create_openai_tools_agent, AgentExecutor
@@ -11,15 +13,15 @@ from .tools.item_tools import ListItems, StoreItem
 from .tools.navigation_tools import NavigateEnvironment
 from .tools.combat_tools import Combat
 from .tools.level_up_tools import LevelUp
+import logging
 
-
-open_api_key = os.getenv("OPENAI_API_KEY")
+logger = logging.getLogger(__name__)
 
 
 # Define the RPGChat class
 class RPGChat:
     def __init__(self):
-        prompt = ChatPromptTemplate.from_messages(
+        self.prompt = ChatPromptTemplate.from_messages(
             [
                 (
                     "system",
@@ -30,9 +32,7 @@ class RPGChat:
             ]
         )
 
-        # gpt-4-turbo
-        self.chat = ChatOpenAI(model="gpt-4o", temperature=0)
-        tools = [
+        self.tools = [
             DescribeEnvironment(),
             ListItems(),
             StoreItem(),
@@ -41,13 +41,10 @@ class RPGChat:
             LevelUp(),
         ]
 
-        self.agent = create_openai_tools_agent(self.chat, tools, prompt)
-        self.agent_executor = AgentExecutor(agent=self.agent, tools=tools, verbose=True)
-
         # Multi-tenant management with defaultdict
         self.chat_histories = defaultdict(ChatMessageHistory)
 
-    def ask_question(self, user_id, question):
+    def ask_question(self, user_id, question, api_key):
         if user_id not in self.chat_histories:
             # Initialize new chat history for a new user
             self.chat_histories[user_id] = ChatMessageHistory()
@@ -57,7 +54,17 @@ class RPGChat:
 
         # Add the user's question and generate a response
         user_chat_history.add_user_message(question)
-        response = self.agent_executor.invoke({"messages": user_chat_history.messages})
+
+        # Initialize ChatOpenAI with the provided API key
+        chat = ChatOpenAI(api_key=api_key, model="gpt-4", temperature=0)
+        agent = create_openai_tools_agent(chat, self.tools, self.prompt)
+        agent_executor = AgentExecutor(agent=agent, tools=self.tools, verbose=True)
+
+        logger.info("*********************************************************")
+        logger.info(f"{user_chat_history.messages[-10:]}")
+        logger.info("*********************************************************")
+
+        response = agent_executor.invoke({"messages": user_chat_history.messages[-10:]})
         user_chat_history.add_ai_message(response["output"])
 
         return response["output"]
