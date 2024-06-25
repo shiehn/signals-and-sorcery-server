@@ -102,7 +102,7 @@ def navigate_environment(environment_id):
             current_env["game_info"]["encounters"]
         )
         EventPublisher().publish_sync(user_id, "encounter-start", combat_stats)
-        return "You must deal with the encounter!"
+        return "You have encountered a creature that you must deal with!"
 
     logger.info(f"NAV_DEBUG - CURRENT ENV: {current_env}")
 
@@ -129,4 +129,4 @@ def navigate_environment(environment_id):
         game_state.save()
         return "success"
 
-    return "Error"
+    return "error"

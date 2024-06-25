@@ -2,8 +2,10 @@
 
 import os
 import uuid
+import re
 from langchain.agents import create_openai_tools_agent, AgentExecutor
 from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_core.messages import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from collections import defaultdict  # For managing multiple chat histories
@@ -45,6 +47,16 @@ class RPGChat:
         self.chat_histories = defaultdict(ChatMessageHistory)
 
     def ask_question(self, user_id, question, api_key):
+        def estimate_tokens(text):
+            return len(text) // 4  # Approximation: 1 token ~= 4 characters
+
+        def extract_context(message):
+            pattern = re.compile(
+                r"user_id=[^ ]+ environment_id=[^ ]+ doors=\[[^\]]*\] environment_items=\[[^\]]*\] inventory_items=\[[^\]]*\]"
+            )
+            match = pattern.search(message)
+            return match.group(0) if match else ""
+
         if user_id not in self.chat_histories:
             # Initialize new chat history for a new user
             self.chat_histories[user_id] = ChatMessageHistory()
@@ -52,19 +64,48 @@ class RPGChat:
         # Get the specific user's chat history
         user_chat_history = self.chat_histories[user_id]
 
-        # Add the user's question and generate a response
-        user_chat_history.add_user_message(question)
+        # Extract the context from the latest question
+        latest_context = extract_context(question)
+        escaped_latest_context = re.escape(latest_context)
+        clean_question = re.sub(escaped_latest_context, "", question).strip()
+
+        # Add the user's clean question to the chat history
+        user_chat_history.add_user_message(clean_question)
 
         # Initialize ChatOpenAI with the provided API key
         chat = ChatOpenAI(api_key=api_key, model="gpt-4", temperature=0)
         agent = create_openai_tools_agent(chat, self.tools, self.prompt)
         agent_executor = AgentExecutor(agent=agent, tools=self.tools, verbose=True)
 
-        logger.info("*********************************************************")
-        logger.info(f"{user_chat_history.messages[-10:]}")
-        logger.info("*********************************************************")
+        # Calculate the total token length, including the latest question
+        total_tokens = estimate_tokens(question)
 
-        response = agent_executor.invoke({"messages": user_chat_history.messages[-10:]})
+        # Process the message history in reverse to find the latest context and trim if needed
+        trimmed_messages = []
+        for message in reversed(user_chat_history.messages):
+            content = message.content
+            # Remove any previous context from the message content
+            content = re.sub(escaped_latest_context, "", content).strip()
+            message_tokens = estimate_tokens(content)
+
+            if total_tokens + message_tokens <= 8000:
+                trimmed_messages.append(message)
+                total_tokens += message_tokens
+            else:
+                break
+
+        # Reverse to maintain the original order
+        trimmed_messages.reverse()
+
+        # Include the latest context in the latest question
+        latest_question_with_context = clean_question + " " + latest_context
+        trimmed_messages.append(HumanMessage(content=latest_question_with_context))
+
+        logger.info("******************TEN ITEM HISTORY START************************")
+        logger.info(f"{trimmed_messages[-10:]}")
+        logger.info("******************TEN ITEM HISTORY END  ************************")
+
+        response = agent_executor.invoke({"messages": trimmed_messages})
         user_chat_history.add_ai_message(response["output"])
 
         return response["output"]
