@@ -94,7 +94,8 @@ services:
             - static-api:/var/www/api/static
             - static-cms:/var/www/cms/static
             - ./nginx/conf:/etc/nginx/conf.d:ro
-            - /etc/letsencrypt:/etc/letsencrypt:ro
+            - ./certbot/conf:/etc/letsencrypt:ro
+            - ./certbot/www:/var/www/certbot
         env_file:
             - ./.env
         ports:
@@ -107,10 +108,23 @@ services:
         networks:
             - django-seed-network
 
+    certbot:
+        image: certbot/certbot
+        volumes:
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+        depends_on:
+            - nginx
+        networks:
+            - django-seed-network
+
 volumes:
     postgres-data:
     static-api:
     static-cms:
+    certbot/conf:
+    certbot/www:
 
 networks:
   django-seed-network:
