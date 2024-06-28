@@ -16,6 +16,8 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 
+from game_engine.api.combat_processor import CombatProcessor
+
 
 class GameCombatAttackView(APIView):
     """
@@ -25,15 +27,26 @@ class GameCombatAttackView(APIView):
     def post(self, request, format=None):
         # Access the JSON payload directly from request.data
         user_id = request.data.get("user_id")
-        items = request.data.get("items", [])
+        item_id = request.data.get("item_id", None)
 
-        logger.info(f"User ID: {user_id}")
-        logger.info(f"Items: {items}")
+        logger.info("COMBAT user_id: " + str(user_id))
+        logger.info("COMBAT item_id: " + str(item_id))
 
-        # Example response
-        return Response(
-            {"message": "Attack processed successfully"}, status=status.HTTP_200_OK
-        )
+        if item_id is None:
+            return Response(
+                {"message": "Item is required in the payload"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        combat_processor = CombatProcessor()
+        if combat_processor.attack(item_id):
+            return Response(
+                {"message": "Attack processed successfully"}, status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"message": "Attack failed"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 # class GameCombatAttackView(generics.CreateAPIView):

@@ -54,10 +54,10 @@ class MapProcessor:
 
         # Ensure the color attribute exists for each node, if not, initialize it
         entrance_node["label"] = "Entrance"
-        entrance_node["color"]["background"] = "green"
+        entrance_node["color"]["border"] = "green"
 
         exit_node["label"] = "Exit"
-        exit_node["color"]["background"] = "red"
+        exit_node["color"]["border"] = "red"
 
         return self
 
@@ -74,7 +74,10 @@ class MapProcessor:
         encounter_generator = EncounterGenerator()
 
         for node in self.map_graph["nodes"]:
-            if random.random() < self.encounter_probability:
+            if (
+                node.get("label") != "Entrance"
+                and random.random() < self.encounter_probability
+            ):
                 node["game_info"][
                     "encounters"
                 ] = encounter_generator.generate_encounters(1)

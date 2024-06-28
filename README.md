@@ -109,4 +109,14 @@ POSTGRESQL_ADDON_PORT=5438 (localport)
 ```
 
 
+### SSL CONFIGURATION
+
+Go to GoDaddy and download the private key from the domain.  Then go to the Godaddy SSL Certs and download the cert.
+On the host put them in these locations:
+```bash
+ssl_trusted_certificate /etc/ssl/certs/gd_bundle-g2-g1.crt;
+ssl_certificate_key /etc/ssl/private/generated-private-key.txt;
+ssl_certificate /etc/ssl/certs/ddfda9a2ad338b2b.crt;
+```
+
 

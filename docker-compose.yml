@@ -25,6 +25,7 @@ services:
             - static-cms:/cms/app/static
         depends_on:
             - postgres
+
     websocket:
         restart: always
         build:
@@ -43,6 +44,7 @@ services:
         depends_on:
             - postgres
             - api
+
     api:
         restart: always
         build:
@@ -73,6 +75,7 @@ services:
             - static-api:/api/app/static
         depends_on:
             - postgres
+
     postgres:
         image: postgres:14
         restart: always
@@ -88,16 +91,15 @@ services:
             - django-seed-network
         volumes:
             - postgres-data:/var/lib/postgresql/data
+
     nginx:
         image: nginx:alpine
         volumes:
             - static-api:/var/www/api/static
             - static-cms:/var/www/cms/static
             - ./nginx/conf:/etc/nginx/conf.d:ro
-            - certbot-conf:/etc/letsencrypt:ro
-            - certbot-www:/var/www/certbot
-        env_file:
-            - ./.env
+            - /etc/ssl/certs/:/etc/ssl/certs/:ro # Adjust the path to your GoDaddy certificates
+            - /etc/ssl/private/:/etc/ssl/private/:ro
         ports:
             - "80:80"
             - "443:443"
@@ -107,24 +109,13 @@ services:
             - api
         networks:
             - django-seed-network
-    certbot:
-        image: certbot/certbot
-        volumes:
-            - certbot-conf:/etc/letsencrypt
-            - certbot-www:/var/www/certbot
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-        depends_on:
-            - nginx
-        networks:
-            - django-seed-network
 
 volumes:
     postgres-data:
     static-api:
     static-cms:
-    certbot-conf:
-    certbot-www:
 
 networks:
-  django-seed-network:
-    name: django-seed-local
+    django-seed-network:
+        name: django-seed-local
+

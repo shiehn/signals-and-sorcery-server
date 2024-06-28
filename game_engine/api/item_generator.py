@@ -8,7 +8,7 @@ class ItemGenerator:
         items = []
 
         for i in range(num_of_items):
-            item_type = random.choice(["weapon", "armor", "potion"])
+            item_type = random.choice(["weapon"])
             item = {
                 "item_id": str(uuid.uuid4()),
                 "item_type": item_type,

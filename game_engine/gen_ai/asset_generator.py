@@ -24,11 +24,11 @@ class AssetGenerator:
                 messages=[
                     {
                         "role": "system",
-                        "content": f"You are a content creator for a chat-based fantasy RPG. Your role is to embellish descriptions based on the specified aesthetic guidelines and details. Please describe a {type} based on: {aesthetic}",
+                        "content": f"You are a content creator for a chat-based fantasy RPG. Your role is generate short descriptions based on the specified item detials and aesthetic guidelines.",
                     },
                     {
                         "role": "user",
-                        "content": f"Describe a {type} based on the following aesthetic guidelines and details: {aesthetic}",
+                        "content": f"Creat a brief description of a {type} based on the following aesthetic guidelines and details: {aesthetic}",
                     },
                 ],
             )

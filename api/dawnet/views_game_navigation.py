@@ -12,7 +12,15 @@ logger = logging.getLogger(__name__)
 
 class GameNavigateToView(views.APIView):
     def get(self, request, user_id, environment_id):
-        navigate_environment(str(environment_id))
+        res = navigate_environment(str(environment_id))
+
+        if res != "success":
+            return Response(
+                {
+                    "message": f"User unable to navigate to environment: {environment_id}"
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         return Response(
             {

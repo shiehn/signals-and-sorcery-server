@@ -126,6 +126,11 @@ class CombatProcessor:
                         game_map_state.save()
                 logger.info("ABC 2")
         else:
+            # combat was a loss so set the users
+            # gamestate.environment_id to the entrance of the level
+            game_state.environment_id = map_inspector.get_entrance_id()
+            game_state.save()
+
             # in case of loss, only the item is consumed, not the encounter
             if item.item_details["item_type"] == "unarmed":
                 # DON'T CONSUME UNARMED ITEM
