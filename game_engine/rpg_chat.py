@@ -73,7 +73,8 @@ class RPGChat:
         user_chat_history.add_user_message(clean_question)
 
         # Initialize ChatOpenAI with the provided API key
-        chat = ChatOpenAI(api_key=api_key, model="gpt-4", temperature=0)
+        # chat = ChatOpenAI(api_key=api_key, model="gpt-4", temperature=0)
+        chat = ChatOpenAI(api_key=api_key, model="gpt-3.5-turbo-0125", temperature=0)
         agent = create_openai_tools_agent(chat, self.tools, self.prompt)
         agent_executor = AgentExecutor(agent=agent, tools=self.tools, verbose=True)
 

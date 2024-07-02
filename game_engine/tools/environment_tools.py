@@ -13,7 +13,15 @@ class DescribeEnvironment(BaseTool):
     description = "Get a description of an environment. This tool takes one parameter which is environment_id"
 
     def _run(self, environment_id: str):
-        user_id = GameElementLookup.objects.get(element_id=environment_id).user_id
+        element_lookup = GameElementLookup.objects.get(element_id=environment_id)
+
+        if element_lookup is None:
+            return "Unable to determine the user's id from the element_lookup"
+
+        user_id = element_lookup.user_id
+
+        if user_id is None:
+            return "Unable to determine the user's id"
 
         return get_environment(environment_id, user_id)
 

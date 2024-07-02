@@ -39,13 +39,13 @@ class GameCombatAttackView(APIView):
             )
 
         combat_processor = CombatProcessor()
-        if combat_processor.attack(item_id):
-            return Response(
-                {"message": "Attack processed successfully"}, status=status.HTTP_200_OK
-            )
+
+        combat_result = combat_processor.attack(item_id)
+        if combat_result == "encounter-victory" or combat_result == "encounter-loss":
+            return Response({"message": combat_result}, status=status.HTTP_200_OK)
         else:
             return Response(
-                {"message": "Attack failed"}, status=status.HTTP_400_BAD_REQUEST
+                {"message": combat_result}, status=status.HTTP_400_BAD_REQUEST
             )
 
 

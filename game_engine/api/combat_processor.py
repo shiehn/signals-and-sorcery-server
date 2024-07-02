@@ -9,6 +9,7 @@ from game_engine.api.map_inspector import MapInspector
 from game_engine.api.map_state_filter import MapStateFilter
 from game_engine.api.event_publisher import EventPublisher
 
+
 import logging
 import random
 
@@ -57,7 +58,7 @@ class CombatProcessor:
 
         return combat_stats
 
-    def attack(self, item_id: str) -> bool:
+    def attack(self, item_id: str) -> str:
         logger.info(f"ATTACK WITH ITEM_ID: {item_id}")
 
         user_id = GameElementLookup.objects.get(element_id=item_id).user_id
@@ -81,7 +82,7 @@ class CombatProcessor:
             environment["game_info"]["encounters"] is None
             or len(environment["game_info"]["encounters"]) == 0
         ):
-            return False
+            return "encounter-error"
 
         encounter = environment["game_info"]["encounters"][0]
         encounter_id = environment["game_info"]["encounters"][0]["encounter_id"]
@@ -128,7 +129,7 @@ class CombatProcessor:
         else:
             # combat was a loss so set the users
             # gamestate.environment_id to the entrance of the level
-            game_state.environment_id = map_inspector.get_entrance_id()
+            game_state.environment_id = map_inspector.get_env_id_of_entrance()
             game_state.save()
 
             # in case of loss, only the item is consumed, not the encounter
@@ -150,4 +151,4 @@ class CombatProcessor:
 
         logger.info("ATTACK SUCCESS")
 
-        return True
+        return combat_stats["phase"]

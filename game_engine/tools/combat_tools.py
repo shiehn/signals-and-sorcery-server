@@ -8,7 +8,7 @@ from byo_network_hub.models import GameElementLookup
 
 class Combat(BaseTool):
     name = "AttackEncounter"
-    description = "This tool takes an item_id and attacks an encounter with it.  It will calculate the damage done by the user's item to the encounter.  It will return the return the combat stats and if the encounter was defeated or not."
+    description = "This tool takes an item_id and attacks an encounter with it.  It will calculate the combat results and return either 'encounter-loss', encounter-victory', or 'encounter-error'."
 
     def _run(self, item_id: str):
         combat = CombatProcessor()

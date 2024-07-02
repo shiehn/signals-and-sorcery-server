@@ -9,7 +9,7 @@ class MapProcessor:
         self.map_graph = map_graph
         self.item_range_min = 0
         self.item_range_max = 2
-        self.encounter_probability = 0.25
+        self.encounter_probability = 1.0  # 0.25
         self.nx_graph = self.build_networkx_graph()
 
     def set_item_range(self, item_range_min, item_range_max):
@@ -78,9 +78,9 @@ class MapProcessor:
                 node.get("label") != "Entrance"
                 and random.random() < self.encounter_probability
             ):
-                node["game_info"][
-                    "encounters"
-                ] = encounter_generator.generate_encounters(1)
+                node["game_info"]["encounters"] = (
+                    encounter_generator.generate_encounters(1)
+                )
 
         return self
 
