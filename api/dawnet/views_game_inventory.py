@@ -12,30 +12,38 @@ class InventoryListView(views.APIView):
     """
 
     def get(self, request, user_id):
-        try:
-            game_state = GameState.objects.get(user_id=user_id)
-        except GameState.DoesNotExist:
-            return Response(
-                {"error": "User does not have a game state"},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
-        game_map_states = GameMapState.objects.filter(map_id=game_state.map_id)
-        consumed_item_ids = {
-            state.item_id for state in game_map_states if state.consumed
-        }
-
-        inventory_items = (
-            GameInventory.objects.filter(user_id=user_id)
-            .filter(Q(map_id=game_state.map_id) | Q(map_id=uuid.UUID(int=0)))
-            .exclude(item_id__in=consumed_item_ids)
-        )
-
+        inventory_items = GameInventory.objects.filter(user_id=user_id)
         if not inventory_items.exists():
             return Response(
                 {"error": "User does not have any items in the inventory"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+        # try:
+        #     game_state = GameState.objects.get(user_id=user_id)
+        # except GameState.DoesNotExist:
+        #     return Response(
+        #         {"error": "User does not have a game state"},
+        #         status=status.HTTP_404_NOT_FOUND,
+        #     )
+        #
+        # game_map_states = GameMapState.objects.filter(map_id=game_state.map_id)
+        # consumed_item_ids = {
+        #     state.item_id for state in game_map_states if state.consumed
+        # }
+        #
+        # inventory_items = (
+        #     GameInventory.objects.filter(user_id=user_id)
+        #     .filter(Q(map_id=game_state.map_id) | Q(map_id=uuid.UUID(int=0)))
+        #     .exclude(item_id__in=consumed_item_ids)
+        # )
+        #
+        # if not inventory_items.exists():
+        #     return Response(
+        #         {"error": "User does not have any items in the inventory"},
+        #         status=status.HTTP_404_NOT_FOUND,
+        #     )
 
         serializer = GameInventorySerializer(inventory_items, many=True)
         return Response(serializer.data)

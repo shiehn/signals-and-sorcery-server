@@ -42,7 +42,7 @@ def add_item(item_id: str):
     ).first()
     if game_state_item is None:
         new_game_state_item = GameMapState.objects.create(
-            map_id=map_id, item_id=item_id, consumed=True
+            map_id=map_id, item_id=item_id, consumed=True, user_id=user_id
         )
         new_game_state_item.save()
 
