@@ -12,6 +12,7 @@ from byo_network_hub.models import (
     GameMap,
     GameElementLookup,
     GameUpdateQueue,
+    GameMapState,
 )
 from game_engine.api.aesthetic_generator import AestheticGenerator
 from game_engine.gen_ai.asset_generator import AssetGenerator
@@ -37,6 +38,27 @@ def add_uuids_to_lookup(user_id, uuids):
             GameElementLookup.objects.create(element_id=uuid, user_id=user_id)
 
 
+def delete_user_related_objects(user_id):
+    # Delete GameInventory related to the user
+    GameInventory.objects.filter(user_id=user_id).delete()
+
+    # Delete GameMapState related to the user
+    GameMapState.objects.filter(user_id=user_id).delete()
+
+    # Delete GameUpdateQueue related to the user
+    GameUpdateQueue.objects.filter(user_id=user_id).delete()
+
+    # Delete GameElementLookup related to the user
+    GameElementLookup.objects.filter(user_id=user_id).delete()
+
+    # Delete GameState related to the user
+    GameState.objects.filter(user_id=user_id).delete()
+
+    # Optionally delete other related objects
+    # GameEvent.objects.filter(user_id=user_id).delete()
+    # Add more deletions if there are other models related to the user
+
+
 class GameStateCreateView(generics.CreateAPIView):
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
@@ -52,6 +74,9 @@ class GameStateCreateView(generics.CreateAPIView):
             raise ValueError("No OpenAI Key provided")
 
         user_id = serializer.validated_data["user_id"]
+
+        # Delete all related objects before creating a new game
+        delete_user_related_objects(user_id)
 
         game_update, _ = GameUpdateQueue.objects.get_or_create(
             user_id=user_id, defaults={"level": 1, "status": "started"}

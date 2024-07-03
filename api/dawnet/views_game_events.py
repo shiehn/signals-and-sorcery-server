@@ -2,11 +2,11 @@ from byo_network_hub.models import GameEvent
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 
 class GetGameEventView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]  # R
 
     def get(self, request, user_id):
         event = GameEvent.objects.filter(user_id=user_id).order_by("created_at").first()
@@ -25,7 +25,7 @@ class GetGameEventView(APIView):
 
 
 class AddGameEventView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]  # R
 
     def post(self, request, user_id):
         try:

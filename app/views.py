@@ -1,4 +1,5 @@
 """Collection of views for main app"""
+
 import logging
 
 from django.shortcuts import redirect
@@ -26,46 +27,6 @@ from django.contrib.auth.decorators import login_required
 
 class LoginView(FormView):
     """Login view"""
-
-    # template_name = "login.html"
-    # form_class = AuthenticationForm
-    # success_url = reverse_lazy("dashboard")
-    # logger = logging.getLogger("django.message")
-    #
-    # @method_decorator(sensitive_post_parameters("password"))
-    # @method_decorator(csrf_protect)
-    # @method_decorator(never_cache)
-    # def dispatch(self, request: WSGIRequest, *args, **kwargs) -> TemplateResponse:
-    #     """Dispatch request based on authentication"""
-    #     if request.user.is_authenticated:
-    #         return redirect(self.success_url)
-    #     # Sets a test cookie to make sure the user has cookies enabled
-    #     request.session.set_test_cookie()
-    #     return super().dispatch(request, *args, **kwargs)
-    #
-    # def form_valid(self, form: AuthenticationForm) -> HttpResponseRedirect:
-    #     """Check information from the login page"""
-    #     username = self.request.POST.get("username", False)
-    #     password = self.request.POST.get("password", False)
-    #     user = authenticate(username=username, password=password)
-    #     if user.role != CustomUserRole.SUPERUSER:
-    #         form.add_error("username", _("Unauthorized"))
-    #         return super().form_invalid(form)
-    #
-    #     login(self.request, form.get_user())
-    #
-    #     # If the test cookie worked, go ahead and
-    #     # delete it since its no longer needed
-    #     if self.request.session.test_cookie_worked():
-    #         self.request.session.delete_test_cookie()
-    #
-    #     return super().form_valid(form)
-
-    # def get_success_url(self):
-    #     # Default to "/auth/profile/" if no next parameter is provided
-    #     next_url = super().get_success_url()
-    #     print("STEVE: LOGIN SUCCESS: " + str(next_url))
-    #     return next_url if next_url != "/" else "/auth/profile/"
 
 
 class LogoutView(RedirectView):

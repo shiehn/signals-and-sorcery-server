@@ -214,7 +214,15 @@ CELERY_RESULT_BACKEND = "django-db"
 # django auth
 AUTH_USER_MODEL = "user.CustomUser"
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/auth/profile/"
+LOGIN_REDIRECT_URL = "http://127.0.0.1:5173/"
+# LOGIN_REDIRECT_URL = "https://signalsandsorcery.app"
+# LOGIN_REDIRECT_URL = "/auth/profile/"
+
+# Ensure Django sessions use cookie settings that allow sharing over different domains/ports
+SESSION_COOKIE_SAMESITE = "None"  # Necessary for cross-origin cookies
+SESSION_COOKIE_SECURE = True  # Secure should be True in production when using HTTPS
+CSRF_COOKIE_SAMESITE = "None"  # If you're using CSRF protection in your forms/API
+CSRF_COOKIE_SECURE = True
 
 OBJECTS_PER_PAGE = 25
 
@@ -228,6 +236,14 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=365),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "https://signalsandsorcery.app",
+]
+
+CORS_ALLOW_CREDENTIALS = True  # Allow cookies to be submitted across origin
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
