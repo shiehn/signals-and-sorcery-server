@@ -1,8 +1,5 @@
 from langchain_core.tools import BaseTool
 
-from game_engine.api.item import get_item
-from game_engine.api.storage import list_items, add_item
-
 from game_engine.api.environment import navigate_environment
 
 

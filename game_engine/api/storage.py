@@ -40,9 +40,11 @@ def add_item(item_id: str):
     game_state_item = GameMapState.objects.filter(
         map_id=map_id, item_id=item_id
     ).first()
-    if game_state_item is not None:
-        game_state_item.consumed = True
-        game_state_item.save()
+    if game_state_item is None:
+        new_game_state_item = GameMapState.objects.create(
+            map_id=map_id, item_id=item_id, consumed=True
+        )
+        new_game_state_item.save()
 
     EventPublisher().publish_sync(user_id, "inventory-update")
 
