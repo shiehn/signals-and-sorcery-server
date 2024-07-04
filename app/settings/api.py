@@ -29,6 +29,7 @@ INSTALLED_APPS += [
 
 MIDDLEWARE += [
     "corsheaders.middleware.CorsMiddleware",
+    "api.middleware.RemoveWWWAuthenticateMiddleware",
 ]
 
 REST_FRAMEWORK = {
