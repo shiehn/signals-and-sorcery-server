@@ -214,9 +214,9 @@ CELERY_RESULT_BACKEND = "django-db"
 # django auth
 AUTH_USER_MODEL = "user.CustomUser"
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "http://127.0.0.1:5173/"
-# LOGIN_REDIRECT_URL = "https://signalsandsorcery.app"
-# LOGIN_REDIRECT_URL = "/auth/profile/"
+# LOGIN_REDIRECT_URL = "http://127.0.0.1:5173/"
+LOGIN_REDIRECT_URL = "https://signalsandsorcery.app"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 # Ensure Django sessions use cookie settings that allow sharing over different domains/ports
 SESSION_COOKIE_SAMESITE = "None"  # Necessary for cross-origin cookies
