@@ -26,6 +26,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseServerError
+from rest_framework.permissions import IsAuthenticated
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
+
 
 logger = logging.getLogger(__name__)
 
@@ -62,70 +66,74 @@ def delete_user_related_objects(user_id):
 class GameStateCreateView(generics.CreateAPIView):
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        open_ai_key = self.kwargs.get("open_ai_key")
-        logger = logging.getLogger(__name__)
+        user = self.request.user
+        if user:
+            # Add user_id to the validated_data before saving
+            serializer.validated_data["user_id"] = user.id
 
-        if open_ai_key:
-            logger.info(f"OpenAI Key: {open_ai_key}")
-        else:
-            logger.error("No OpenAI Key provided")
-            raise ValueError("No OpenAI Key provided")
+            # Continue with your existing logic
+            open_ai_key = self.kwargs.get("open_ai_key")
+            logger = logging.getLogger(__name__)
 
-        user_id = serializer.validated_data["user_id"]
+            if open_ai_key:
+                logger.info(f"OpenAI Key: {open_ai_key}")
+            else:
+                logger.error("No OpenAI Key provided")
+                raise ValueError("No OpenAI Key provided")
 
-        # Delete all related objects before creating a new game
-        delete_user_related_objects(user_id)
+            delete_user_related_objects(user.id)
+            item_generator = ItemGenerator()
+            unarmed_item = item_generator.generate_unarmed_item()
 
-        game_update, _ = GameUpdateQueue.objects.get_or_create(
-            user_id=user_id, defaults={"level": 1, "status": "started"}
-        )
+            GameInventory.objects.create(
+                user_id=user.id,
+                item_id=unarmed_item["item_id"],
+                map_id=uuid.UUID(int=0),
+                item_details=unarmed_item,
+            )
+            GameElementLookup.objects.create(
+                element_id=unarmed_item["item_id"], user_id=user.id
+            )
+            game_update, _ = GameUpdateQueue.objects.get_or_create(
+                user_id=user.id, defaults={"level": 1, "status": "started"}
+            )
 
-        # add a default unarmed item to the user's inventory
-        item_generator = ItemGenerator()
-        unarmed_item = item_generator.generate_unarmed_item()
-        GameInventory.objects.create(
-            user_id=user_id,
-            item_id=unarmed_item["item_id"],
-            map_id=uuid.UUID(int=0),
-            item_details=unarmed_item,
-        )
-
-        # add the item to the lookup table
-        GameElementLookup.objects.create(
-            element_id=unarmed_item["item_id"], user_id=user_id
-        )
-
-        game_update.status = "started"
-        game_update.save()
-
-        try:
-            logger.info(f"Validated data before save: {serializer.validated_data}")
-
-            # Ensure map_id defaults to uuid.UUID(int=0) if not provided
-            if "map_id" not in serializer.validated_data:
-                serializer.validated_data["map_id"] = uuid.UUID(int=0)
-
-            serializer.save()
-
+            serializer.save()  # user_id is included in the validated_data
             game_update.status = "queued"
             game_update.save()
 
-        except Exception as e:
-            logger.error(f"Error during GameState creation: {str(e)}")
-            game_update.status = "error"
-            game_update.save()
-            raise e
+        else:
+            logger = logging.getLogger(__name__)
+            logger.error("No authenticated user")
+            raise PermissionDenied("No authenticated user")
 
 
 class GameStateDetailView(generics.RetrieveAPIView):
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
-    lookup_field = "user_id"
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        """
+        Returns the object the view is displaying.
+        Overridden to get the game state for the current authenticated user.
+        """
+        user_id = self.request.user.id  # Get user_id from the authenticated user
+        try:
+            return GameState.objects.get(
+                user_id=user_id
+            )  # Adjusted to fetch by user_id
+        except GameState.DoesNotExist:
+            raise Http404("No GameState matches the given query.")
 
 
 class GameStateDeleteView(generics.DestroyAPIView):
+
+    permission_classes = [IsAuthenticated]
+
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
     lookup_field = "user_id"

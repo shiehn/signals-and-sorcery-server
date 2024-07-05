@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
-from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 from byo_network_hub.models import GameMap
 from .serializers import GameMapSerializer
 
@@ -12,6 +12,8 @@ class GameMapView(APIView):
     Retrieve or update a specific GameMap instance.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, uuid):
         try:
             return GameMap.objects.get(pk=uuid)
@@ -19,6 +21,15 @@ class GameMapView(APIView):
             raise Http404
 
     def get(self, request, uuid, format=None):
+
+        # if request.user is None:
+        #     return Response(
+        #         {"message": "User not found"},
+        #         status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        #     )
+        #
+        # uuid = request.user.id
+
         # Get the GameMap instance
         gamemap = self.get_object(uuid)
 
@@ -32,6 +43,15 @@ class GameMapView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, uuid, format=None):
+
+        if request.user is None:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        uuid = request.user.id
+
         gamemap = self.get_object(uuid)
         serializer = GameMapSerializer(gamemap, data=request.data, partial=True)
         if serializer.is_valid():
@@ -44,6 +64,8 @@ class GameMapCreateView(APIView):
     """
     Create a new GameMap instance.
     """
+
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         serializer = GameMapSerializer(data=request.data)

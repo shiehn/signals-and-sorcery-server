@@ -252,6 +252,12 @@ CORS_ORIGIN_WHITELIST = [
     "https://signalsandsorcery.app",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "https://signalsandsorcery.app",
+]
+
 CORS_ALLOW_CREDENTIALS = True  # Allow cookies to be submitted across origin
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"

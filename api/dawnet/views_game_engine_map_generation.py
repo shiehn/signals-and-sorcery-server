@@ -4,12 +4,11 @@ from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
 from byo_network_hub.models import GameMap
 from .serializers import GameMapSerializer
-from game_engine.api.event_publisher import EventPublisher
+from rest_framework.permissions import IsAuthenticated
 
 
 class GameMapGeneration(views.APIView):
-    authentication_classes = []  # Disables authentication
-    permission_classes = []  # Disables permission
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         level = int(request.query_params.get("level"))

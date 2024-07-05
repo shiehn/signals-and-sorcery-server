@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class GetGameEventView(APIView):
-    permission_classes = [IsAuthenticated]  # R
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id):
 
@@ -19,6 +19,14 @@ class GetGameEventView(APIView):
         logger.info(f"XYZ - CSRF: {request.META.get('CSRF_COOKIE')}")
         logger.info(f"XYZ - USER: {request.user}")
         logger.info(f"XYZ - USER: {request.user.id}")
+
+        if request.user is None:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        user_id = request.user.id
 
         event = GameEvent.objects.filter(user_id=user_id).order_by("created_at").first()
         if event:

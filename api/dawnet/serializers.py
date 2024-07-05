@@ -1,4 +1,5 @@
 """DAWNet data validators"""
+
 from rest_framework import serializers
 from byo_network_hub.models import (
     Connection,
@@ -47,7 +48,6 @@ class GameStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = GameState
         fields = [
-            "user_id",
             "map_id",
             "level",
             "created_at",
@@ -63,9 +63,7 @@ class GameStateSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        # Ensure non-model fields are handled correctly before creating the instance
-        # validated_data.pop("environment_id", None)
-        # validated_data.pop("environment_img", None)
+        # User is added in the view's perform_create method, not here
         return super().create(validated_data)
 
 

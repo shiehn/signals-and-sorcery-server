@@ -4,10 +4,12 @@ from .serializers import GameMapStateSerializer
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework.permissions import IsAuthenticated
 
 
 class GameMapStateViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):
     serializer_class = GameMapStateSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_id = self.request.query_params.get("user_id")

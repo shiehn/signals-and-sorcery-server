@@ -8,6 +8,7 @@ from .serializers import GameMapSerializer
 
 from game_engine.api.environment import get_environment
 from byo_network_hub.models import GameElementLookup
+from rest_framework.permissions import IsAuthenticated
 
 
 import logging
@@ -20,16 +21,19 @@ class GameEnvironmentView(APIView):
     Retrieve or update a specific GameMap instance.
     """
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, environment_id):
         try:
             id = str(environment_id)
 
-            # Attempt to get the user_id from GameElementLookup
-            try:
-                user_id = GameElementLookup.objects.get(element_id=id).user_id
-            except GameElementLookup.DoesNotExist:
-                logger.error(f"GameElementLookup with element_id {id} does not exist")
-                raise Http404("GameElementLookup not found")
+            if request.user is None:
+                return Response(
+                    {"message": "User not found"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
+            user_id = request.user.id
 
             # Retrieve the environment
             environment = get_environment(id, user_id)

@@ -5,13 +5,18 @@ from rest_framework.response import Response
 from byo_network_hub.models import GameElementLookup, GameMapState, GameMap, GameState
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.environment import navigate_environment
+from rest_framework.permissions import IsAuthenticated
 
 
 logger = logging.getLogger(__name__)
 
 
 class GameNavigateToView(views.APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, user_id, environment_id):
+
         res = navigate_environment(str(environment_id))
 
         if res != "success":
@@ -31,7 +36,19 @@ class GameNavigateToView(views.APIView):
 
 
 class GameNavigateGetAdjacentView(views.APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, user_id, environment_id):
+
+        if request.user is None:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        user_id = request.user.id
+
         try:
             game_state = GameState.objects.get(user_id=str(user_id))
 

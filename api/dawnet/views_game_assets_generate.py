@@ -6,10 +6,22 @@ from game_engine.api.aesthetic_generator import AestheticGenerator
 from game_engine.gen_ai.asset_generator import AssetGenerator
 from game_engine.api.event_publisher import EventPublisher  # Import EventPublisher
 from asgiref.sync import sync_to_async
+from rest_framework.permissions import IsAuthenticated
 
 
 class GameAssetsGenerateView(APIView):
+    permission_classes = [IsAuthenticated]
+
     async def post(self, request, user_id):
+
+        if request.user is None:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        user_id = request.user.id
+
         api_key = request.data.get("api_key")  # Extract API
 
         logger.info("BBB *******************************")

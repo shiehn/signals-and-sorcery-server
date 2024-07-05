@@ -12,6 +12,8 @@ from game_engine.api.map_processor import MapProcessor
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.event_publisher import EventPublisher
 from asgiref.sync import sync_to_async, async_to_sync
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 
 def add_uuids_to_lookup(user_id, uuids):
@@ -21,11 +23,29 @@ def add_uuids_to_lookup(user_id, uuids):
 
 
 class AssetGenerateView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, user_id, open_ai_key):
+        if request.user is None:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        user_id = request.user.id
+
         return async_to_sync(self.async_post)(request, user_id, open_ai_key)
 
     async def async_post(self, request, user_id, open_ai_key):
         logger = logging.getLogger(__name__)
+
+        if request.user is None:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        user_id = request.user.id
 
         try:
             game_state = await sync_to_async(GameState.objects.get)(user_id=user_id)

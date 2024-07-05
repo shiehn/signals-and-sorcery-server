@@ -9,6 +9,7 @@ from game_engine.api.map_state_filter import MapStateFilter
 from game_engine.api.storage import list_items
 import logging
 import re
+from rest_framework.permissions import IsAuthenticated
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +29,19 @@ def strip_patterns(text):
 
 
 class GameQueryView(views.APIView):
-    authentication_classes = []  # Disables authentication
-    permission_classes = []  # Disables permission
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+
+        if request.user is None:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        token = request.user.id
+
         # Extract data from the request body
-        token = request.data.get("token")
         query = request.data.get("query")
         api_key = request.data.get("api_key")  # Extract API key
 
