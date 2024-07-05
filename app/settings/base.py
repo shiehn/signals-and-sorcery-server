@@ -71,15 +71,18 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # Place this at the top
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "api.middleware.LogUserMiddleware",  # Ensure this is after AuthenticationMiddleware
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "app.logger.RequestLogMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "api.middleware.RemoveWWWAuthenticateMiddleware",
 ]
 
 ROOT_URLCONF = "app.urls"
@@ -243,6 +246,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://signalsandsorcery.app",
 ]
 
+CORS_ORIGIN_WHITELIST = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "https://signalsandsorcery.app",
+]
+
 CORS_ALLOW_CREDENTIALS = True  # Allow cookies to be submitted across origin
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"
@@ -254,3 +263,21 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
+# SMTP EMAIL
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 25))
+EMAIL_USE_LOCALTIME = False
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "False") == "True"
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False") == "True"
+
+# If you don't use SSL, you can leave these as None or empty strings
+EMAIL_SSL_CERTFILE = os.getenv("EMAIL_SSL_CERTFILE", None)
+EMAIL_SSL_KEYFILE = os.getenv("EMAIL_SSL_KEYFILE", None)
+EMAIL_TIMEOUT = os.getenv("EMAIL_TIMEOUT", None)

@@ -27,10 +27,10 @@ INSTALLED_APPS += [
     "drf_yasg",
 ]
 
-MIDDLEWARE += [
-    "corsheaders.middleware.CorsMiddleware",
-    "api.middleware.RemoveWWWAuthenticateMiddleware",
-]
+# MIDDLEWARE += [
+#     "corsheaders.middleware.CorsMiddleware",
+#     "api.middleware.RemoveWWWAuthenticateMiddleware",
+# ]
 
 REST_FRAMEWORK = {
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S",
@@ -42,8 +42,8 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
 SITE_ID = 1

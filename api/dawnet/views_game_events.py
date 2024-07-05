@@ -4,11 +4,22 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class GetGameEventView(APIView):
     permission_classes = [IsAuthenticated]  # R
 
     def get(self, request, user_id):
+
+        logger.info(f"XYZ - HEADERS: {request.headers}")
+        logger.info(f"XYZ - COOKIE: {request.COOKIES.get('sessionid')}")
+        logger.info(f"XYZ - CSRF: {request.META.get('CSRF_COOKIE')}")
+        logger.info(f"XYZ - USER: {request.user}")
+        logger.info(f"XYZ - USER: {request.user.id}")
+
         event = GameEvent.objects.filter(user_id=user_id).order_by("created_at").first()
         if event:
             response = {
