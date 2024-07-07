@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     # Miscellaneous
     "storages",
     "django_filters",
@@ -218,14 +219,20 @@ CELERY_RESULT_BACKEND = "django-db"
 AUTH_USER_MODEL = "user.CustomUser"
 LOGIN_URL = "/accounts/login/"
 # LOGIN_REDIRECT_URL = "http://127.0.0.1:5173/"
-LOGIN_REDIRECT_URL = "https://signalsandsorcery.app"
+# LOGIN_REDIRECT_URL = "https://signalsandsorcery.app"
+LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", "http://127.0.0.1:5173/")
 LOGOUT_REDIRECT_URL = "/accounts/login/"
+
+ACCOUNT_ADAPTER = "app.custom_adapters.CustomAccountAdapter"
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:5173/")
 
 # Ensure Django sessions use cookie settings that allow sharing over different domains/ports
 SESSION_COOKIE_SAMESITE = "None"  # Necessary for cross-origin cookies
 SESSION_COOKIE_SECURE = True  # Secure should be True in production when using HTTPS
 CSRF_COOKIE_SAMESITE = "None"  # If you're using CSRF protection in your forms/API
 CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False  # Necessary for AJAX requests
+CSRF_COOKIE_NAME = "csrftoken"
 
 OBJECTS_PER_PAGE = 25
 
@@ -238,6 +245,7 @@ AUTHENTICATION_BACKENDS = (
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=365),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 CORS_ALLOWED_ORIGINS = [

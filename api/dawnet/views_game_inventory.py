@@ -3,8 +3,9 @@ from django.db.models import Q
 import uuid
 from rest_framework.response import Response
 from .serializers import GameInventorySerializer
-from byo_network_hub.models import GameInventory, GameState, GameMapState
+from byo_network_hub.models import GameInventory
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class InventoryListView(views.APIView):
@@ -12,6 +13,7 @@ class InventoryListView(views.APIView):
     View to list all items in a user's inventory.
     """
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id):
@@ -40,6 +42,7 @@ class InventoryCreateView(views.APIView):
     View to add a new item to the user's inventory.
     """
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):

@@ -5,6 +5,7 @@ from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from byo_network_hub.models import GameMap
 from .serializers import GameMapSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class GameMapView(APIView):
@@ -12,6 +13,7 @@ class GameMapView(APIView):
     Retrieve or update a specific GameMap instance.
     """
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_object(self, uuid):
@@ -65,6 +67,7 @@ class GameMapCreateView(APIView):
     Create a new GameMap instance.
     """
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):

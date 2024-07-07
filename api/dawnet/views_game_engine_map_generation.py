@@ -5,9 +5,11 @@ from game_engine.api.map_processor import MapProcessor
 from byo_network_hub.models import GameMap
 from .serializers import GameMapSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class GameMapGeneration(views.APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):

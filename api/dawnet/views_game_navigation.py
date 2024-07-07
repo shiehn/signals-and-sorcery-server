@@ -6,6 +6,7 @@ from byo_network_hub.models import GameElementLookup, GameMapState, GameMap, Gam
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.environment import navigate_environment
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 class GameNavigateToView(views.APIView):
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id, environment_id):
@@ -37,6 +39,7 @@ class GameNavigateToView(views.APIView):
 
 class GameNavigateGetAdjacentView(views.APIView):
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id, environment_id):

@@ -2,14 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
-from rest_framework.parsers import JSONParser
 from byo_network_hub.models import GameMap
-from .serializers import GameMapSerializer
-
 from game_engine.api.environment import get_environment
-from byo_network_hub.models import GameElementLookup
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 import logging
 
@@ -21,6 +17,7 @@ class GameEnvironmentView(APIView):
     Retrieve or update a specific GameMap instance.
     """
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, environment_id):

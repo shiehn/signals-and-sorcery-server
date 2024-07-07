@@ -2,25 +2,17 @@ import uuid
 
 from django.db import transaction
 from rest_framework import generics
-from game_engine.api.map_generator import MapGenerator
-from game_engine.api.map_processor import MapProcessor
-from game_engine.api.map_inspector import MapInspector
 from game_engine.api.item_generator import ItemGenerator
 from byo_network_hub.models import (
     GameState,
     GameInventory,
     GameMap,
-    GameElementLookup,
     GameUpdateQueue,
     GameMapState,
 )
-from game_engine.api.aesthetic_generator import AestheticGenerator
-from game_engine.gen_ai.asset_generator import AssetGenerator
 from game_engine.api.level_up import level_up
 from .serializers import GameStateSerializer
 import logging
-from rest_framework.views import APIView
-from game_engine.api.environment import get_environment
 from byo_network_hub.models import GameElementLookup
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -29,6 +21,7 @@ from django.http import HttpResponseServerError
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 logger = logging.getLogger(__name__)
@@ -66,6 +59,7 @@ def delete_user_related_objects(user_id):
 class GameStateCreateView(generics.CreateAPIView):
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
@@ -114,6 +108,7 @@ class GameStateCreateView(generics.CreateAPIView):
 class GameStateDetailView(generics.RetrieveAPIView):
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -132,6 +127,7 @@ class GameStateDetailView(generics.RetrieveAPIView):
 
 class GameStateDeleteView(generics.DestroyAPIView):
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     queryset = GameState.objects.all()
@@ -140,6 +136,7 @@ class GameStateDeleteView(generics.DestroyAPIView):
 
 
 class GameStateUpdateView(generics.UpdateAPIView):
+    authentication_classes = [JWTAuthentication]
     queryset = GameState.objects.all()
     serializer_class = GameStateSerializer
     lookup_field = "id"
@@ -149,6 +146,9 @@ class LevelUpView(APIView):
     """
     Level UP the users game
     """
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, environment_id):
         try:

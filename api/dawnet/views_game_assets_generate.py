@@ -7,9 +7,15 @@ from game_engine.gen_ai.asset_generator import AssetGenerator
 from game_engine.api.event_publisher import EventPublisher  # Import EventPublisher
 from asgiref.sync import sync_to_async
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class GameAssetsGenerateView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     async def post(self, request, user_id):

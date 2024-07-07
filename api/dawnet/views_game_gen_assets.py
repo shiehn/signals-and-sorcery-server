@@ -14,6 +14,7 @@ from game_engine.api.event_publisher import EventPublisher
 from asgiref.sync import sync_to_async, async_to_sync
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 def add_uuids_to_lookup(user_id, uuids):
@@ -23,6 +24,7 @@ def add_uuids_to_lookup(user_id, uuids):
 
 
 class AssetGenerateView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id, open_ai_key):

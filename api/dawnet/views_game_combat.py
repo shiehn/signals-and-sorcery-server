@@ -1,22 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import Http404
-from rest_framework.parsers import JSONParser
-from byo_network_hub.models import GameMap
-from .serializers import GameMapSerializer
-from .serializers import GameStateSerializer
+from game_engine.api.combat_processor import CombatProcessor
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 import logging
 
 logger = logging.getLogger(__name__)
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-import json
-from game_engine.api.combat_processor import CombatProcessor
-from rest_framework.permissions import IsAuthenticated
 
 
 class GameCombatAttackView(APIView):
@@ -24,6 +15,7 @@ class GameCombatAttackView(APIView):
     Attack an encounter.
     """
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):

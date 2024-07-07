@@ -10,6 +10,7 @@ from game_engine.api.storage import list_items
 import logging
 import re
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ def strip_patterns(text):
 
 
 class GameQueryView(views.APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):

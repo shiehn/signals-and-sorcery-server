@@ -7,9 +7,11 @@ from byo_network_hub.models import GameUpdateQueue
 from .serializers import GameUpdateQueueSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class GetGameUpdateQueueByUserId(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]  # R
 
     def get(self, request, user_id):
