@@ -9,6 +9,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class GetGameUpdateQueueByUserId(APIView):
     authentication_classes = [JWTAuthentication]
@@ -27,4 +31,8 @@ class GetGameUpdateQueueByUserId(APIView):
         game_update = get_object_or_404(GameUpdateQueue, user_id=user_id)
         # Serialize the game update object
         serializer = GameUpdateQueueSerializer(game_update)
+
+        logger.info(f"Game update retrieved for user {user_id}")
+        logger.info(f"Game update: {serializer.data}")
+
         return Response(serializer.data)

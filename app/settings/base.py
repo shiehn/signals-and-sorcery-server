@@ -221,7 +221,9 @@ LOGIN_URL = "/accounts/login/"
 # LOGIN_REDIRECT_URL = "http://127.0.0.1:5173/"
 # LOGIN_REDIRECT_URL = "https://signalsandsorcery.app"
 LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", "http://127.0.0.1:5173/")
-LOGOUT_REDIRECT_URL = "/accounts/login/"
+LOGOUT_REDIRECT_URL = os.getenv(
+    "LOGIN_REDIRECT_URL", "http://127.0.0.1:8081/accounts/logout/"
+)
 
 ACCOUNT_ADAPTER = "app.custom_adapters.CustomAccountAdapter"
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:5173/")
