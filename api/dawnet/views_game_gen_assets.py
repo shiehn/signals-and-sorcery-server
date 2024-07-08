@@ -27,38 +27,27 @@ class AssetGenerateView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, user_id, open_ai_key):
-        if request.user is None:
+    def post(self, request, user_id):
+        user_id = request.user.id
+        open_ai_key = request.data.get(
+            "api_key"
+        )  # Continue extracting API key from request data
+
+        if not open_ai_key or open_ai_key in ["", "placeholder_key"]:
             return Response(
-                {"message": "User not found"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                {"error": "Invalid or missing OpenAI Key."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user_id = request.user.id
+        return async_to_sync(self.async_post)(user_id, open_ai_key)
 
-        return async_to_sync(self.async_post)(request, user_id, open_ai_key)
-
-    async def async_post(self, request, user_id, open_ai_key):
+    async def async_post(self, user_id, open_ai_key):
         logger = logging.getLogger(__name__)
-
-        if request.user is None:
-            return Response(
-                {"message": "User not found"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-        user_id = request.user.id
 
         try:
             game_state = await sync_to_async(GameState.objects.get)(user_id=user_id)
         except GameState.DoesNotExist:
             raise NotFound("GameState not found")
-
-        open_ai_key = request.data.get("api_key")  # Extract API
-
-        logger.info("CCC *******************************")
-        logger.info(f"CCC API_KEY: {open_ai_key}")
-        logger.info("CCC *******************************")
 
         if not open_ai_key:
             raise ValueError("No OpenAI Key provided")

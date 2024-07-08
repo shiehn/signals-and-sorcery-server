@@ -55,12 +55,17 @@ class GameQueryView(views.APIView):
 
         action = {"encounter": None}
 
+        # Check if the api_key is invalid
+        if not api_key or api_key in ["", "placeholder_key"]:
+            return Response(
+                {"error": "Please provide a valid OpenAI API Key."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if not token or not query or not api_key:  # Check if api_key is provided
             # If either token, query or api_key is missing, return a bad request response
             return Response(
-                {
-                    "error": "Both 'token', 'query', and 'api_key' are required in the request body"
-                },
+                {"error": "'token', 'query', and 'api_key' are all required fields."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

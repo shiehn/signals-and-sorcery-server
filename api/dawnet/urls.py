@@ -28,7 +28,6 @@ from .views_game_engine_state import (
 )
 from .views_game_inventory import InventoryListView, InventoryCreateView
 from .views_game_navigation import GameNavigateToView, GameNavigateGetAdjacentView
-from .views_game_assets_generate import GameAssetsGenerateView
 from .views_game_environment import GameEnvironmentView
 from .views_game_combat import GameCombatAttackView
 from .views_game_update import GetGameUpdateQueueByUserId
@@ -36,13 +35,8 @@ from .views_game_events import GetGameEventView, AddGameEventView
 from .views_game_gen_assets import AssetGenerateView
 
 router = OptionalSlashRouter()
-# router.register(r"dawnet", DAWNetView, basename="dawnet")
-# router.register(r'healthcheck', HealthCheckView, basename='healthcheck')
-
-# post_dawnet_non_generic = DAWNetView.as_view({"post": "post_dawnet_non_generic"})
 
 urlpatterns = [
-    # path("dawnet/non-generic", post_dawnet_non_generic, name="post-dawnet-non-generic"),
     # DAWNet HEALTH CHECK
     path("hub/healthcheck/", HealthCheckView.as_view(), name="health-check"),
     # DAWNet CONNECTION
@@ -71,6 +65,9 @@ urlpatterns = [
         name="update-message-status",
     ),
     path("hub/get_signed_url/", SignedURLAPIView.as_view(), name="get-signed-url"),
+    # GAME ENGINE ROUTES
+    # GAME ENGINE ROUTES
+    # GAME ENGINE ROUTES
     path(
         "game-engine/query/",
         GameQueryView.as_view(),
@@ -92,7 +89,7 @@ urlpatterns = [
         name="game-state-create",
     ),
     path(
-        "game-state/generate/assets/<str:user_id>/<str:open_ai_key>/",
+        "game-state/generate/assets/<str:user_id>/",
         AssetGenerateView.as_view(),
         name="asset_generate",
     ),
@@ -140,11 +137,6 @@ urlpatterns = [
         "game-navigate-get-adjacent/<uuid:user_id>/<uuid:environment_id>/",
         GameNavigateGetAdjacentView.as_view(),
         name="navigate-get-adjacent",
-    ),
-    path(
-        "game-assets/generate/<uuid:user_id>/",
-        GameAssetsGenerateView.as_view(),
-        name="game-assets-generate",
     ),
     path(
         "game-update-queue/<uuid:user_id>/",

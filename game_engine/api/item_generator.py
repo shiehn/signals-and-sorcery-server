@@ -1,6 +1,6 @@
 import random
 import uuid
-from game_engine.conf.config import IMG_ITEM_PLACEHOLDER
+from game_engine.conf.config import IMG_ITEM_PLACEHOLDER, IMG_ITEM_UNARMED
 
 
 class ItemGenerator:
@@ -14,7 +14,7 @@ class ItemGenerator:
                 "item_type": item_type,
                 "item_level": random.randint(1, 100),
                 "aesthetic": {
-                    "description": "",
+                    "description": item_type,
                     "image": IMG_ITEM_PLACEHOLDER,
                 },
             }
@@ -30,6 +30,6 @@ class ItemGenerator:
             "item_level": 0,
             "aesthetic": {
                 "description": "unarmed",
-                "image": IMG_ITEM_PLACEHOLDER,
+                "image": IMG_ITEM_UNARMED,
             },
         }
