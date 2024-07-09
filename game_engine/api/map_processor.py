@@ -1,3 +1,4 @@
+import asyncio
 import random
 from game_engine.api.item_generator import ItemGenerator
 from game_engine.api.encounter_generator import EncounterGenerator

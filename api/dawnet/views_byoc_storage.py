@@ -5,14 +5,10 @@ from django.http import JsonResponse
 from google.cloud import storage
 from google.cloud.storage import Blob
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 from dawnet_client import DNSystemType, DNTag, DNMsgStage
 
-# from mysite import settings
-
-dn_tracer = None  # SentryEventLogger(service_name=DNSystemType.DN_API_SERVER.value)
+dn_tracer = None
 
 
 class SignedURLAPIView(APIView):

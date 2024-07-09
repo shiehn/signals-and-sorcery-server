@@ -1,7 +1,9 @@
 import unittest
-from unittest.mock import MagicMock
+import asyncio
+from unittest.mock import MagicMock, AsyncMock
 from game_engine.api.aesthetic_generator import AestheticGenerator
 from game_engine.gen_ai.asset_generator import AssetGenerator
+from game_engine.api.riddle_generator import RiddleGenerator
 
 
 class TestAestheticGenerator(unittest.TestCase):
@@ -12,6 +14,9 @@ class TestAestheticGenerator(unittest.TestCase):
         self.mock_asset_generator.generate_description.return_value = (
             "This is a placeholder description."
         )
+        self.mock_asset_generator.generate_riddle = AsyncMock(
+            return_value="This is a riddle clue."
+        )
 
     def test_add_item_aesthetic_with_existing_items(self):
         map_data = {"nodes": [{"game_info": {"items": [{"item_type": "item"}]}}]}
@@ -20,7 +25,7 @@ class TestAestheticGenerator(unittest.TestCase):
         gen = AestheticGenerator(
             aesthetic="fantasy", map=map_data, asset_generator=self.mock_asset_generator
         )
-        gen.add_item_aesthetic()
+        asyncio.run(gen.add_item_aesthetic())
 
         self.assertIn("aesthetic", map_data["nodes"][0]["game_info"]["items"][0])
         self.assertEqual(
@@ -37,7 +42,7 @@ class TestAestheticGenerator(unittest.TestCase):
         gen = AestheticGenerator(
             aesthetic="fantasy", map=map_data, asset_generator=self.mock_asset_generator
         )
-        gen.add_item_aesthetic()
+        asyncio.run(gen.add_item_aesthetic())
 
         self.assertEqual(len(map_data["nodes"][0]["game_info"]["items"]), 0)
 
@@ -46,7 +51,7 @@ class TestAestheticGenerator(unittest.TestCase):
         gen = AestheticGenerator(
             aesthetic="fantasy", map=map_data, asset_generator=self.mock_asset_generator
         )
-        gen.add_encounter_aesthetic()
+        asyncio.run(gen.add_encounter_aesthetic())
 
         self.assertEqual(len(map_data["nodes"][0]["game_info"]["encounters"]), 0)
 
@@ -66,7 +71,7 @@ class TestAestheticGenerator(unittest.TestCase):
         gen = AestheticGenerator(
             aesthetic="fantasy", map=map_data, asset_generator=self.mock_asset_generator
         )
-        gen.add_all_aesthetics()
+        asyncio.run(gen.add_all_aesthetics())
 
         self.assertIn("aesthetic", map_data["nodes"][0]["game_info"]["environment"])
         self.assertEqual(
@@ -79,6 +84,41 @@ class TestAestheticGenerator(unittest.TestCase):
             map_data["nodes"][0]["game_info"]["environment"]["aesthetic"]["image"],
             self.mock_asset_generator.generate_image.return_value,
         )
+
+    def test_add_clues(self):
+        map_data = {
+            "nodes": [
+                {
+                    "game_info": {
+                        "environment": {
+                            "aesthetic": {"description": "A beautiful forest"}
+                        }
+                    }
+                }
+            ]
+        }
+        gen = AestheticGenerator(
+            aesthetic="fantasy", map=map_data, asset_generator=self.mock_asset_generator
+        )
+
+        # Mock the password generation and clue generation methods
+        gen.asset_generator.generate_riddle = AsyncMock(
+            return_value="This is a riddle clue."
+        )
+        RiddleGenerator.generate_password = MagicMock(return_value="correct_password")
+        RiddleGenerator.generate_incorrect_passwords = MagicMock(
+            return_value=["wrong_ans_a", "wrong_ans_b", "wrong_ans_c"]
+        )
+
+        asyncio.run(gen.add_clues())
+
+        riddle_info = map_data["nodes"][0]["game_info"]["riddle"]
+        self.assertEqual(riddle_info["password"]["correct"], "correct_password")
+        self.assertEqual(
+            riddle_info["password"]["incorrect"],
+            ["wrong_ans_a", "wrong_ans_b", "wrong_ans_c"],
+        )
+        self.assertEqual(riddle_info["clues"], ["This is a riddle clue."])
 
 
 if __name__ == "__main__":

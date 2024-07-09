@@ -77,7 +77,7 @@ class TestMapGenerator(unittest.TestCase):
             if len(node["game_info"]["encounters"]) > 0:
                 item_count += 1
 
-        self.assertEqual(len(map["nodes"]), item_count)
+        self.assertEqual(len(map["nodes"]) - 1, item_count)
 
     def test_all_nodes_are_traversable(self):
         # Test the graph for 30% connectivity

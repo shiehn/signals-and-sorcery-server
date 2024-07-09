@@ -10,7 +10,7 @@ from byo_network_hub.models import GameElementLookup
 
 class DescribeEnvironment(BaseTool):
     name = "DescribeEnvironment"
-    description = "Get a description of an environment. This tool takes one parameter which is environment_id"
+    description = "Get a description of an environment. This tool takes one parameter which is environment_id."
 
     def _run(self, environment_id: str):
         element_lookup = GameElementLookup.objects.get(element_id=environment_id)

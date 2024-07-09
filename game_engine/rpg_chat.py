@@ -15,6 +15,7 @@ from .tools.item_tools import ListItems, StoreItem
 from .tools.navigation_tools import NavigateEnvironment
 from .tools.combat_tools import Combat
 from .tools.level_up_tools import LevelUp
+from .tools.riddle_tools import GetClues, GetRiddle, SolveRiddle
 import logging
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class RPGChat:
             [
                 (
                     "system",
-                    "As the narrator of this chat-based fantasy RPG, your role is to vividly describe the game world and events, enhancing the player's experience. You try to keep response short usually one or two paragraphs in length.  Use tools to interpret and enrich information about the environment and items without displaying raw data like JSON or technical identifiers to the player. For example, when a player explores a new room, you might describe its eerie ambiance and lurking shadows instead of just listing available exits. Similarly, in combat, focus on creating a dynamic scene rather than only reporting numerical outcomes. Always maintain the narrative's flow and keep technical details in the background, ensuring the story remains immersive and engaging.",
+                    "As the narrator of this LLM based fantasy RPG, your role is to describe the game world and events. You try to keep your response short usually one to three sentences in length. Use tools to save and retrieve state details about the environment and items without displaying raw data like JSON or technical identifiers to the player. For example, when a player explores a new room, you might describe its eerie ambiance and lurking shadows instead of just listing available exits. Similarly, in combat, focus on creating a dynamic scene rather than only reporting numerical outcomes. Always maintain the narrative's flow and keep technical details in the background, ensuring the story remains immersive and engaging.",
                 ),
                 MessagesPlaceholder(variable_name="messages"),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
@@ -41,6 +42,9 @@ class RPGChat:
             NavigateEnvironment(),
             Combat(),
             LevelUp(),
+            GetClues(),
+            GetRiddle(),
+            SolveRiddle(),
         ]
 
         # Multi-tenant management with defaultdict

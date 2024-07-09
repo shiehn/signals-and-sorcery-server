@@ -16,6 +16,27 @@ class AssetGenerator:
         self.client = OpenAI(api_key=open_ai_key)
         self.file_uploader = FileUploader()
 
+    async def generate_riddle(self, password: str, setting_and_lore: str) -> str:
+        try:
+            response = await asyncio.to_thread(
+                self.client.chat.completions.create,
+                model="gpt-3.5-turbo-0125",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": f"You are a content creator for a fantasy RPG. You generate straightforward clues, hints, and riddles for players to solve for a password.",
+                    },
+                    {
+                        "role": "user",
+                        "content": f"The password is {password}, please generate a simple clue, hint, or riddle that could be found in this fantasy settings: {setting_and_lore}.",
+                    },
+                ],
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            logger.error(f"Error generating description asset: {e}")
+            return "Error generating asset description "
+
     async def generate_description(self, type: str, aesthetic: str) -> str:
         try:
             response = await asyncio.to_thread(
