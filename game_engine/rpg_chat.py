@@ -50,6 +50,23 @@ class RPGChat:
         # Multi-tenant management with defaultdict
         self.chat_histories = defaultdict(ChatMessageHistory)
 
+    def add_action_outcome(self, user_id, action, outcome):
+        # Format the message about the action and its outcome
+        action_outcome = f"{action}, {outcome}"
+
+        # Check if the user_id already has a chat history, if not, initialize it
+        if user_id not in self.chat_histories:
+            self.chat_histories[user_id] = ChatMessageHistory()
+
+        # Retrieve the user's chat history
+        user_chat_history = self.chat_histories[user_id]
+
+        # Add the action outcome message to the user's chat history
+        user_chat_history.add_user_message(action_outcome)
+
+        # Optionally, log this addition
+        logger.info(f"Action outcome added for User {user_id}: {action_outcome}")
+
     def ask_question(self, user_id, question, api_key):
         def estimate_tokens(text):
             return len(text) // 4  # Approximation: 1 token ~= 4 characters
@@ -106,8 +123,12 @@ class RPGChat:
         latest_question_with_context = clean_question + " " + latest_context
         trimmed_messages.append(HumanMessage(content=latest_question_with_context))
 
+        logger.info(
+            f"********* FINAL HISTORY TOKEN SIZE: {estimate_tokens(str(trimmed_messages))}"
+        )
+
         logger.info("******************TEN ITEM HISTORY START************************")
-        logger.info(f"{trimmed_messages[-10:]}")
+        logger.info(f"{trimmed_messages}")
         logger.info("******************TEN ITEM HISTORY END  ************************")
 
         response = agent_executor.invoke({"messages": trimmed_messages})

@@ -15,8 +15,8 @@ class GetGameEventView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id):
-        logger.info(f"XYZ - USER: {request.user}")
-        logger.info(f"XYZ - USER_ID: {request.user.id}")
+        # logger.info(f"XYZ - USER: {request.user}")
+        # logger.info(f"XYZ - USER_ID: {request.user.id}")
 
         if request.user is None:
             return Response(

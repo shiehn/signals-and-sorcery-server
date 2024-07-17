@@ -35,7 +35,7 @@ class GameEnvironmentView(APIView):
             # Retrieve the environment
             environment = get_environment(id, user_id)
 
-            logger.info(f"XXX Environment: {environment}")
+            # logger.info(f"XXX Environment: {environment}")
 
             return Response(environment, status=status.HTTP_200_OK)
         except GameMap.DoesNotExist:

@@ -58,23 +58,23 @@ def get_environment(environment_id, user_id):
 def navigate_environment(environment_id):
     user_id = GameElementLookup.objects.get(element_id=environment_id).user_id
 
-    logger.info(f"NAV_DEBUG - USER ID: {user_id}")
+    # logger.info(f"NAV_DEBUG - USER ID: {user_id}")
 
     game_state = GameState.objects.get(user_id=user_id)
 
-    logger.info(f"NAV_DEBUG - GAME STATE: {game_state}")
+    # logger.info(f"NAV_DEBUG - GAME STATE: {game_state}")
 
     current_env_id = game_state.environment_id
 
-    logger.info(f"NAV_DEBUG - CURRENT ENV ID: {current_env_id}")
+    # logger.info(f"NAV_DEBUG - CURRENT ENV ID: {current_env_id}")
 
     map_id = game_state.map_id
 
-    logger.info(f"NAV_DEBUG - MAP ID: {map_id}")
+    # logger.info(f"NAV_DEBUG - MAP ID: {map_id}")
 
     map = GameMap.objects.get(id=map_id).map_graph
 
-    logger.info(f"NAV_DEBUG - MAP: {map}")
+    # logger.info(f"NAV_DEBUG - MAP: {map}")
 
     # map_inspector = MapInspector(map)
     game_map_states = list(GameMapState.objects.filter(map_id=map_id))

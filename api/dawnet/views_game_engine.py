@@ -47,11 +47,11 @@ class GameQueryView(views.APIView):
         query = request.data.get("query")
         api_key = request.data.get("api_key")  # Extract API key
 
-        logger.info("AAA *******************************")
-        logger.info(f"AAA TOKEN: {token}")
-        logger.info(f"AAA QUERY: {query}")
-        logger.info(f"AAA API_KEY: {api_key}")
-        logger.info("AAA *******************************")
+        # logger.info("AAA *******************************")
+        # logger.info(f"AAA TOKEN: {token}")
+        # logger.info(f"AAA QUERY: {query}")
+        # logger.info(f"AAA API_KEY: {api_key}")
+        # logger.info("AAA *******************************")
 
         action = {"encounter": None}
 
@@ -72,11 +72,11 @@ class GameQueryView(views.APIView):
         # START -- CRAFTING THE QUERY
         # Get the game state for the user
         game_state = GameState.objects.get(user_id=token)
-        logger.info(f"XXX GAME_STATE: {game_state}")
+        # logger.info(f"XXX GAME_STATE: {game_state}")
 
         map_id = game_state.map_id
         map = GameMap.objects.get(id=map_id).map_graph
-        logger.info(f"XXX GAME_MAP: {map}")
+        # logger.info(f"XXX GAME_MAP: {map}")
         game_map_states = list(GameMapState.objects.filter(map_id=map_id))
 
         if game_map_states is not None and len(game_map_states) > 0:
@@ -84,12 +84,12 @@ class GameQueryView(views.APIView):
             filtered_map = map_filter.filter(game_map_states)
             map_inspector = MapInspector(filtered_map)
 
-            logger.info(f"XXX GAME_FILTERED_MAP: {filtered_map}")
+            # logger.info(f"XXX GAME_FILTERED_MAP: {filtered_map}")
         else:
             map_inspector = MapInspector(map)
 
         environment = map_inspector.get_env_by_id(game_state.environment_id)
-        logger.info(f"XXX ENVIRONMENT: {environment}")
+        # logger.info(f"XXX ENVIRONMENT: {environment}")
 
         # handle potential encounters
         if (

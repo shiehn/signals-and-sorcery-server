@@ -32,7 +32,7 @@ class GetGameUpdateQueueByUserId(APIView):
         # Serialize the game update object
         serializer = GameUpdateQueueSerializer(game_update)
 
-        logger.info(f"Game update retrieved for user {user_id}")
-        logger.info(f"Game update: {serializer.data}")
+        # logger.info(f"Game update retrieved for user {user_id}")
+        # logger.info(f"Game update: {serializer.data}")
 
         return Response(serializer.data)

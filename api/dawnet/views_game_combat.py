@@ -4,6 +4,7 @@ from rest_framework import status
 from game_engine.api.combat_processor import CombatProcessor
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from game_engine.rpg_chat_service import RPGChatService
 
 import logging
 
@@ -17,6 +18,12 @@ class GameCombatAttackView(APIView):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def set_action_outcome(self, user_id, action, outcome):
+        rpg_chat_service = RPGChatService()
+        rpg_chat_service.track_action_outcome(
+            user_id=user_id, action=action, outcome=outcome
+        )
 
     def post(self, request, format=None):
         if request.user is None:
@@ -42,6 +49,20 @@ class GameCombatAttackView(APIView):
 
         combat_result = combat_processor.attack(item_id)
         if combat_result == "encounter-victory" or combat_result == "encounter-loss":
+
+            if combat_result == "encounter-victory":
+                self.set_action_outcome(
+                    user_id,
+                    f"I attacked the encounter with item {str(item_id)}",
+                    "and was victorious!",
+                )
+            else:
+                self.set_action_outcome(
+                    user_id,
+                    f"I attacked the encounter with item {str(item_id)}",
+                    "and was defeated.",
+                )
+
             return Response({"message": combat_result}, status=status.HTTP_200_OK)
         else:
             return Response(
