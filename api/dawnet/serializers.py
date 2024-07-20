@@ -53,6 +53,8 @@ class GameStateSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "aesthetic",
+            "art_style",
+            "setting",
             "environment_id",
             "environment_img",
         ]

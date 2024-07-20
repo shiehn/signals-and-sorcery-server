@@ -5,9 +5,16 @@ from game_engine.api.riddle_generator import RiddleGenerator
 
 class AestheticGenerator:
     def __init__(
-        self, aesthetic="default", map=None, asset_generator: AssetGenerator = None
+        self,
+        aesthetic=None,
+        art_style=None,
+        setting=None,
+        map=None,
+        asset_generator: AssetGenerator = None,
     ):
         self.aesthetic = aesthetic
+        self.art_style = art_style
+        self.setting = setting
         self.map = map
         self.asset_generator = asset_generator
 
@@ -22,10 +29,10 @@ class AestheticGenerator:
                 item_type = item.get("item_type", "item")
                 item["aesthetic"] = {
                     "description": await self.asset_generator.generate_description(
-                        item_type, self.aesthetic
+                        item_type, self.aesthetic, self.setting
                     ),
                     "image": await self.asset_generator.generate_image(
-                        item_type, self.aesthetic
+                        item_type, self.aesthetic, self.setting
                     ),
                 }
 
@@ -36,10 +43,10 @@ class AestheticGenerator:
                 encounter_type = encounter.get("encounter_type", "encounter")
                 encounter["aesthetic"] = {
                     "description": await self.asset_generator.generate_description(
-                        encounter_type, self.aesthetic
+                        encounter_type, self.aesthetic, self.setting
                     ),
                     "image": await self.asset_generator.generate_image(
-                        encounter_type, self.aesthetic
+                        encounter_type, self.aesthetic, self.setting
                     ),
                 }
 
@@ -62,10 +69,10 @@ class AestheticGenerator:
 
             node["game_info"]["environment"]["aesthetic"] = {
                 "description": await self.asset_generator.generate_description(
-                    combined_description, self.aesthetic
+                    combined_description, self.aesthetic, self.setting
                 ),
                 "image": await self.asset_generator.generate_image(
-                    combined_description, self.aesthetic
+                    combined_description, self.aesthetic, self.setting
                 ),
             }
 
@@ -105,9 +112,9 @@ class AestheticGenerator:
         await asyncio.gather(
             self.add_item_aesthetic(),
             self.add_encounter_aesthetic(),
-            self.add_environment_aesthetic(),
         )
         # After the above tasks have completed, run this
+        await self.add_environment_aesthetic()
         await self.add_clues()
 
         return self.map

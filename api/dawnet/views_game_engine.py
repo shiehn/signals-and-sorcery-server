@@ -116,9 +116,14 @@ class GameQueryView(views.APIView):
         )
         # END -- CRAFTING THE QUERY
 
+        objective_and_setting = (
+            "OBJECTIVE: Your objective is traverse the level and reach the exit. You can interact with the environment and items to find clues to solve a riddle. Solving the riddle will allow you to progress to the next level. Combat may occur if you encounter enemies. SETTING: "
+            + game_state.setting
+        )
+
         rpg_chat_service = RPGChatService()  # Get the singleton instance
         response = rpg_chat_service.ask_question(
-            token, query, api_key
+            token, query, api_key, objective_and_setting
         )  # Pass the API key
 
         filtered_response = strip_patterns(response)

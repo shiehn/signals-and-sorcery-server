@@ -52,7 +52,14 @@ class AssetGenerateView(APIView):
         if not open_ai_key:
             raise ValueError("No OpenAI Key provided")
 
+        asset_generator = AssetGenerator(open_ai_key=open_ai_key)
+
         aesthetic = game_state.aesthetic
+        art_style = game_state.art_style
+
+        game_setting = await asset_generator.generate_politics_and_history(aesthetic)
+        game_state.setting = game_setting
+
         game_update = await sync_to_async(GameUpdateQueue.objects.get)(user_id=user_id)
 
         # Set game update status to "started"
@@ -74,7 +81,7 @@ class AssetGenerateView(APIView):
 
         game_map = await sync_to_async(GameMap.objects.create)(
             level=game_update.level,
-            description=game_state.aesthetic,
+            description=aesthetic + " " + art_style,
             map_graph=map,
         )
 
@@ -98,6 +105,8 @@ class AssetGenerateView(APIView):
             asset_generator = AssetGenerator(open_ai_key=open_ai_key)
             aesthetic_generator = AestheticGenerator(
                 aesthetic=aesthetic,
+                art_style=art_style,
+                setting=game_setting,
                 map=game_map.map_graph,
                 asset_generator=asset_generator,
             )

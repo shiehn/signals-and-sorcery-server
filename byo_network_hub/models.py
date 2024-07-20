@@ -135,6 +135,8 @@ class GameState(models.Model):
     )  # Enforce uniqueness
     level = models.IntegerField()
     aesthetic = models.CharField(max_length=1024)
+    art_style = models.CharField(max_length=1024)
+    setting = models.CharField(max_length=4096)
     map_id = models.UUIDField(default=uuid.UUID(int=0), null=True, blank=True)
     environment_id = models.UUIDField(null=True, blank=True)  # Allow null values
     environment_img = models.CharField(

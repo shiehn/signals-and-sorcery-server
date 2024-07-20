@@ -10,3 +10,6 @@ IMG_ITEM_UNARMED = (
 IMG_ENCOUNTER_PLACEHOLDER = (
     "https://storage.googleapis.com/byoc-file-transfer/img_placeholder.png"
 )
+
+# LLM_MODEL = "gpt-3.5-turbo-0125"
+LLM_MODEL = "gpt-4o-mini"

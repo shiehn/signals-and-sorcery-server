@@ -9,10 +9,10 @@ class LogUserMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if hasattr(request, "user"):
-            logger.info(f"After AuthenticationMiddleware - USER: {request.user}")
-        else:
-            logger.info("After AuthenticationMiddleware - USER attribute is missing")
+        # if hasattr(request, "user"):
+        #     logger.info(f"After AuthenticationMiddleware - USER: {request.user}")
+        # else:
+        #     logger.info("After AuthenticationMiddleware - USER attribute is missing")
         return response
 
 

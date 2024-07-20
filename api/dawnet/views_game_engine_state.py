@@ -11,6 +11,7 @@ from byo_network_hub.models import (
     GameMapState,
 )
 from game_engine.api.level_up import level_up
+from game_engine.rpg_chat_service import RPGChatService
 from .serializers import GameStateSerializer
 import logging
 from byo_network_hub.models import GameElementLookup
@@ -98,6 +99,10 @@ class GameStateCreateView(generics.CreateAPIView):
             serializer.save()  # user_id is included in the validated_data
             game_update.status = "queued"
             game_update.save()
+
+            # finally, clear the users chat history if it exits
+            rpg_chat_service = RPGChatService()
+            rpg_chat_service.clear_chat_history(user.id)
 
         else:
             logger = logging.getLogger(__name__)

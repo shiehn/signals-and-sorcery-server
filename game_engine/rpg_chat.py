@@ -5,11 +5,12 @@ import uuid
 import re
 from langchain.agents import create_openai_tools_agent, AgentExecutor
 from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from collections import defaultdict  # For managing multiple chat histories
 
+from .conf.config import LLM_MODEL
 from .tools.environment_tools import DescribeEnvironment
 from .tools.item_tools import ListItems, StoreItem
 from .tools.navigation_tools import NavigateEnvironment
@@ -17,8 +18,11 @@ from .tools.combat_tools import Combat
 from .tools.level_up_tools import LevelUp
 from .tools.riddle_tools import GetClues, GetRiddle, SolveRiddle
 import logging
+import tiktoken
 
 logger = logging.getLogger(__name__)
+
+tokenizer = tiktoken.encoding_for_model(LLM_MODEL)
 
 
 # Define the RPGChat class
@@ -28,9 +32,10 @@ class RPGChat:
             [
                 (
                     "system",
-                    "As the narrator of this LLM based fantasy RPG, your role is to describe the game world and events. You try to keep your response short usually one to three sentences in length. Use tools to save and retrieve state details about the environment and items without displaying raw data like JSON or technical identifiers to the player. For example, when a player explores a new room, you might describe its eerie ambiance and lurking shadows instead of just listing available exits. Similarly, in combat, focus on creating a dynamic scene rather than only reporting numerical outcomes. Always maintain the narrative's flow and keep technical details in the background, ensuring the story remains immersive and engaging.",
+                    "As the narrator of this LLM based fantasy RPG, your role is to describe the game world and events. You try to keep your response short usually one to three sentences in length. You use tools to save and retrieve state details about environments, encounters, clues and items without displaying raw data like JSON or technical identifiers to the player. For example, when a player explores a new room, you might describe its eerie ambiance and lurking shadows instead of just listing available exits. Similarly, in combat, focus on creating a dynamic scene rather than only reporting numerical outcomes. Always maintain the narrative's flow and keep technical details in the background, ensuring the story remains immersive and engaging.",
                 ),
-                MessagesPlaceholder(variable_name="messages"),
+                MessagesPlaceholder(variable_name="input"),
+                MessagesPlaceholder(variable_name="chat_history"),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )
@@ -67,9 +72,10 @@ class RPGChat:
         # Optionally, log this addition
         logger.info(f"Action outcome added for User {user_id}: {action_outcome}")
 
-    def ask_question(self, user_id, question, api_key):
-        def estimate_tokens(text):
-            return len(text) // 4  # Approximation: 1 token ~= 4 characters
+    def ask_question(self, user_id, question, api_key, game_setting=None):
+        def count_tokens(text):
+            tokens = tokenizer.encode(text)
+            return len(tokens)
 
         def extract_context(message):
             pattern = re.compile(
@@ -94,23 +100,20 @@ class RPGChat:
         user_chat_history.add_user_message(clean_question)
 
         # Initialize ChatOpenAI with the provided API key
-        # chat = ChatOpenAI(api_key=api_key, model="gpt-4", temperature=0)
-        chat = ChatOpenAI(api_key=api_key, model="gpt-3.5-turbo-0125", temperature=0)
+        chat = ChatOpenAI(api_key=api_key, model=LLM_MODEL, temperature=0)
         agent = create_openai_tools_agent(chat, self.tools, self.prompt)
         agent_executor = AgentExecutor(agent=agent, tools=self.tools, verbose=True)
 
         # Calculate the total token length, including the latest question
-        total_tokens = estimate_tokens(question)
+        total_tokens = count_tokens(question)
 
         # Process the message history in reverse to find the latest context and trim if needed
         trimmed_messages = []
         for message in reversed(user_chat_history.messages):
             content = message.content
-            # Remove any previous context from the message content
-            content = re.sub(escaped_latest_context, "", content).strip()
-            message_tokens = estimate_tokens(content)
+            message_tokens = count_tokens(content)
 
-            if total_tokens + message_tokens <= 8000:
+            if total_tokens + message_tokens <= 8500:
                 trimmed_messages.append(message)
                 total_tokens += message_tokens
             else:
@@ -119,19 +122,47 @@ class RPGChat:
         # Reverse to maintain the original order
         trimmed_messages.reverse()
 
-        # Include the latest context in the latest question
-        latest_question_with_context = clean_question + " " + latest_context
-        trimmed_messages.append(HumanMessage(content=latest_question_with_context))
-
-        logger.info(
-            f"********* FINAL HISTORY TOKEN SIZE: {estimate_tokens(str(trimmed_messages))}"
+        # Add the setting & Objective question to the chat history
+        trimmed_messages.insert(
+            0,
+            AIMessage(content=game_setting),
+        )
+        trimmed_messages.insert(
+            0,
+            HumanMessage(
+                content="What is the game objective and setting of this level?"
+            ),
         )
 
-        logger.info("******************TEN ITEM HISTORY START************************")
-        logger.info(f"{trimmed_messages}")
-        logger.info("******************TEN ITEM HISTORY END  ************************")
+        # Include the latest context in the latest question
+        latest_question_with_context = clean_question + " " + latest_context
 
-        response = agent_executor.invoke({"messages": trimmed_messages})
+        logger.info(
+            f"********* CHAT HISTORY TOKEN SIZE: {count_tokens(str(trimmed_messages))}"
+        )
+
+        logger.info("****************** LATEST CHAT MESSAGE START *******************")
+        logger.info(f"{HumanMessage(content=latest_question_with_context)}")
+        logger.info("****************** LATEST CHAT MESSAGE END   *******************")
+
+        logger.info("****************** CHAT HISTORY START ************************")
+        logger.info(f"{trimmed_messages}")
+        logger.info("****************** CHAT HISTORY END  ************************")
+
+        response = agent_executor.invoke(
+            {
+                "input": [HumanMessage(content=latest_question_with_context)],
+                "chat_history": trimmed_messages,
+            }
+        )
+
         user_chat_history.add_ai_message(response["output"])
 
         return response["output"]
+
+    def clear_chat_history(self, user_id):
+        if user_id in self.chat_histories:
+            del self.chat_histories[user_id]
+            logger.info(f"Chat history cleared for User {user_id}")
+        else:
+            logger.info(f"No chat history found for User {user_id} to clear")
