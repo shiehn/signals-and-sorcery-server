@@ -1,25 +1,24 @@
 ![signals_and_sorcery_logo](https://storage.googleapis.com/docs-assets/sas_logo.png)
 # Signals & Sorcery
 
-`Signals & Sorcery` is a DAW (digit audio workstation) plugin that connects to a remote Google Colab or Script.  A user can send audio files from the plugin for remote processing. Hence, perform computationally expensive tasks such as text-2-audio or stem separation without leaving the DAW. 
+`Signals & Sorcery` is an experimental RPG powered by Large Language Models (LLMs).  It has a touch plus natural language hybrid UI. A user chooses an art style and describes a fantasy setting then a map and game assets will be generated accordingly.  From there a player can navigate the map collecting, artifacts, weapons, clues and combating encounter along the way.
 
-For more information:
+Play the hosted version here:
 
 - [https://signalsandsorcery.app/](https://signalsandsorcery.app/)
 
-- [Community Discord](https://discord.gg/UcHCjfpRkV)
-
-
 # Signals & Sorcery infrastructure (DockerCompose)
 
-This is a monorepo containing all the services needed to support the Crucible plugin and runes-client.  The repo contains the following services:
+This repo is all the code needed to support the REACT UI client.  The repo contains the following services:
 
 * **Signals & Sorcery API SERVER:** The Django server (DRF) which serves the API and handles uploads/downloads to cloud storage.
-* **Signals & Sorcery WEBSOCKET SERVER:** A Python websockets server which handles the realtime communication between the RUNES / Google Colabs (or scripts)
-* **POSTGRES DATABASE:** The database which stores all the data for the Signals & Sorcery infrastructure
+* **Signals & Sorcery AUTH SERVER:** A Django server which handles user registration and authentication.
+* **POSTGRES DATABASE:** A database which stores all the data for the Signals & Sorcery infrastructure
 
-NOTE: there are a few other services which are currently just placeholders to support potential functionality such as a web frontend for user auth, etc.
+Find the REACT UI client here:
 
+- [https://github.com/shiehn/signalsandsorcery-game-ui](https://github.com/shiehn/signalsandsorcery-game-ui)
+  
 ## MAKE COMMANDS
 
 To install all dependencies:
