@@ -1,7 +1,7 @@
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.map_state_filter import MapStateFilter
 from game_engine.api.event_publisher import EventPublisher
-from byo_network_hub.models import GameMap, GameState, GameElementLookup, GameMapState
+from game_models.models import GameMap, GameState, GameElementLookup, GameMapState
 
 import logging
 

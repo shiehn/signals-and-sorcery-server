@@ -3,7 +3,7 @@ import uuid
 from django.db import transaction
 from rest_framework import generics
 from game_engine.api.item_generator import ItemGenerator
-from byo_network_hub.models import (
+from game_models.models import (
     GameState,
     GameInventory,
     GameMap,
@@ -14,7 +14,7 @@ from game_engine.api.level_up import level_up
 from game_engine.rpg_chat_service import RPGChatService
 from .serializers import GameStateSerializer
 import logging
-from byo_network_hub.models import GameElementLookup
+from game_models.models import GameElementLookup
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status

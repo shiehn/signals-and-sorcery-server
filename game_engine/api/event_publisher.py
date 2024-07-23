@@ -1,4 +1,4 @@
-from byo_network_hub.models import GameEvent
+from game_models.models import GameEvent
 import logging
 from asgiref.sync import sync_to_async
 

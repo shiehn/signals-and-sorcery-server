@@ -3,7 +3,7 @@ import uuid
 import requests
 import time
 import requests
-from byo_network_hub.models import GameStates, GameMap
+from game_models.models import GameStates, GameMap
 from game_engine.api.map_inspector import MapInspector
 
 BASE_URL = "http://localhost:8081"

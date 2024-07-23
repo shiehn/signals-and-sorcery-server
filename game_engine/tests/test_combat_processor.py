@@ -6,7 +6,7 @@ from django.conf import settings
 if not settings.configured:
     settings.configure(
         INSTALLED_APPS=[
-            "byo_network_hub",
+            "game_models",
             "game_engine",
         ],
         DATABASES={

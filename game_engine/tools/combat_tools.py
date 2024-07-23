@@ -3,7 +3,7 @@ from langchain_core.tools import BaseTool
 
 from game_engine.api.environment import get_environment
 from game_engine.api.combat_processor import CombatProcessor
-from byo_network_hub.models import GameElementLookup
+from game_models.models import GameElementLookup
 
 
 class Combat(BaseTool):

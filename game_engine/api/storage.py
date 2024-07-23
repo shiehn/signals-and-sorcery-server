@@ -1,4 +1,4 @@
-from byo_network_hub.models import (
+from game_models.models import (
     GameMap,
     GameMapState,
     GameState,

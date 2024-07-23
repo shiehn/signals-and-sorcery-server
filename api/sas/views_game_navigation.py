@@ -2,7 +2,7 @@ import logging
 
 from rest_framework import views, status
 from rest_framework.response import Response
-from byo_network_hub.models import GameElementLookup, GameMapState, GameMap, GameState
+from game_models.models import GameElementLookup, GameMapState, GameMap, GameState
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.environment import navigate_environment
 from rest_framework.permissions import IsAuthenticated

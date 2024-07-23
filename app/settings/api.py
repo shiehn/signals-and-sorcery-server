@@ -22,7 +22,7 @@ CORS_ALLOW_HEADERS = [
 
 INSTALLED_APPS += [
     "corsheaders",
-    "byo_network_hub",
+    "game_models",
     "game_engine",
     "drf_yasg",
 ]

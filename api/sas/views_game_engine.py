@@ -3,7 +3,7 @@
 from rest_framework import status, views
 from rest_framework.response import Response
 from game_engine.rpg_chat_service import RPGChatService
-from byo_network_hub.models import GameState, GameMap, GameMapState
+from game_models.models import GameState, GameMap, GameMapState
 from game_engine.api.map_inspector import MapInspector
 from game_engine.api.map_state_filter import MapStateFilter
 from game_engine.api.storage import list_items

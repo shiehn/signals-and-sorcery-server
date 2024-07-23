@@ -2,7 +2,7 @@ import logging
 import random
 
 from game_engine.api.event_publisher import EventPublisher
-from byo_network_hub.models import (
+from game_models.models import (
     GameMap,
     GameState,
     GameElementLookup,

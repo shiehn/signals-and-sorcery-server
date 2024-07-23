@@ -1,7 +1,7 @@
 """DAWNet data validators"""
 
 from rest_framework import serializers
-from byo_network_hub.models import (
+from game_models.models import (
     GameMap,
     GameMapState,
     GameState,

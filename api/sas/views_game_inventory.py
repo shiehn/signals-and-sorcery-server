@@ -3,7 +3,7 @@ from django.db.models import Q
 import uuid
 from rest_framework.response import Response
 from .serializers import GameInventorySerializer
-from byo_network_hub.models import GameInventory
+from game_models.models import GameInventory
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 

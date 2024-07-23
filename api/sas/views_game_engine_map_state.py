@@ -1,4 +1,4 @@
-from byo_network_hub.models import GameMapState
+from game_models.models import GameMapState
 from .serializers import GameMapStateSerializer
 
 

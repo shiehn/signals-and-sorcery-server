@@ -1,11 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from byo_network_hub.models import GameState, GameMap
+from game_models.models import GameState, GameMap
 import logging
 from game_engine.api.aesthetic_generator import AestheticGenerator
 from game_engine.gen_ai.asset_generator import AssetGenerator
-from byo_network_hub.models import GameUpdateQueue, GameElementLookup
+from game_models.models import GameUpdateQueue, GameElementLookup
 from django.db import transaction
 from game_engine.api.map_generator import MapGenerator
 from game_engine.api.map_processor import MapProcessor
