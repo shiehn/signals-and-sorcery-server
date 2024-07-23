@@ -61,7 +61,7 @@ source env/bin/activate
 pip install -r requirements.txt
 make setting=api migrations
 ```
-*note: the migrations will be applied when you do the `docker-compose up --build`*
+*note: the migrations will be applied when you do the `docker compose up --build`*
 
 
 The server will be ready on http://localhost:8080.

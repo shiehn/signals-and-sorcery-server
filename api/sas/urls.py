@@ -4,17 +4,6 @@ from django.urls import include, path
 
 from api.urls import OptionalSlashRouter
 
-from .views_byoc_ws_health_check import HealthCheckView
-
-from .views_byoc_messages import (
-    SendMessageView,
-    GetMessageResponseView,
-    AbortMessagesView,
-    ReplyToMessageView,
-    GetLatestPendingMessagesView,
-    UpdateMessageStatusView,
-)
-from .views_byoc_storage import SignedURLAPIView
 from .views_game_engine import GameQueryView
 from .views_game_engine_map import GameMapView, GameMapCreateView
 from .views_game_engine_map_state import GameMapStateViewSet
@@ -37,37 +26,6 @@ from .views_game_gen_assets import AssetGenerateView
 router = OptionalSlashRouter()
 
 urlpatterns = [
-    # DAWNet HEALTH CHECK
-    path("hub/healthcheck/", HealthCheckView.as_view(), name="health-check"),
-    # DAWNet CONNECTION
-    path("hub/send_message/", SendMessageView.as_view(), name="send-message"),
-    path(
-        "hub/get_response/<uuid:id>/<str:token>/",
-        GetMessageResponseView.as_view(),
-        name="get-response",
-    ),
-    path(
-        "hub/abort_messages/<str:token>/",
-        AbortMessagesView.as_view(),
-        name="abort-messages",
-    ),
-    path(
-        "hub/reply_to_message/", ReplyToMessageView.as_view(), name="reply-to-message"
-    ),
-    path(
-        "hub/get_latest_pending_messages/<uuid:connection_token>/",
-        GetLatestPendingMessagesView.as_view(),
-        name="get-latest-pending-messages",
-    ),
-    path(
-        "hub/update_message_status/<str:token>/<uuid:message_id>/",
-        UpdateMessageStatusView.as_view(),
-        name="update-message-status",
-    ),
-    path("hub/get_signed_url/", SignedURLAPIView.as_view(), name="get-signed-url"),
-    # GAME ENGINE ROUTES
-    # GAME ENGINE ROUTES
-    # GAME ENGINE ROUTES
     path(
         "game-engine/query/",
         GameQueryView.as_view(),

@@ -32,7 +32,7 @@ class OptionalSlashRouter(SimpleRouter):
 
 
 urlpatterns = [
-    path("", include("api.dawnet.urls")),
+    path("", include("api.sas.urls")),
     # Swagger
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
