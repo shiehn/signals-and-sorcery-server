@@ -1,7 +1,7 @@
 ![signals_and_sorcery_logo](https://storage.googleapis.com/docs-assets/sas_logo.png)
 # Signals & Sorcery
 
-`Signals & Sorcery` is an experimental RPG powered by Large Language Models (LLMs).  It has a touch plus natural language hybrid UI. A user chooses an art style and describes a fantasy setting then a map and game assets will be generated accordingly.  From there a player can navigate the map collecting, artifacts, weapons, clues and combating encounter along the way.
+`Signals & Sorcery` is an experimental RPG powered by Large Language Models (LLMs).  It has a touch / natural language hybrid UI. A user chooses an art style and describes a fantasy setting then a map and game assets will be generated accordingly.  From there a player can navigate the map collecting, artifacts, weapons, clues and combating encounter along the way.
 
 Play the hosted version here:
 
@@ -19,53 +19,63 @@ Find the REACT UI client here:
 
 - [https://github.com/shiehn/signalsandsorcery-game-ui](https://github.com/shiehn/signalsandsorcery-game-ui)
   
-## MAKE COMMANDS
+## LOCAL DEVELOPMENT ON MAC
 
-To install all dependencies:
-```bash
-make install
-```
-
-To delete all dependencies:
-```bash
-make clean
-```
-
-All the command from the Makefile would require to have your environment setup with the variables listed at the end of this file.
-You may use `example.env` as a sample.
-
-### DB MIGRATIONS
-
-This django app has been setup for multi-settings mode (app/settings), two settings have been created:
-
-* api
-* web
-
-There are inheriting everything from app/settings/base.py.
-
-Here is an example of commands you can run for the `api` settings:
-
+1) check that python is installed, and you are running >= python 3.10
 
 ```bash
-make setting=api migrations
-make setting=api migrate
-make setting=api port=8080 server
+python --version
+``` 
+
+If the default version is less than 3.10 update it before proceeding
+
+2) Install docker desktop:
+
+```bash
+https://www.docker.com/products/docker-desktop/
 ```
 
-*note: migrations require you to have a virtual environment setup i.e:*
+3) install postgres (on your local mac)
+ 
+Using brew is one of many options:
+
+```bash
+brew install postgresql
 ```
+
+4) In the root of the repo, rename `.example-env` to `.env`
+
+```bash 
+mv .example-env .env
+```
+
+5) UPDATE THE VALUES in the `.env`  file
+ 
+NOTES: 
+- Setup an smtp email relay.  `https://www.brevo.com/` is one of many options 
+- Update the Postgres User/Pass before starting docker-compose 
+- Files are pushed to GCP Storage.  Please signup for a GCP bucket and download the GCP Service account file.  You will need to add the path in your .env file
+
+6) CREATE AN RUN A VIRTUAL ENVIRONMENT
+
+```bash
 cd signals-and-sorcery-server
 python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
 make setting=api migrations
 ```
+
 *note: the migrations will be applied when you do the `docker compose up --build`*
 
+6) RUN docker
 
-The server will be ready on http://localhost:8080.
+```bash
+docker-compose up --build 
+```
+NOTE: newer versions of docker use the command `docker compose up —build` with no hyphen
 
-
+  
 ## Dependencies:
 
 * **SERVER:** You will a server expose to the public internet.  I recommend a multi-core Ubuntu VM on AWS or GCP.
@@ -82,40 +92,11 @@ Start the services using docker-compose:
 ```bash
 docker-compose up --build
 ````
+
 After running this command, (BY DEFAULT) you should have the following services exposed on the following ports:
 
 * **Signals & Sorcery API SERVER:** `http://[YOUR-IP-AT-PORT]:8081`
 * **Signals & Sorcery WEB SOCKET:** `http://[YOUR-IP-AT-PORT]:8765`
 
-### NOTE:
-
-Remember you'll need to expose your ports to the public internet on your VM.  (Query Chat-GPT for instructions on how to do this.)
-
-### NOTE:
-When running migrations and database command make sure you are using the correct .env values.  Note: they will be different from outside docker. e.x
-
-### Super User creation
-```
-make setting=web superuser
-```
-
-```
-POSTGRESQL_ADDON_DB=
-POSTGRESQL_ADDON_USER=
-POSTGRESQL_ADDON_PASSWORD=
-POSTGRESQL_ADDON_HOST=localhost
-POSTGRESQL_ADDON_PORT=5438 (localport)
-```
-
-
-### SSL CONFIGURATION
-
-Go to GoDaddy and download the private key from the domain.  Then go to the Godaddy SSL Certs and download the cert.
-On the host put them in these locations:
-```bash
-ssl_trusted_certificate /etc/ssl/certs/gd_bundle-g2-g1.crt;
-ssl_certificate_key /etc/ssl/private/generated-private-key.txt;
-ssl_certificate /etc/ssl/certs/ddfda9a2ad338b2b.crt;
-```
 
 
